@@ -1,0 +1,7 @@
+node_modules/
+dist/
+dist-firefox/
+native-host/target/
+*.log
+.DS_Store
+Thumbs.db

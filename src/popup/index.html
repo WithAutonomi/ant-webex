@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=360" />
+    <title>Autonomi</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Daemon status -->
+    <header id="status-bar">
+      <span id="status-dot"></span>
+      <span id="status-text">Checking daemon...</span>
+    </header>
+
+    <!-- Main content (shown when connected) -->
+    <section id="connected-view" class="hidden">
+      <p class="muted">antd running at <code id="daemon-url"></code></p>
+      <p class="muted">Version <code id="antd-version">—</code></p>
+      <p id="version-warning" class="version-warning hidden">
+        This antd version is too old. The extension needs
+        <strong id="min-version"></strong> or newer.
+        <a id="warning-update-link" href="#" target="_blank" rel="noopener">Update antd</a>
+      </p>
+      <p id="update-nudge" class="update-nudge hidden">
+        Update available: <strong id="latest-version"></strong>
+        <a id="update-link" href="#" target="_blank" rel="noopener">Get the latest</a>
+      </p>
+      <div id="page-resources">
+        <h3>Resources on this page</h3>
+        <p class="muted" id="no-resources">No autonomi:// references detected.</p>
+        <ul id="resource-list"></ul>
+      </div>
+      <p class="muted setup-footer"><a href="#" class="open-setup">Setup guide</a></p>
+    </section>
+
+    <!-- Disconnected view -->
+    <section id="disconnected-view" class="hidden">
+      <p>The Autonomi daemon (<code>antd</code>) is not running.</p>
+      <p class="muted">The extension needs antd to fetch content from the network.</p>
+
+      <button id="btn-detect">Detect daemon</button>
+      <button id="btn-install">Download daemon</button>
+
+      <p class="muted"><a href="#" class="open-setup">Setup guide</a></p>
+
+      <div id="install-info" class="hidden">
+        <h3>Install antd</h3>
+        <ol class="install-steps">
+          <li>Run the installer that just downloaded (<code id="install-file"></code>).</li>
+          <li>It starts antd and sets it to launch on login.</li>
+          <li>This panel updates automatically once antd is detected.</li>
+        </ol>
+        <p class="muted" id="install-waiting"><span class="spinner"></span> Waiting for antd…</p>
+        <p class="muted">
+          Other platforms or manual install:
+          <a id="install-releases-link" href="#" target="_blank">antd releases</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- Settings -->
+    <details id="settings-panel">
+      <summary>Settings</summary>
+      <label>
+        Daemon URL
+        <input type="text" id="input-url" placeholder="http://localhost:8082" />
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" id="input-auto-fetch" />
+        Auto-fetch inline resources
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" id="input-check-updates" />
+        Check for antd updates
+      </label>
+      <label>
+        Max inline size (MB)
+        <input type="number" id="input-max-size" min="0" step="1" />
+      </label>
+      <button id="btn-save">Save</button>
+    </details>
+
+    <script src="index.js"></script>
+  </body>
+</html>

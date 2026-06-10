@@ -1,0 +1,226 @@
+/* ── Base ───────────────────────────────────────────────────────── */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 360px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  color: #e2e8f0;
+  background: #1e293b;
+  padding: 12px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.muted {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+code {
+  background: #334155;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+pre {
+  background: #0f172a;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+a {
+  color: #60a5fa;
+}
+
+/* ── Status bar ──────────────────────────────────────────────────── */
+
+#status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #334155;
+  margin-bottom: 10px;
+}
+
+#status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #94a3b8;
+  flex-shrink: 0;
+}
+
+#status-dot.connected {
+  background: #22c55e;
+}
+
+#status-dot.disconnected {
+  background: #ef4444;
+}
+
+#status-text {
+  font-weight: 500;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────── */
+
+button {
+  display: inline-block;
+  margin: 6px 4px 6px 0;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  background: #3b82f6;
+  color: #fff;
+}
+
+button:hover {
+  background: #2563eb;
+}
+
+/* ── Install panel ───────────────────────────────────────────────── */
+
+#install-info h3 {
+  font-size: 13px;
+  margin: 8px 0 6px;
+}
+
+.install-steps {
+  margin: 0 0 8px 18px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.install-steps li {
+  margin-bottom: 2px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  vertical-align: -1px;
+  border: 2px solid #475569;
+  border-top-color: #60a5fa;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Version warning (below minimum) ─────────────────────────────── */
+
+.version-warning {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fecaca;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin: 6px 0;
+}
+
+.version-warning a {
+  margin-left: 6px;
+}
+
+/* ── Update nudge ────────────────────────────────────────────────── */
+
+.update-nudge {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fde68a;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin: 6px 0;
+}
+
+.update-nudge a {
+  margin-left: 6px;
+}
+
+/* ── Resources list ──────────────────────────────────────────────── */
+
+#page-resources h3 {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+#resource-list {
+  list-style: none;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+#resource-list li {
+  padding: 4px 0;
+  border-bottom: 1px solid #334155;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+#resource-list li .kind {
+  color: #60a5fa;
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+/* ── Settings ────────────────────────────────────────────────────── */
+
+#settings-panel {
+  margin-top: 12px;
+  border-top: 1px solid #334155;
+  padding-top: 8px;
+}
+
+#settings-panel summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+#settings-panel label {
+  display: block;
+  margin: 8px 0 4px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+#settings-panel label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#settings-panel input[type='text'],
+#settings-panel input[type='number'] {
+  width: 100%;
+  padding: 4px 8px;
+  margin-top: 2px;
+  background: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 4px;
+  color: #e2e8f0;
+  font-size: 12px;
+}
