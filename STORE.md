@@ -6,6 +6,21 @@ submissions. The privacy policy is in `PRIVACY.md`.
 > Publishing is blocked by **V2-484** (real installer assets) and, for the macOS
 > daemon path, **V2-490** (Apple notarization). This document is the unblocked prep.
 
+## Developer accounts (registration)
+
+| Platform | Sign-up / console | Account | Cost |
+|----------|-------------------|---------|------|
+| Chrome Web Store (all Chromium) | <https://chromewebstore.google.com/devconsole> | Google account | $5 one-time |
+| Firefox AMO | <https://addons.mozilla.org/developers/> (account: <https://accounts.firefox.com>) | Mozilla account | Free |
+| Apple (Safari / Mac App Store — V2-494) | Enrol <https://developer.apple.com/programs/enroll/> · console <https://appstoreconnect.apple.com> | Apple ID | $99/yr |
+
+Notes:
+- The Chrome Web Store build installs on all Chromium browsers; a dedicated Microsoft
+  Edge listing (<https://partner.microsoft.com/dashboard/microsoftedge>) is optional.
+- Apple enrolment is only needed for the Safari path (V2-494) and is the same
+  enrolment that unblocks **V2-490** (mac notarization) — longest lead time, worth
+  starting early. Chrome's $5 identity verification can also lag.
+
 ## Listing copy (shared)
 
 **Name:** Autonomi
