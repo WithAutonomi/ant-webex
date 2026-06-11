@@ -33,6 +33,9 @@ const connectedView = document.getElementById('connected-view')!;
 const disconnectedView = document.getElementById('disconnected-view')!;
 const noResources = document.getElementById('no-resources')!;
 const resourceList = document.getElementById('resource-list')!;
+const downloadList = document.getElementById('download-list')!;
+const noDownloads = document.getElementById('no-downloads')!;
+const btnClearDownloads = document.getElementById('btn-clear-downloads') as HTMLButtonElement;
 const installInfo = document.getElementById('install-info')!;
 const installFile = document.getElementById('install-file')!;
 const installReleasesLink = document.getElementById('install-releases-link') as HTMLAnchorElement;
@@ -44,7 +47,6 @@ const btnSave = document.getElementById('btn-save') as HTMLButtonElement;
 const inputUrl = document.getElementById('input-url') as HTMLInputElement;
 const inputAutoFetch = document.getElementById('input-auto-fetch') as HTMLInputElement;
 const inputCheckUpdates = document.getElementById('input-check-updates') as HTMLInputElement;
-const inputMaxSize = document.getElementById('input-max-size') as HTMLInputElement;
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
@@ -63,7 +65,8 @@ function hide(el: HTMLElement) {
 
 async function refreshStatus() {
   const resp = await send<DaemonStatusResp>({ type: 'GET_DAEMON_STATUS' });
-  const s = resp.status;
+  const s = resp?.status;
+  if (!s) return; // service worker waking up / older build — try again next tick
 
   if (s.connected) {
     statusDot.className = 'connected';
@@ -150,14 +153,13 @@ async function refreshResources() {
 
 async function loadSettings() {
   const resp = await send<SettingsResp>({ type: 'GET_SETTINGS' });
-  applySettingsToUI(resp.settings);
+  if (resp?.settings) applySettingsToUI(resp.settings);
 }
 
 function applySettingsToUI(s: ExtensionSettings) {
   inputUrl.value = s.daemonUrl;
   inputAutoFetch.checked = s.autoFetchInline;
   inputCheckUpdates.checked = s.checkForUpdates;
-  inputMaxSize.value = String(Math.round(s.maxInlineBytes / (1024 * 1024)));
 }
 
 btnSave.addEventListener('click', async () => {
@@ -165,7 +167,6 @@ btnSave.addEventListener('click', async () => {
     daemonUrl: inputUrl.value.replace(/\/+$/, ''),
     autoFetchInline: inputAutoFetch.checked,
     checkForUpdates: inputCheckUpdates.checked,
-    maxInlineBytes: (parseInt(inputMaxSize.value, 10) || 50) * 1024 * 1024,
   };
   btnSave.disabled = true;
   btnSave.textContent = 'Saving...';
@@ -220,8 +221,116 @@ btnInstall.addEventListener('click', async () => {
   startAutoPoll();
 });
 
+// ── Downloads ───────────────────────────────────────────────────────
+
+function formatBytes(n: number): string {
+  if (!n) return '0 B';
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let v = n;
+  let i = 0;
+  while (v >= 1024 && i < units.length - 1) {
+    v /= 1024;
+    i++;
+  }
+  return `${v.toFixed(i ? 1 : 0)} ${units[i]}`;
+}
+
+function basename(path: string): string {
+  return path.split(/[\\/]/).pop() || path;
+}
+
+function renderDownloads(items: chrome.downloads.DownloadItem[]) {
+  if (!items.length) {
+    show(noDownloads);
+    hide(btnClearDownloads);
+    downloadList.innerHTML = '';
+    return;
+  }
+  hide(noDownloads);
+  btnClearDownloads.classList.toggle(
+    'hidden',
+    !items.some((i) => i.state === 'complete' || i.state === 'interrupted'),
+  );
+
+  downloadList.innerHTML = '';
+  for (const it of items) {
+    const li = document.createElement('li');
+    li.className = `dl dl-${it.state}`;
+
+    const name = document.createElement('div');
+    name.className = 'dl-name';
+    name.textContent = basename(it.filename) || it.url;
+    li.appendChild(name);
+
+    if (it.state === 'in_progress') {
+      const meta = document.createElement('div');
+      meta.className = 'dl-meta';
+      const bar = document.createElement('div');
+      const fill = document.createElement('div');
+      fill.className = 'dl-fill';
+      if (it.totalBytes > 0) {
+        const pct = Math.floor((it.bytesReceived / it.totalBytes) * 100);
+        meta.textContent = `Downloading… ${pct}% (${formatBytes(it.bytesReceived)} / ${formatBytes(it.totalBytes)})`;
+        bar.className = 'dl-bar';
+        fill.style.width = `${pct}%`;
+      } else {
+        meta.textContent = `Downloading… ${formatBytes(it.bytesReceived)}`;
+        bar.className = 'dl-bar indeterminate';
+      }
+      bar.appendChild(fill);
+      li.appendChild(meta);
+      li.appendChild(bar);
+    } else if (it.state === 'complete') {
+      const meta = document.createElement('div');
+      meta.className = 'dl-meta';
+      meta.textContent = formatBytes(it.totalBytes || it.bytesReceived);
+      li.appendChild(meta);
+      const open = document.createElement('button');
+      open.className = 'open-folder dl-action';
+      open.dataset.id = String(it.id);
+      open.textContent = 'Open folder';
+      li.appendChild(open);
+    } else {
+      const meta = document.createElement('div');
+      meta.className = 'dl-meta dl-err';
+      meta.textContent = `Failed${it.error ? `: ${it.error}` : ''}`;
+      li.appendChild(meta);
+    }
+    downloadList.appendChild(li);
+  }
+}
+
+async function refreshDownloads() {
+  try {
+    const items = await chrome.downloads.search({ limit: 100, orderBy: ['-startTime'] });
+    renderDownloads(items.filter((i) => i.byExtensionId === chrome.runtime.id));
+  } catch {
+    // downloads API unavailable / transient — the next tick retries.
+  }
+}
+
+downloadList.addEventListener('click', (e) => {
+  const btn = (e.target as HTMLElement).closest('.open-folder') as HTMLElement | null;
+  if (btn?.dataset.id) chrome.downloads.show(Number(btn.dataset.id));
+});
+
+btnClearDownloads.addEventListener('click', async () => {
+  const items = await chrome.downloads.search({ limit: 1000 });
+  const finished = items.filter(
+    (i) =>
+      i.byExtensionId === chrome.runtime.id &&
+      (i.state === 'complete' || i.state === 'interrupted'),
+  );
+  await Promise.all(finished.map((i) => chrome.downloads.erase({ id: i.id })));
+  refreshDownloads();
+});
+
 // ── Init ────────────────────────────────────────────────────────────
 
 refreshStatus();
 refreshResources();
+refreshDownloads();
 loadSettings();
+
+// Keep the downloads list (and any in-flight progress) live while open.
+setInterval(refreshDownloads, 1000);

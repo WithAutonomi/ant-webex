@@ -22,11 +22,6 @@ export interface ExtensionSettings {
   daemonUrl: string;
   /** Automatically fetch and render inline autonomi:// resources. */
   autoFetchInline: boolean;
-  /**
-   * Maximum byte size to auto-fetch for inline rendering.
-   * 0 = unlimited. Prevents accidentally loading huge files into the DOM.
-   */
-  maxInlineBytes: number;
   /** Periodically check GitHub for a newer antd release. */
   checkForUpdates: boolean;
 }
@@ -34,7 +29,6 @@ export interface ExtensionSettings {
 export const DEFAULT_SETTINGS: ExtensionSettings = {
   daemonUrl: 'http://localhost:8082',
   autoFetchInline: true,
-  maxInlineBytes: 50 * 1024 * 1024, // 50 MB
   checkForUpdates: true,
 };
 
@@ -44,8 +38,10 @@ export type AntElementKind = 'link' | 'image' | 'video' | 'audio' | 'embed';
 
 export interface AntElement {
   kind: AntElementKind;
-  /** Network address (the part after autonomi://). */
+  /** Network address (the part after autonomi://, query stripped). */
   address: string;
+  /** Optional download filename from a ?name= query param. */
+  name?: string;
   /** Optional MIME type hint from data-ant-type attribute. */
   mimeType?: string;
 }

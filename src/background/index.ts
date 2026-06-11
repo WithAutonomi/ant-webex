@@ -193,23 +193,12 @@ async function handleMessage(msg: Request, sender?: chrome.runtime.MessageSender
       try {
         const buf = await getCachedData(msg.address);
 
-        // Enforce max inline size (0 = unlimited).
-        if (settings.maxInlineBytes > 0 && buf.byteLength > settings.maxInlineBytes) {
-          const sizeMB = (buf.byteLength / (1024 * 1024)).toFixed(1);
-          const limitMB = (settings.maxInlineBytes / (1024 * 1024)).toFixed(0);
-          return {
-            type: 'RESOURCE_RESULT',
-            address: msg.address,
-            result: { ok: false, error: `Resource too large (${sizeMB} MB, limit ${limitMB} MB)` },
-          };
-        }
-
         const bytes = new Uint8Array(buf);
         const mime = msg.mimeType || sniffMime(bytes) || 'application/octet-stream';
 
         // chrome.runtime.sendMessage uses JSON serialization (not structured
-        // cloning), so Uint8Array can't cross contexts. Encode as base64 data
-        // URL — bounded by maxInlineBytes. Downloads use blob URLs instead.
+        // cloning), so Uint8Array can't cross contexts. Encode as a base64
+        // data URL for inline rendering.
         const dataUrl = `data:${mime};base64,${uint8ToBase64(bytes)}`;
         return {
           type: 'RESOURCE_RESULT',
@@ -234,24 +223,27 @@ async function handleMessage(msg: Request, sender?: chrome.runtime.MessageSender
           error: 'Daemon not connected',
         };
       }
+      const filename =
+        (msg.filename && sanitizeFilename(msg.filename)) ||
+        `autonomi-${msg.address.slice(0, 12)}`;
       try {
-        const buf = await getCachedData(msg.address);
+        // antd's public-data /stream endpoint is currently a stub (501), and
+        // chunk addresses are served as base64 JSON — so the daemon can't be a
+        // direct download source yet. Fetch via the client (handles both chunk
+        // and public-data formats) and hand chrome.downloads a data URL (MV3
+        // service workers have no URL.createObjectURL).
+        const buf = await client.getData(msg.address);
         const bytes = new Uint8Array(buf);
         const mime = sniffMime(bytes) || 'application/octet-stream';
-        // Blob URL stays in service worker context — no cross-context issue.
-        const blob = new Blob([buf], { type: mime });
-        const blobUrl = URL.createObjectURL(blob);
-        const filename = msg.filename || `autonomi-${msg.address.slice(0, 12)}`;
-
-        await chrome.downloads.download({ url: blobUrl, filename, saveAs: true });
-        URL.revokeObjectURL(blobUrl);
+        const dataUrl = `data:${mime};base64,${uint8ToBase64(bytes)}`;
+        await chrome.downloads.download({ url: dataUrl, filename, saveAs: false });
         return { type: 'DOWNLOAD_RESULT', address: msg.address, ok: true };
       } catch (e: any) {
         return {
           type: 'DOWNLOAD_RESULT',
           address: msg.address,
           ok: false,
-          error: e.message,
+          error: e?.message || 'download failed',
         };
       }
     }
@@ -319,6 +311,23 @@ async function getCachedData(address: string): Promise<ArrayBuffer> {
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────
+
+/**
+ * Sanitize a page-supplied download filename. The ?name= param (and the HTML
+ * download attribute) are author-controlled, so reduce to a bare basename,
+ * drop path separators, control characters, and leading dots, and cap the
+ * length. Returns '' if nothing usable remains, so the caller can fall back.
+ * chrome.downloads also blocks traversal, but we write straight to Downloads
+ * (saveAs:false) and shouldn't rely solely on that.
+ */
+function sanitizeFilename(name: string): string {
+  const base = name.split(/[/\\]/).pop() ?? '';
+  return base
+    .replace(/[\x00-\x1f<>:"|?*]/g, '')
+    .replace(/^\.+/, '')
+    .trim()
+    .slice(0, 200);
+}
 
 /** Convert a Uint8Array to a base64 string. */
 function uint8ToBase64(bytes: Uint8Array): string {

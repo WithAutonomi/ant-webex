@@ -27,6 +27,9 @@ const commonOptions = {
   sourcemap: watching ? 'inline' : false,
   minify: !watching,
   logLevel: 'info',
+  // Inline imported images as data URLs (the content script can't reference
+  // page-relative or extension assets without web_accessible_resources).
+  loader: { '.png': 'dataurl' },
 };
 
 /**

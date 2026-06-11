@@ -50,11 +50,32 @@ declare namespace chrome {
   }
 
   namespace downloads {
+    interface DownloadItem {
+      id: number;
+      url: string;
+      filename: string;
+      state: 'in_progress' | 'complete' | 'interrupted';
+      bytesReceived: number;
+      totalBytes: number;
+      error?: string;
+      exists: boolean;
+      byExtensionId?: string;
+      startTime: string;
+    }
     function download(options: {
       url: string;
       filename?: string;
       saveAs?: boolean;
     }): Promise<number>;
+    function search(query: {
+      limit?: number;
+      orderBy?: string[];
+      state?: string;
+      id?: number;
+    }): Promise<DownloadItem[]>;
+    /** Open the downloaded file's containing folder in the OS file manager. */
+    function show(downloadId: number): void;
+    function erase(query: { id?: number }): Promise<number[]>;
   }
 
   namespace alarms {

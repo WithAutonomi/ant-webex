@@ -178,7 +178,6 @@ The extension watches for DOM mutations. If your JavaScript adds `autonomi://` e
 
 ## Limits
 
-- **Max inline size** — configurable by the user (default 50 MB). Resources exceeding this are rejected with an error tooltip on the element.
 - **Auto-fetch toggle** — users can disable automatic inline fetching. Download links still work when auto-fetch is off.
 - **No streaming** — video and audio are fully downloaded before playback. Large media files should use download links instead of inline embedding.
 

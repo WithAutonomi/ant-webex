@@ -114,7 +114,6 @@ Settings:
 - **Daemon URL** — defaults to `http://localhost:8082`. Change if antd runs on a different port.
 - **Auto-fetch inline** — toggle automatic fetching of `data-ant-src` / `data-ant-embed` resources.
 - **Check for antd updates** — periodically check GitHub for a newer antd release and show an update prompt.
-- **Max inline size** — cap on auto-fetched resource size (default 50 MB).
 
 ## Native Messaging Host (Optional)
 

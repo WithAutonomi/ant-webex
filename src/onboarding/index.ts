@@ -24,8 +24,9 @@ const osLabel = document.getElementById('os-label')!;
 const releasesLink = document.getElementById('releases-link') as HTMLAnchorElement;
 const downloadHint = document.getElementById('download-hint')!;
 const step1 = document.getElementById('step-1')!;
-const step3 = document.getElementById('step-3')!;
 const donePanel = document.getElementById('done-panel')!;
+const welcomeSection = document.getElementById('welcome')!;
+const stepsList = document.getElementById('steps')!;
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
@@ -91,8 +92,9 @@ function onConnected() {
   if (connected) return;
   connected = true;
   setBanner('connected', 'Connected to the Autonomi network');
-  step1.classList.add('complete');
-  step3.classList.add('complete');
+  // Already working — collapse the setup walkthrough and just confirm success.
+  welcomeSection.classList.add('hidden');
+  stepsList.classList.add('hidden');
   donePanel.classList.remove('hidden');
   stopPoll();
 }

@@ -28,9 +28,20 @@ const SELECTOR = [
   '[data-ant-embed]',
 ].join(',');
 
-/** Extract the network address from an autonomi:// URI. */
-function extractAddress(uri: string): string {
-  return uri.startsWith(ANT_PROTOCOL) ? uri.slice(ANT_PROTOCOL.length) : uri;
+/**
+ * Parse an autonomi:// URI into its bare network address and optional query
+ * params. The address is content-addressed (64 hex chars); a `?name=` param
+ * lets the author suggest a download filename. The query is stripped from the
+ * address so it stays a clean address for the daemon, which rejects anything
+ * that isn't exactly 64 hex characters.
+ */
+export function parseAntUri(uri: string): { address: string; name?: string } {
+  const body = uri.startsWith(ANT_PROTOCOL) ? uri.slice(ANT_PROTOCOL.length) : uri;
+  const q = body.indexOf('?');
+  if (q === -1) return { address: body };
+  const address = body.slice(0, q);
+  const name = new URLSearchParams(body.slice(q + 1)).get('name')?.trim();
+  return { address, name: name || undefined };
 }
 
 /** Map a tag name to an AntElementKind. */
@@ -58,25 +69,16 @@ export function scan(root: ParentNode = document): AntElement[] {
     const mimeType = el.getAttribute('data-ant-type') ?? undefined;
 
     if (href?.startsWith(ANT_PROTOCOL)) {
-      results.push({
-        kind: 'link',
-        address: extractAddress(href),
-        mimeType,
-      });
+      const { address, name } = parseAntUri(href);
+      results.push({ kind: 'link', address, name, mimeType });
     }
     if (antSrc?.startsWith(ANT_PROTOCOL)) {
-      results.push({
-        kind: kindFromTag(el.tagName),
-        address: extractAddress(antSrc),
-        mimeType,
-      });
+      const { address, name } = parseAntUri(antSrc);
+      results.push({ kind: kindFromTag(el.tagName), address, name, mimeType });
     }
     if (antEmbed?.startsWith(ANT_PROTOCOL)) {
-      results.push({
-        kind: 'embed',
-        address: extractAddress(antEmbed),
-        mimeType,
-      });
+      const { address, name } = parseAntUri(antEmbed);
+      results.push({ kind: 'embed', address, name, mimeType });
     }
   }
 

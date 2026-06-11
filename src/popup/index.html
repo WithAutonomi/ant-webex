@@ -31,6 +31,14 @@
         <p class="muted" id="no-resources">No autonomi:// references detected.</p>
         <ul id="resource-list"></ul>
       </div>
+
+      <div id="downloads-section">
+        <h3>Downloads</h3>
+        <p class="muted" id="no-downloads">No downloads yet.</p>
+        <ul id="download-list"></ul>
+        <button id="btn-clear-downloads" class="hidden">Clear finished</button>
+      </div>
+
       <p class="muted setup-footer"><a href="#" class="open-setup">Setup guide</a></p>
     </section>
 
@@ -73,10 +81,6 @@
       <label class="checkbox">
         <input type="checkbox" id="input-check-updates" />
         Check for antd updates
-      </label>
-      <label>
-        Max inline size (MB)
-        <input type="number" id="input-max-size" min="0" step="1" />
       </label>
       <button id="btn-save">Save</button>
     </details>

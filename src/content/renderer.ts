@@ -13,6 +13,10 @@
 
 import type { FetchResourceReq, DownloadFileReq, Request, Response } from '../shared/messages';
 import type { AntElement } from '../shared/types';
+import { parseAntUri } from './scanner';
+// Bundled as a data URL (esbuild dataurl loader) so it works on any page
+// without web_accessible_resources.
+import antLogo from '../../assets/icons/icon-48.png';
 
 /**
  * Send a message to the service worker, retrying once if it was suspended.
@@ -77,6 +81,22 @@ function injectStyles(): void {
       color: #ef4444;
       white-space: nowrap;
     }
+    a.ant-dl {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #1e293b;
+      color: #e2e8f0 !important;
+      text-decoration: none !important;
+      font: 500 13px/1 system-ui, -apple-system, sans-serif;
+      cursor: pointer;
+      vertical-align: middle;
+    }
+    a.ant-dl:hover { background: #334155; }
+    a.ant-dl[data-ant-downloading] { opacity: 0.7; cursor: default; }
+    a.ant-dl .ant-dl-logo { width: 16px; height: 16px; display: block; }
   `;
   document.head.appendChild(style);
 }
@@ -107,40 +127,58 @@ export function render(elements: AntElement[], autoFetch = true): void {
  */
 function bindLink(el: AntElement): void {
   // Find the actual <a> elements (there may be several with same address).
-  const anchors = document.querySelectorAll(`a[href="autonomi://${el.address}"]`);
+  // Prefix match, not exact: the href may carry a ?name= query that the
+  // address (parsed by the scanner) has had stripped off.
+  const anchors = document.querySelectorAll<HTMLAnchorElement>(`a[href^="autonomi://${el.address}"]`);
   for (const a of anchors) {
     if (a.hasAttribute('data-ant-bound')) continue;
     a.setAttribute('data-ant-bound', '1');
 
+    // Brand the link as a recognizable [Autonomi logo] Download control,
+    // preserving the author's original text as the accessible label.
+    const origText = (a.textContent || '').trim();
+    if (origText) a.setAttribute('aria-label', origText);
+    a.setAttribute('title', 'Download from the Autonomi network');
+    a.classList.add('ant-dl');
+    a.replaceChildren();
+
+    const img = document.createElement('img');
+    img.className = 'ant-dl-logo';
+    img.src = antLogo;
+    img.alt = '';
+    const label = document.createElement('span');
+    label.className = 'ant-dl-label';
+    label.textContent = 'Download';
+    a.append(img, label);
+
     a.addEventListener('click', (e) => {
       e.preventDefault();
-      // Links use their own text as the progress indicator; the LOADING_CLASS
-      // spinner and ERROR_CLASS overlay are for inline media containers where
-      // the element has no meaningful text content, so they don't apply here.
+      // The label span carries the progress text; the LOADING_CLASS spinner and
+      // ERROR_CLASS overlay are for inline media containers, so they don't apply.
       if (a.hasAttribute('data-ant-downloading')) return;
 
       a.setAttribute('data-ant-downloading', '1');
-      const origText = a.textContent;
-      a.textContent = 'Fetching from network...';
+      label.textContent = 'Fetching…';
 
+      // Filename precedence: the standard HTML download attribute wins, then
+      // the ?name= from this anchor's own href, else the background falls back
+      // to an address-derived name.
       const msg: DownloadFileReq = {
         type: 'DOWNLOAD_FILE',
         address: el.address,
-        filename: a.getAttribute('download') || undefined,
+        filename:
+          a.getAttribute('download') || parseAntUri(a.getAttribute('href') || '').name || undefined,
       };
       sendMsg(msg).then((resp: Response) => {
         a.removeAttribute('data-ant-downloading');
         if (resp?.type === 'DOWNLOAD_RESULT' && !resp.ok) {
-          a.textContent = 'Download failed';
-          setTimeout(() => { a.textContent = origText; }, 3_000);
+          label.textContent = 'Download failed';
+          setTimeout(() => { label.textContent = 'Download'; }, 3_000);
         } else {
-          a.textContent = origText;
+          label.textContent = 'Download';
         }
       });
     });
-
-    // Visual hint that this link is handled by the extension.
-    a.setAttribute('title', `Download from Autonomi network: ${el.address}`);
   }
 }
 
