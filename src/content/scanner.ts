@@ -44,6 +44,17 @@ export function parseAntUri(uri: string): { address: string; name?: string } {
   return { address, name: name || undefined };
 }
 
+/**
+ * A valid Autonomi address is a content hash: exactly 64 hex characters.
+ * Validating here keeps malformed or hostile values (e.g. markup smuggled
+ * through an `autonomi://` href) out of the daemon, the popup, and CSS
+ * selectors downstream.
+ */
+const ADDRESS_RE = /^[0-9a-fA-F]{64}$/;
+export function isValidAddress(addr: string): boolean {
+  return ADDRESS_RE.test(addr);
+}
+
 /** Map a tag name to an AntElementKind. */
 function kindFromTag(tag: string): AntElementKind {
   switch (tag) {
@@ -63,23 +74,22 @@ export function scan(root: ParentNode = document): AntElement[] {
   const results: AntElement[] = [];
 
   for (const el of root.querySelectorAll(SELECTOR)) {
+    const mimeType = el.getAttribute('data-ant-type') ?? undefined;
+
+    // Only emit references whose address is a well-formed content hash;
+    // anything else is malformed or hostile and is dropped silently.
+    const push = (kind: AntElementKind, uri: string) => {
+      const { address, name } = parseAntUri(uri);
+      if (isValidAddress(address)) results.push({ kind, address, name, mimeType });
+    };
+
     const href = el.getAttribute('href');
     const antSrc = el.getAttribute('data-ant-src');
     const antEmbed = el.getAttribute('data-ant-embed');
-    const mimeType = el.getAttribute('data-ant-type') ?? undefined;
 
-    if (href?.startsWith(ANT_PROTOCOL)) {
-      const { address, name } = parseAntUri(href);
-      results.push({ kind: 'link', address, name, mimeType });
-    }
-    if (antSrc?.startsWith(ANT_PROTOCOL)) {
-      const { address, name } = parseAntUri(antSrc);
-      results.push({ kind: kindFromTag(el.tagName), address, name, mimeType });
-    }
-    if (antEmbed?.startsWith(ANT_PROTOCOL)) {
-      const { address, name } = parseAntUri(antEmbed);
-      results.push({ kind: 'embed', address, name, mimeType });
-    }
+    if (href?.startsWith(ANT_PROTOCOL)) push('link', href);
+    if (antSrc?.startsWith(ANT_PROTOCOL)) push(kindFromTag(el.tagName), antSrc);
+    if (antEmbed?.startsWith(ANT_PROTOCOL)) push('embed', antEmbed);
   }
 
   return results;

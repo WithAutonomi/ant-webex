@@ -137,10 +137,15 @@ async function refreshResources() {
       return;
     }
     hide(noResources);
-    resourceList.innerHTML = '';
+    resourceList.replaceChildren();
     for (const el of elements) {
+      // Build via textContent, never innerHTML — el.kind/el.address originate
+      // from page content and must not be interpreted as markup in the popup.
       const li = document.createElement('li');
-      li.innerHTML = `<span class="kind">${el.kind}</span>${el.address.slice(0, 24)}...`;
+      const kind = document.createElement('span');
+      kind.className = 'kind';
+      kind.textContent = el.kind;
+      li.append(kind, `${String(el.address).slice(0, 24)}...`);
       resourceList.appendChild(li);
     }
   } catch {
@@ -243,7 +248,7 @@ function renderDownloads(items: chrome.downloads.DownloadItem[]) {
   if (!items.length) {
     show(noDownloads);
     hide(btnClearDownloads);
-    downloadList.innerHTML = '';
+    downloadList.replaceChildren();
     return;
   }
   hide(noDownloads);
@@ -252,7 +257,7 @@ function renderDownloads(items: chrome.downloads.DownloadItem[]) {
     !items.some((i) => i.state === 'complete' || i.state === 'interrupted'),
   );
 
-  downloadList.innerHTML = '';
+  downloadList.replaceChildren();
   for (const it of items) {
     const li = document.createElement('li');
     li.className = `dl dl-${it.state}`;
