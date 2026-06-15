@@ -82,6 +82,18 @@ async function checkHealth(): Promise<void> {
   updateBadge(status.connected && !status.belowMinimum);
 }
 
+/**
+ * True if the daemon is reachable. The in-memory `status` resets to
+ * disconnected whenever the MV3 worker restarts (e.g. waking to handle a
+ * message), so re-check health live before trusting a disconnected flag —
+ * otherwise the first request after a wake spuriously fails.
+ */
+async function ensureConnected(): Promise<boolean> {
+  if (status.connected) return true;
+  await checkHealth();
+  return status.connected;
+}
+
 // ── Update checking ─────────────────────────────────────────────────
 
 /**
@@ -183,7 +195,7 @@ async function handleMessage(msg: Request, sender?: chrome.runtime.MessageSender
       return { type: 'SETTINGS', settings };
 
     case 'FETCH_RESOURCE': {
-      if (!status.connected) {
+      if (!(await ensureConnected())) {
         return {
           type: 'RESOURCE_RESULT',
           address: msg.address,
@@ -215,7 +227,7 @@ async function handleMessage(msg: Request, sender?: chrome.runtime.MessageSender
     }
 
     case 'DOWNLOAD_FILE': {
-      if (!status.connected) {
+      if (!(await ensureConnected())) {
         return {
           type: 'DOWNLOAD_RESULT',
           address: msg.address,
@@ -227,18 +239,46 @@ async function handleMessage(msg: Request, sender?: chrome.runtime.MessageSender
         (msg.filename && sanitizeFilename(msg.filename)) ||
         `autonomi-${msg.address.slice(0, 12)}`;
       try {
-        // antd's public-data /stream endpoint is currently a stub (501), and
-        // chunk addresses are served as base64 JSON — so the daemon can't be a
-        // direct download source yet. Fetch via the client (handles both chunk
-        // and public-data formats) and hand chrome.downloads a data URL (MV3
-        // service workers have no URL.createObjectURL).
+        // Fetch via the client (resolves public-data DataMaps, falls back to
+        // raw chunks) and hand the bytes to chrome.downloads. A direct
+        // daemon→browser download via /v1/data/public/:addr/stream would avoid
+        // buffering, but needs a newer antd binary than is currently shipped.
         const buf = await client.getData(msg.address);
         const bytes = new Uint8Array(buf);
         const mime = sniffMime(bytes) || 'application/octet-stream';
-        const dataUrl = `data:${mime};base64,${uint8ToBase64(bytes)}`;
-        await chrome.downloads.download({ url: dataUrl, filename, saveAs: false });
-        return { type: 'DOWNLOAD_RESULT', address: msg.address, ok: true };
+
+        // Pick the download source per browser. Chrome's MV3 service worker has
+        // no URL.createObjectURL, so it uses a data: URL. Firefox's event-page
+        // background has createObjectURL and *refuses* to download data: URLs
+        // ("Access denied"), so it uses a blob: URL.
+        let url: string;
+        let objectUrl: string | null = null;
+        if (typeof URL.createObjectURL === 'function') {
+          objectUrl = URL.createObjectURL(new Blob([bytes], { type: mime }));
+          url = objectUrl;
+        } else {
+          url = `data:${mime};base64,${uint8ToBase64(bytes)}`;
+        }
+
+        try {
+          const id = await chrome.downloads.download({ url, filename, saveAs: false });
+          // Firefox's chrome.* namespace can report failures via lastError
+          // rather than rejecting the promise, so check it explicitly.
+          const lastErr = (chrome.runtime as any)?.lastError;
+          if (lastErr) throw new Error(lastErr.message);
+          // Revoke the blob URL once the download reaches a terminal state —
+          // revoking earlier can cancel an in-flight download.
+          if (objectUrl) revokeWhenDone(id, objectUrl);
+          console.debug(`[ant-webex] download started: ${filename} (${bytes.length} bytes, id ${id})`);
+          return { type: 'DOWNLOAD_RESULT', address: msg.address, ok: true };
+        } catch (e) {
+          if (objectUrl) URL.revokeObjectURL(objectUrl);
+          throw e;
+        }
       } catch (e: any) {
+        // Log so failures are visible in the background console — the fetch
+        // error carries the failing endpoint + status (e.g. .../public: 501).
+        console.error(`[ant-webex] download failed for ${msg.address} → ${filename}:`, e);
         return {
           type: 'DOWNLOAD_RESULT',
           address: msg.address,
@@ -327,6 +367,21 @@ function sanitizeFilename(name: string): string {
     .replace(/^\.+/, '')
     .trim()
     .slice(0, 200);
+}
+
+/**
+ * Revoke a blob object URL once its download reaches a terminal state, then
+ * detach the listener. Used only on the Firefox (blob:) path.
+ */
+function revokeWhenDone(id: number, objectUrl: string): void {
+  const onChanged = (delta: chrome.downloads.DownloadDelta) => {
+    if (delta.id !== id || !delta.state) return;
+    if (delta.state.current === 'complete' || delta.state.current === 'interrupted') {
+      URL.revokeObjectURL(objectUrl);
+      chrome.downloads.onChanged.removeListener(onChanged);
+    }
+  };
+  chrome.downloads.onChanged.addListener(onChanged);
 }
 
 /** Convert a Uint8Array to a base64 string. */

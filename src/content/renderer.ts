@@ -27,7 +27,9 @@ async function sendMsg(msg: Request): Promise<Response> {
   try {
     return await chrome.runtime.sendMessage(msg);
   } catch {
-    // Service worker was likely suspended — retry once to wake it.
+    // Worker was likely suspended ("Receiving end does not exist"). Give it a
+    // moment to wake, then retry once.
+    await new Promise((r) => setTimeout(r, 300));
     return await chrome.runtime.sendMessage(msg);
   }
 }
@@ -169,15 +171,23 @@ function bindLink(el: AntElement): void {
         filename:
           a.getAttribute('download') || parseAntUri(a.getAttribute('href') || '').name || undefined,
       };
-      sendMsg(msg).then((resp: Response) => {
-        a.removeAttribute('data-ant-downloading');
-        if (resp?.type === 'DOWNLOAD_RESULT' && !resp.ok) {
-          label.textContent = 'Download failed';
-          setTimeout(() => { label.textContent = 'Download'; }, 3_000);
-        } else {
-          label.textContent = 'Download';
-        }
-      });
+      const fail = (detail: unknown) => {
+        console.error('[ant-webex] download failed:', detail ?? '(no detail)');
+        label.textContent = 'Download failed';
+        setTimeout(() => { label.textContent = 'Download'; }, 3_000);
+      };
+      sendMsg(msg)
+        .then((resp: Response) => {
+          if (resp?.type === 'DOWNLOAD_RESULT' && !resp.ok) {
+            fail(resp.error);
+          } else {
+            label.textContent = 'Download';
+          }
+        })
+        // A rejected message (worker asleep / no listener) must still reset the
+        // button — otherwise it stays stuck on "Fetching…".
+        .catch(fail)
+        .finally(() => a.removeAttribute('data-ant-downloading'));
     });
   }
 }

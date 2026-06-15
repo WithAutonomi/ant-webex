@@ -40,9 +40,12 @@ export class AntdClient {
       try {
         const r = await fetch(input, init);
         if (r.ok || r.status < 500) return r; // success or client error (no retry)
-        // 5xx — create an error with status and retry
-        const err: any = new Error(`${r.status} ${r.statusText}`);
+        // 5xx — capture the body (antd sends {"error","code"}) so callers can
+        // tell *why* it failed, then retry.
+        const body = await r.text().catch(() => '');
+        const err: any = new Error(`${r.status} ${r.statusText}${body ? ` — ${body}` : ''}`);
         err.status = r.status;
+        err.body = body;
         lastErr = err;
       } catch (e) {
         lastErr = e;
@@ -90,21 +93,38 @@ export class AntdClient {
     return results.find((r) => r !== null) ?? null;
   }
 
+  /** Decode a base64 string into an ArrayBuffer. */
+  private static base64ToBuffer(b64: string): ArrayBuffer {
+    const binary = atob(b64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return bytes.buffer;
+  }
+
   /**
    * GET /v1/data/public/:addr
    *
-   * Downloads public data stored at `address`. The daemon handles chunk
-   * retrieval, self-encryption reassembly, and returns the raw bytes.
+   * Resolves the DataMap at `address` and returns the reassembled content. The
+   * daemon handles chunk retrieval and self-encryption; the response is JSON
+   * `{"data":"<base64>"}` (parsed via text() so we don't depend on a
+   * content-type header, which Firefox CORS may hide).
    */
   async getPublicData(address: string): Promise<ArrayBuffer> {
     const r = await this.fetchRetry(`${this.baseUrl}/v1/data/public/${address}`);
     if (!r.ok) {
       const body = await r.text().catch(() => '');
-      throw new Error(
+      const err: any = new Error(
         `GET /v1/data/public/${address}: ${r.status} ${r.statusText}${body ? ` — ${body}` : ''}`,
       );
+      err.status = r.status;
+      throw err;
     }
-    return await r.arrayBuffer();
+    const text = await r.text();
+    try {
+      const json = JSON.parse(text);
+      if (typeof json.data === 'string') return AntdClient.base64ToBuffer(json.data);
+    } catch { /* not the expected JSON shape */ }
+    throw new Error(`GET /v1/data/public/${address}: unexpected response (no data field)`);
   }
 
   /**
@@ -123,14 +143,7 @@ export class AntdClient {
     const text = await r.text();
     try {
       const json = JSON.parse(text);
-      if (json.data) {
-        const binary = atob(json.data);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-          bytes[i] = binary.charCodeAt(i);
-        }
-        return bytes.buffer;
-      }
+      if (typeof json.data === 'string') return AntdClient.base64ToBuffer(json.data);
     } catch { /* not JSON — treat as raw bytes */ }
 
     const encoder = new TextEncoder();
@@ -138,20 +151,40 @@ export class AntdClient {
   }
 
   /**
-   * Fetch data by address, trying endpoints in order:
-   *   1. GET /v1/chunks/:addr       (raw chunks — simpler, no DataMap overhead)
-   *   2. GET /v1/data/public/:addr  (self-encrypted data via DataMap)
+   * Fetch the content stored at `address`, trying endpoints in order:
+   *   1. GET /v1/data/public/:addr  (resolves the DataMap → reassembled file)
+   *   2. GET /v1/chunks/:addr       (raw single chunk — fallback)
    *
-   * These are different storage formats. Chunks stores raw bytes directly;
-   * public data uses self-encryption (DataMap → encrypted chunks). The
-   * address alone doesn't indicate which format was used, so we try both.
-   * Chunks first avoids a wasted 500 when the address is a raw chunk.
+   * The address alone doesn't reveal the storage format, but real autonomi://
+   * content is public data (a DataMap address), so that endpoint is tried
+   * first. Chunk-first would be *wrong* here: /v1/chunks/:addr on a DataMap
+   * address returns 200 with the serialized DataMap (the chunk index), not the
+   * file — so we'd silently download the index instead of the content.
+   *
+   * The fallback is gated on *why* public-data failed:
+   *   - network/timeout (the address IS public data but its content can't be
+   *     retrieved): surface it — falling back would download the DataMap and
+   *     mask the real failure.
+   *   - otherwise (e.g. the chunk isn't a DataMap): treat the address as a raw
+   *     chunk and fetch it directly.
+   * We match on both HTTP status and antd's error body, since the daemon may
+   * map a retrieval timeout to a generic 500 rather than 502/504.
    */
   async getData(address: string): Promise<ArrayBuffer> {
     try {
-      return await this.getChunk(address);
-    } catch {
       return await this.getPublicData(address);
+    } catch (e: any) {
+      const status = e?.status;
+      const detail = `${e?.message ?? ''} ${e?.body ?? ''}`.trim();
+      const unreachable =
+        status === 502 ||
+        status === 504 ||
+        /timeout|timed out|exhausted|close group|network|insufficient|peers|not ?found/i.test(detail);
+      if (unreachable) throw e;
+      // Not public data (or not a DataMap) — fall back to a raw chunk fetch.
+      // Normal for raw-chunk content, so log at debug level only.
+      console.debug(`[ant-webex] /v1/data/public miss for ${address} (${status}); trying /v1/chunks`);
+      return await this.getChunk(address);
     }
   }
 

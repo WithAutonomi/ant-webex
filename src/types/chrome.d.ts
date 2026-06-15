@@ -76,6 +76,14 @@ declare namespace chrome {
     /** Open the downloaded file's containing folder in the OS file manager. */
     function show(downloadId: number): void;
     function erase(query: { id?: number }): Promise<number[]>;
+    interface DownloadDelta {
+      id: number;
+      state?: { current: string; previous?: string };
+    }
+    const onChanged: {
+      addListener(callback: (delta: DownloadDelta) => void): void;
+      removeListener(callback: (delta: DownloadDelta) => void): void;
+    };
   }
 
   namespace alarms {
