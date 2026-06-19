@@ -44,20 +44,56 @@ a {
   color: #60a5fa;
 }
 
-/* ── Status bar ──────────────────────────────────────────────────── */
+/* ── Header: brand (left) + status (right) ───────────────────────── */
 
-#status-bar {
+#app-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   padding-bottom: 10px;
   border-bottom: 1px solid #334155;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.brand-logo {
+  width: 22px;
+  height: 22px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* Connection status as a compact pill, top-right. */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  font-size: 11px;
+  font-weight: 500;
+  color: #cbd5e1;
 }
 
 #status-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #94a3b8;
   flex-shrink: 0;
@@ -71,8 +107,158 @@ a {
   background: #ef4444;
 }
 
-#status-text {
+/* ── Daemon meta line (connected) ────────────────────────────────── */
+
+.daemon-meta {
+  color: #94a3b8;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.daemon-meta .dot-sep {
+  margin: 0 2px;
+  color: #475569;
+}
+
+/* ── Panels & section headers ────────────────────────────────────── */
+
+.panel {
+  background: #0f172a;
+  border: 1px solid #273449;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #94a3b8;
+}
+
+.empty {
+  margin: 2px 0;
+}
+
+/* Subtle text-style button for secondary section actions. */
+.link-btn {
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: #60a5fa;
+  font-size: 11px;
   font-weight: 500;
+}
+
+.link-btn:hover {
+  background: none;
+  text-decoration: underline;
+}
+
+/* ── Disconnected notice ─────────────────────────────────────────── */
+
+.notice p + p {
+  margin-top: 4px;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.btn-row button {
+  margin: 0;
+}
+
+button.secondary {
+  background: #334155;
+}
+
+button.secondary:hover {
+  background: #475569;
+}
+
+/* ── Already-installed run guide ─────────────────────────────────── */
+
+.guide > summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: #60a5fa;
+  list-style: none;
+}
+
+.guide > summary::-webkit-details-marker {
+  display: none;
+}
+
+.guide > summary::before {
+  content: '▸ ';
+  color: #64748b;
+}
+
+.guide[open] > summary::before {
+  content: '▾ ';
+}
+
+.guide-body {
+  margin-top: 8px;
+}
+
+.guide-step {
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.guide-step:first-of-type {
+  margin-top: 4px;
+}
+
+.guide-sub {
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.guide-body pre {
+  margin: 4px 0;
+  user-select: all;
+}
+
+.guide-paths {
+  list-style: none;
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+
+.guide-paths li {
+  margin-top: 4px;
+  word-break: break-all;
+}
+
+.guide-paths code {
+  font-size: 11px;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────── */
+
+.app-footer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #334155;
+  font-size: 12px;
+  color: #94a3b8;
 }
 
 /* ── Buttons ─────────────────────────────────────────────────────── */
@@ -162,11 +348,6 @@ button:hover {
 
 /* ── Resources list ──────────────────────────────────────────────── */
 
-#page-resources h3 {
-  font-size: 13px;
-  margin-bottom: 6px;
-}
-
 #resource-list {
   list-style: none;
   max-height: 180px;
@@ -174,30 +355,75 @@ button:hover {
 }
 
 #resource-list li {
-  padding: 4px 0;
-  border-bottom: 1px solid #334155;
+  padding: 6px 0;
+  border-bottom: 1px solid #1e2a3d;
   font-size: 12px;
   word-break: break-all;
 }
 
-#resource-list li .kind {
+#resource-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+#resource-list li:first-child {
+  padding-top: 0;
+}
+
+#resource-list li.res {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+#resource-list .kind {
+  /* Never shrink or break (the parent's word-break: break-all would otherwise
+     wrap the badge text letter-by-letter into a vertical strip). */
+  flex: 0 0 auto;
+  white-space: nowrap;
+  word-break: normal;
   color: #60a5fa;
   font-weight: 500;
   margin-right: 4px;
 }
 
+.res-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.res-head {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.res-name {
+  /* Absorb the remaining width and wrap the address there, not in the badge. */
+  flex: 1;
+  min-width: 0;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.res-addr {
+  color: #94a3b8;
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  word-break: break-all;
+  margin-top: 2px;
+}
+
+.res-download {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  padding: 3px 8px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
 /* ── Downloads ───────────────────────────────────────────────────── */
-
-#downloads-section {
-  margin-top: 12px;
-  border-top: 1px solid #334155;
-  padding-top: 8px;
-}
-
-#downloads-section h3 {
-  font-size: 13px;
-  margin-bottom: 6px;
-}
 
 #download-list {
   list-style: none;
@@ -207,8 +433,17 @@ button:hover {
 
 .dl {
   padding: 6px 0;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid #1e2a3d;
   font-size: 12px;
+}
+
+.dl:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.dl:first-child {
+  padding-top: 0;
 }
 
 .dl-name {

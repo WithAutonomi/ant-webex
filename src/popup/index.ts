@@ -7,14 +7,19 @@ import type {
   DaemonStatusResp,
   SettingsResp,
   DetectDaemonResp,
+  DownloadResp,
 } from '../shared/messages';
 import type { ExtensionSettings } from '../shared/types';
 import {
+  ANTD_DEFAULT_URL,
   ANTD_INSTALLER_ASSETS,
   ANTD_RELEASES_URL,
+  ANTD_RUN_COMMAND,
+  ANTD_RUN_GUIDE,
   detectOs,
   installerDownloadUrl,
   MIN_ANTD_VERSION,
+  OS_LABELS,
 } from '../shared/constants';
 
 // ── DOM refs ────────────────────────────────────────────────────────
@@ -139,13 +144,46 @@ async function refreshResources() {
     hide(noResources);
     resourceList.replaceChildren();
     for (const el of elements) {
-      // Build via textContent, never innerHTML — el.kind/el.address originate
-      // from page content and must not be interpreted as markup in the popup.
+      // Build via textContent, never innerHTML — el.kind/el.address/el.name
+      // originate from page content and must not be interpreted as markup.
+      const address = String(el.address);
+      const name = typeof el.name === 'string' && el.name.length ? el.name : '';
+
       const li = document.createElement('li');
+      li.className = 'res';
+
+      const main = document.createElement('div');
+      main.className = 'res-main';
+
+      const head = document.createElement('div');
+      head.className = 'res-head';
       const kind = document.createElement('span');
       kind.className = 'kind';
       kind.textContent = el.kind;
-      li.append(kind, `${String(el.address).slice(0, 24)}...`);
+      head.append(kind);
+      // Filename (bold) on the first line only when known.
+      if (name) {
+        const title = document.createElement('span');
+        title.className = 'res-name';
+        title.textContent = name;
+        head.append(title);
+      }
+      main.appendChild(head);
+
+      // Address always shown in full as the smaller grey second line.
+      const addr = document.createElement('div');
+      addr.className = 'res-addr';
+      addr.textContent = address;
+      main.appendChild(addr);
+      li.appendChild(main);
+
+      const dl = document.createElement('button');
+      dl.className = 'res-download';
+      dl.textContent = 'Download';
+      dl.dataset.address = address;
+      if (name) dl.dataset.name = name;
+      li.appendChild(dl);
+
       resourceList.appendChild(li);
     }
   } catch {
@@ -153,6 +191,25 @@ async function refreshResources() {
     show(noResources);
   }
 }
+
+// Delegated download for the resource list — a one-shot DOWNLOAD_FILE to the
+// worker; the result then surfaces in the downloads list below.
+resourceList.addEventListener('click', (e) => {
+  const btn = (e.target as HTMLElement).closest('.res-download') as HTMLButtonElement | null;
+  if (!btn?.dataset.address) return;
+  send<DownloadResp>({
+    type: 'DOWNLOAD_FILE',
+    address: btn.dataset.address,
+    filename: btn.dataset.name || undefined,
+  });
+  btn.textContent = 'Downloading…';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = 'Download';
+    btn.disabled = false;
+    refreshDownloads();
+  }, 1_200);
+});
 
 // ── Settings ────────────────────────────────────────────────────────
 
@@ -201,6 +258,29 @@ setupLinks.forEach((link) =>
     chrome.tabs.create({ url: chrome.runtime.getURL('onboarding/index.html') });
   }),
 );
+
+// Fill the "already installed? find & run it" guide with OS-specific paths.
+function setupRunGuide() {
+  const url = document.getElementById('guide-url');
+  const term = document.getElementById('guide-terminal');
+  const install = document.getElementById('guide-install');
+  const port = document.getElementById('guide-portfile');
+  const cmd = document.getElementById('guide-cmd');
+  if (url) url.textContent = ANTD_DEFAULT_URL;
+  if (cmd) cmd.textContent = ANTD_RUN_COMMAND;
+
+  const os = detectOs();
+  if (!os) {
+    if (term) term.textContent = 'Open your terminal app.';
+    if (install) install.textContent = 'varies by platform — see the setup guide';
+    if (port) port.textContent = 'varies by platform';
+    return;
+  }
+  const g = ANTD_RUN_GUIDE[os];
+  if (term) term.textContent = `On ${OS_LABELS[os]}: ${g.terminal}.`;
+  if (install) install.textContent = g.installPath;
+  if (port) port.textContent = g.portFile;
+}
 
 btnInstall.addEventListener('click', async () => {
   installReleasesLink.href = ANTD_RELEASES_URL;
@@ -336,6 +416,7 @@ refreshStatus();
 refreshResources();
 refreshDownloads();
 loadSettings();
+setupRunGuide();
 
 // Keep the downloads list (and any in-flight progress) live while open.
 setInterval(refreshDownloads, 1000);

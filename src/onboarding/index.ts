@@ -8,8 +8,11 @@
 
 import type { Request, DaemonStatusResp, DetectDaemonResp } from '../shared/messages';
 import {
+  ANTD_DEFAULT_URL,
   ANTD_INSTALLER_ASSETS,
   ANTD_RELEASES_URL,
+  ANTD_RUN_COMMAND,
+  ANTD_RUN_GUIDE,
   detectOs,
   installerDownloadUrl,
   OS_LABELS,
@@ -27,6 +30,7 @@ const step1 = document.getElementById('step-1')!;
 const donePanel = document.getElementById('done-panel')!;
 const welcomeSection = document.getElementById('welcome')!;
 const stepsList = document.getElementById('steps')!;
+const runGuide = document.getElementById('run-guide')!;
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
@@ -95,9 +99,32 @@ function onConnected() {
   // Already working — collapse the setup walkthrough and just confirm success.
   welcomeSection.classList.add('hidden');
   stepsList.classList.add('hidden');
+  runGuide.classList.add('hidden');
   donePanel.classList.remove('hidden');
   stopPoll();
 }
+
+// Fill the "already installed? find & run it" guide with OS-specific paths.
+function setupRunGuide() {
+  const url = document.getElementById('guide-url');
+  const term = document.getElementById('guide-terminal');
+  const install = document.getElementById('guide-install');
+  const port = document.getElementById('guide-portfile');
+  const cmd = document.getElementById('guide-cmd');
+  if (url) url.textContent = ANTD_DEFAULT_URL;
+  if (cmd) cmd.textContent = ANTD_RUN_COMMAND;
+  if (!os) {
+    if (term) term.textContent = 'Open your terminal application.';
+    if (install) install.textContent = 'varies by platform — see the GitHub releases';
+    if (port) port.textContent = 'varies by platform';
+    return;
+  }
+  const g = ANTD_RUN_GUIDE[os];
+  if (term) term.textContent = `On ${OS_LABELS[os]}: ${g.terminal}.`;
+  if (install) install.textContent = g.installPath;
+  if (port) port.textContent = g.portFile;
+}
+setupRunGuide();
 
 async function checkOnce() {
   // Probe (in case the daemon just started), then read the resulting status.

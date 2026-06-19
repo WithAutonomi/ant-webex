@@ -29,19 +29,40 @@ const SELECTOR = [
 ].join(',');
 
 /**
+ * Combine the author-supplied `name` and `filetype` params into a download
+ * filename:
+ *   - both present  → `name.filetype` (the filetype appended as an extension)
+ *   - only name     → `name`
+ *   - no name       → undefined (a bare `filetype` with no name yields nothing)
+ * The filetype's leading dots are stripped, and it's not appended twice if the
+ * name already ends with that extension.
+ */
+function buildFilename(name?: string, filetype?: string): string | undefined {
+  if (!name) return undefined;
+  const ext = filetype?.replace(/^\.+/, '').trim();
+  if (!ext) return name;
+  if (name.toLowerCase().endsWith(`.${ext.toLowerCase()}`)) return name;
+  return `${name}.${ext}`;
+}
+
+/**
  * Parse an autonomi:// URI into its bare network address and optional query
- * params. The address is content-addressed (64 hex chars); a `?name=` param
- * lets the author suggest a download filename. The query is stripped from the
- * address so it stays a clean address for the daemon, which rejects anything
- * that isn't exactly 64 hex characters.
+ * params. The address is content-addressed (64 hex chars); a `name=` param lets
+ * the author suggest a download filename and a `filetype=` param appends an
+ * extension to it (see [`buildFilename`]). The query is stripped from the
+ * address so it stays clean for the daemon, which rejects anything that isn't
+ * exactly 64 hex characters. The query may be introduced with the usual `?`,
+ * but authors sometimes write `&name=`/`&filetype=` straight after the address,
+ * so either separator is accepted.
  */
 export function parseAntUri(uri: string): { address: string; name?: string } {
   const body = uri.startsWith(ANT_PROTOCOL) ? uri.slice(ANT_PROTOCOL.length) : uri;
-  const q = body.indexOf('?');
-  if (q === -1) return { address: body };
-  const address = body.slice(0, q);
-  const name = new URLSearchParams(body.slice(q + 1)).get('name')?.trim();
-  return { address, name: name || undefined };
+  const sep = body.search(/[?&]/);
+  if (sep === -1) return { address: body };
+  const address = body.slice(0, sep);
+  const params = new URLSearchParams(body.slice(sep + 1));
+  const name = buildFilename(params.get('name')?.trim(), params.get('filetype')?.trim() || undefined);
+  return { address, name };
 }
 
 /**

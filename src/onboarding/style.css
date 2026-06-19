@@ -224,6 +224,91 @@ button.primary:hover {
   min-height: 18px;
 }
 
+/* ── Already-installed guide ─────────────────────────────────────── */
+
+.already {
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid #334155;
+}
+
+.already > summary {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #60a5fa;
+  list-style: none;
+}
+
+.already > summary::-webkit-details-marker {
+  display: none;
+}
+
+.already > summary::before {
+  content: '▸ ';
+  color: #64748b;
+}
+
+.already[open] > summary::before {
+  content: '▾ ';
+}
+
+.already-body {
+  margin-top: 14px;
+}
+
+.already-body p {
+  font-size: 15px;
+  color: #cbd5e1;
+}
+
+.already-body h4 {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+  margin: 18px 0 6px;
+}
+
+.already-body .sub {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.already-body pre {
+  margin: 6px 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  font-size: 14px;
+  color: #e2e8f0;
+  overflow-x: auto;
+  user-select: all;
+}
+
+.already-body .paths {
+  list-style: none;
+  margin-top: 6px;
+}
+
+.already-body .paths li {
+  margin-top: 8px;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.already-body .paths-label {
+  display: inline-block;
+  min-width: 110px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
 /* ── Done ────────────────────────────────────────────────────────── */
 
 .done {

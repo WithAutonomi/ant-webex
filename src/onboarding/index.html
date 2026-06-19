@@ -57,6 +57,44 @@
               <code>antd</code>, starts it, and sets it to launch automatically each time
               you sign in — so you only do this once.
             </p>
+
+            <!-- Already installed? find & run an existing antd -->
+            <details class="already" id="run-guide">
+              <summary>Already installed antd? Find &amp; run it</summary>
+              <div class="already-body">
+                <p>
+                  If you set up antd before, it may simply be stopped — or running without
+                  the option the extension needs. The extension reaches antd at
+                  <code id="guide-url">http://localhost:8082</code> and needs it started
+                  <strong>with the <code>--cors</code> option</strong>.
+                </p>
+
+                <h4>1 · Open a terminal</h4>
+                <p class="sub" id="guide-terminal"></p>
+
+                <h4>2 · Start the daemon</h4>
+                <pre id="guide-cmd">antd --cors</pre>
+                <p class="sub">
+                  Keep that window open while you browse. If you see
+                  <em>“command not found”</em>, antd isn't on your PATH — run it using the
+                  full path shown below (still adding <code>--cors</code>).
+                </p>
+
+                <h4>Where to find it</h4>
+                <ul class="paths">
+                  <li><span class="paths-label">Program</span><code id="guide-install">—</code></li>
+                  <li>
+                    <span class="paths-label">Running check</span><code id="guide-portfile">—</code>
+                    <span class="sub">— this file appears once antd has started.</span>
+                  </li>
+                </ul>
+
+                <p class="sub">
+                  Once it's running, this page connects automatically — or click
+                  <strong>Detect daemon</strong> in the toolbar popup.
+                </p>
+              </div>
+            </details>
           </div>
         </li>
 

@@ -7,16 +7,26 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- Daemon status -->
-    <header id="status-bar">
-      <span id="status-dot"></span>
-      <span id="status-text">Checking daemon...</span>
+    <!-- Brand + daemon status -->
+    <header id="app-header">
+      <div class="brand">
+        <img class="brand-logo" src="../assets/icons/icon-48.png" alt="" />
+        <span class="brand-name">Autonomi</span>
+      </div>
+      <div id="status-bar" class="status-pill">
+        <span id="status-dot"></span>
+        <span id="status-text">Checking…</span>
+      </div>
     </header>
 
     <!-- Main content (shown when connected) -->
     <section id="connected-view" class="hidden">
-      <p class="muted">antd running at <code id="daemon-url"></code></p>
-      <p class="muted">Version <code id="antd-version">—</code></p>
+      <p class="daemon-meta">
+        antd <code id="antd-version">—</code>
+        <span class="dot-sep">·</span>
+        <code id="daemon-url"></code>
+      </p>
+
       <p id="version-warning" class="version-warning hidden">
         This antd version is too old. The extension needs
         <strong id="min-version"></strong> or newer.
@@ -26,34 +36,79 @@
         Update available: <strong id="latest-version"></strong>
         <a id="update-link" href="#" target="_blank" rel="noopener">Get the latest</a>
       </p>
-      <div id="page-resources">
-        <h3>Resources on this page</h3>
-        <p class="muted" id="no-resources">No autonomi:// references detected.</p>
+
+      <section class="panel" id="page-resources">
+        <div class="section-head">
+          <h3 class="section-label">Resources on this page</h3>
+        </div>
+        <p class="muted empty" id="no-resources">No autonomi:// references detected.</p>
         <ul id="resource-list"></ul>
-      </div>
+      </section>
 
-      <div id="downloads-section">
-        <h3>Downloads</h3>
-        <p class="muted" id="no-downloads">No downloads yet.</p>
+      <section class="panel" id="downloads-section">
+        <div class="section-head">
+          <h3 class="section-label">Downloads</h3>
+          <button id="btn-clear-downloads" class="link-btn hidden">Clear finished</button>
+        </div>
+        <p class="muted empty" id="no-downloads">No downloads yet.</p>
         <ul id="download-list"></ul>
-        <button id="btn-clear-downloads" class="hidden">Clear finished</button>
-      </div>
-
-      <p class="muted setup-footer"><a href="#" class="open-setup">Setup guide</a></p>
+      </section>
     </section>
 
     <!-- Disconnected view -->
     <section id="disconnected-view" class="hidden">
-      <p>The Autonomi daemon (<code>antd</code>) is not running.</p>
-      <p class="muted">The extension needs antd to fetch content from the network.</p>
+      <div class="panel notice">
+        <p><strong>Daemon not running</strong></p>
+        <p class="muted">
+          The extension needs the Autonomi daemon (<code>antd</code>) to fetch
+          content from the network.
+        </p>
+        <div class="btn-row">
+          <button id="btn-detect">Detect daemon</button>
+          <button id="btn-install" class="secondary">Download daemon</button>
+        </div>
+      </div>
 
-      <button id="btn-detect">Detect daemon</button>
-      <button id="btn-install">Download daemon</button>
+      <!-- Already-installed guide: find & run an existing antd -->
+      <details class="panel guide" id="run-guide">
+        <summary>Already installed antd? Find &amp; run it</summary>
+        <div class="guide-body">
+          <p class="muted">
+            If you set up antd before, it may just be stopped — or running without the
+            option the extension needs. The extension reaches antd over
+            <code id="guide-url">http://localhost:8082</code> and needs it started
+            <strong>with <code>--cors</code></strong>.
+          </p>
 
-      <p class="muted"><a href="#" class="open-setup">Setup guide</a></p>
+          <p class="guide-step"><strong>1 · Open a terminal</strong></p>
+          <p class="muted guide-sub" id="guide-terminal"></p>
 
-      <div id="install-info" class="hidden">
-        <h3>Install antd</h3>
+          <p class="guide-step"><strong>2 · Start the daemon</strong></p>
+          <pre id="guide-cmd">antd --cors</pre>
+          <p class="muted guide-sub">
+            Leave this window open while you browse. Seeing
+            <em>“command not found”</em>? antd isn't on your PATH — run it with the full
+            path shown below instead (still adding <code>--cors</code>).
+          </p>
+
+          <p class="guide-step"><strong>Where to find it</strong></p>
+          <ul class="guide-paths">
+            <li>Program: <code id="guide-install">—</code></li>
+            <li>
+              Running check: <code id="guide-portfile">—</code>
+              <span class="guide-sub">— this file exists once antd has started.</span>
+            </li>
+          </ul>
+
+          <p class="muted">
+            Then click <strong>Detect daemon</strong> above, or
+            <a href="#" class="open-setup">open the full setup guide</a>.
+          </p>
+        </div>
+      </details>
+
+      <div id="install-info" class="panel hidden">
+        <h3 class="section-label">Install antd</h3>
         <ol class="install-steps">
           <li>Run the installer that just downloaded (<code id="install-file"></code>).</li>
           <li>It starts antd and sets it to launch on login.</li>
@@ -84,6 +139,10 @@
       </label>
       <button id="btn-save">Save</button>
     </details>
+
+    <footer class="app-footer">
+      <a href="#" class="open-setup">Setup guide</a>
+    </footer>
 
     <script src="index.js"></script>
   </body>
