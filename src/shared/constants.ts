@@ -52,13 +52,17 @@ export type OsKey = 'windows' | 'macos' | 'linux';
 export const ANTD_RELEASE_REPO = 'WithAutonomi/ant-sdk';
 
 /**
- * Pinned release tag — a specific tag (not a moving branch) so the downloaded
- * binary is reproducible and auditable. Matches the current SDK line and the
- * MIN_ANTD_VERSION floor.
- * NOTE: the installer *asset filenames* (below) still need to be finalized
- * (awaiting correct installer paths) before this download URL resolves.
+ * Pinned release tag — a specific tag (not a moving branch, and not the
+ * `/releases/latest/` alias which skips pre-releases) so the downloaded binary
+ * is reproducible and auditable.
+ *
+ * TODO (TEST FEATURE — NEEDS UPDATING BEFORE RELEASE): temporarily pinned to the
+ * `v0.10.1-rc.3` *pre-release*, the only tag that currently carries the installer
+ * assets (antd-windows-x64-setup.msi / antd-macos.pkg / antd-linux-x64.deb). This
+ * lets the "Download daemon" flow be tested end-to-end. Revert to a stable
+ * release tag once the installers ship on one.
  */
-export const ANTD_RELEASE_TAG = 'v0.9.2';
+export const ANTD_RELEASE_TAG = 'v0.10.1-rc.3';
 
 /** Releases landing page — fallback / "other builds" link. */
 export const ANTD_RELEASES_URL = `https://github.com/${ANTD_RELEASE_REPO}/releases`;

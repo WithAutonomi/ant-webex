@@ -52,9 +52,13 @@ releasesLink.href = ANTD_RELEASES_URL;
 
 if (os) {
   osLabel.textContent = OS_LABELS[os];
+  // Surface the exact download URL on hover (the button isn't a link, so it has
+  // no native status-bar URL).
+  btnDownload.title = installerDownloadUrl(os);
 } else {
   // Unknown platform — point at the releases page instead of a specific asset.
   osLabel.textContent = 'your platform';
+  btnDownload.title = ANTD_RELEASES_URL;
   downloadHint.textContent =
     "We couldn't detect your operating system — pick the right build on GitHub.";
 }
