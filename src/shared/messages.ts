@@ -27,6 +27,18 @@ export interface DownloadFileReq {
   filename?: string;
 }
 
+/** Ask whether this address has already been downloaded (and still exists). */
+export interface CheckDownloadedReq {
+  type: 'CHECK_DOWNLOADED';
+  address: string;
+}
+
+/** Open the already-downloaded file for this address with the OS default app. */
+export interface OpenDownloadReq {
+  type: 'OPEN_DOWNLOAD';
+  address: string;
+}
+
 export interface DetectDaemonReq {
   type: 'DETECT_DAEMON';
 }
@@ -42,6 +54,8 @@ export type Request =
   | SaveSettingsReq
   | FetchResourceReq
   | DownloadFileReq
+  | CheckDownloadedReq
+  | OpenDownloadReq
   | DetectDaemonReq
   | UpdateBadgeReq;
 
@@ -70,6 +84,24 @@ export interface DownloadResp {
   error?: string;
 }
 
+/**
+ * Progress tick pushed over the download port while the daemon streams a file.
+ * `total` is the Content-Length (original file size), or null if unknown.
+ */
+export interface DownloadProgressResp {
+  type: 'DOWNLOAD_PROGRESS';
+  address: string;
+  received: number;
+  total: number | null;
+}
+
+/** Reply to CHECK_DOWNLOADED — whether a usable prior download exists. */
+export interface DownloadStateResp {
+  type: 'DOWNLOAD_STATE';
+  address: string;
+  downloaded: boolean;
+}
+
 export interface DetectDaemonResp {
   type: 'DETECT_DAEMON_RESULT';
   /** Port read from daemon.port file, or null if unavailable. */
@@ -83,4 +115,6 @@ export type Response =
   | SettingsResp
   | ResourceResp
   | DownloadResp
+  | DownloadProgressResp
+  | DownloadStateResp
   | DetectDaemonResp;

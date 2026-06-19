@@ -6,6 +6,7 @@
   "permissions": [
     "storage",
     "downloads",
+    "downloads.open",
     "alarms"
   ],
   "host_permissions": [

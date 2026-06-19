@@ -17,6 +17,14 @@ export const NATIVE_HOST_NAME = 'com.autonomi.webex';
 export const HEALTH_ALARM = 'antd-health';
 
 /**
+ * chrome.runtime.connect port name for streamed downloads. A long-lived port
+ * (rather than a one-shot sendMessage) lets the service worker push progress
+ * updates back to the content script while the daemon streams the file, and
+ * keeps the MV3 worker alive for the duration of the download.
+ */
+export const DOWNLOAD_PORT = 'ant-download';
+
+/**
  * Platform-specific paths where antd writes its daemon.port file.
  * The native messaging host reads these — the extension itself cannot
  * access the filesystem.
@@ -47,8 +55,8 @@ export const ANTD_RELEASE_REPO = 'WithAutonomi/ant-sdk';
  * Pinned release tag — a specific tag (not a moving branch) so the downloaded
  * binary is reproducible and auditable. Matches the current SDK line and the
  * MIN_ANTD_VERSION floor.
- * NOTE: the installer *asset filenames* (below) still need V2-484 before this
- * download URL resolves.
+ * NOTE: the installer *asset filenames* (below) still need to be finalized
+ * (awaiting correct installer paths) before this download URL resolves.
  */
 export const ANTD_RELEASE_TAG = 'v0.9.2';
 
@@ -61,6 +69,10 @@ export const ANTD_RELEASES_URL = `https://github.com/${ANTD_RELEASE_REPO}/releas
  * release artifacts are finalized.
  */
 export const ANTD_INSTALLER_ASSETS: Record<OsKey, string> = {
+  // Windows ships an MSI, matching the Autonomi GUI (Tauri WiX bundle) and its
+  // existing signing pipeline. NOTE: Tauri names MSIs with the version baked in
+  // (e.g. Autonomi_x.y.z_x64_en-US.msi); the release must publish it under this
+  // stable filename so the download URL resolves. See INSTALLER.md §3.
   windows: 'antd-windows-x64-setup.msi',
   macos: 'antd-macos.pkg',
   linux: 'antd-linux-x64.deb',
@@ -108,9 +120,55 @@ export const OS_LABELS: Record<OsKey, string> = {
   linux: 'Linux',
 };
 
+/**
+ * Per-OS hints for the popup's "already installed antd? find & run it" guide,
+ * shown when the daemon isn't detected. The audience is mixed-technical, so the
+ * copy stays plain. The extension talks to antd over REST and requires the
+ * `--cors` flag (see RUN_COMMAND); the run command is the same on every OS once
+ * antd is on the PATH.
+ *
+ * `installPath` is the conventional install location per installer type
+ * (best-effort). `portFile` is authoritative (mirrors DAEMON_PORT_PATHS): if
+ * that file exists, antd has run at least once.
+ */
+export interface RunGuide {
+  /** How to open a terminal on this OS. */
+  terminal: string;
+  /** Conventional install location of the antd program. */
+  installPath: string;
+  /** Where antd writes its daemon.port file once running. */
+  portFile: string;
+}
+
+/** The command to start antd so the extension can reach it. */
+export const ANTD_RUN_COMMAND = 'antd --cors';
+
+export const ANTD_RUN_GUIDE: Record<OsKey, RunGuide> = {
+  // TODO (awaiting correct installer paths): the `installPath` values below are
+  // conventional best-guesses per installer type. Confirm each against the real
+  // installer once the asset locations are finalized.
+  windows: {
+    terminal: 'press Win, type “PowerShell”, then Enter',
+    installPath: 'C:\\Program Files\\Autonomi\\antd\\antd.exe',
+    portFile: '%APPDATA%\\ant\\sdk\\daemon.port',
+  },
+  macos: {
+    terminal: 'press Cmd+Space, type “Terminal”, then Enter',
+    installPath: '/usr/local/bin/antd',
+    portFile: '~/Library/Application Support/ant/sdk/daemon.port',
+  },
+  linux: {
+    terminal: 'press Ctrl+Alt+T (or open your terminal app)',
+    installPath: '/usr/bin/antd',
+    portFile: '~/.local/share/ant/sdk/daemon.port',
+  },
+};
+
 /** Storage keys used in chrome.storage.local. */
 export const STORAGE_KEYS = {
   SETTINGS: 'settings',
   DAEMON_STATUS: 'daemonStatus',
   UPDATE_CACHE: 'updateCache',
+  /** Map of network address → chrome.downloads id for completed downloads. */
+  DOWNLOADS: 'downloads',
 } as const;
