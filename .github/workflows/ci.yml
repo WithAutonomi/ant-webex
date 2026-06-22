@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-lint:
+    name: typecheck · build · web-ext lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build (Chrome + Firefox)
+        run: npm run build:all
+
+      # Lints the built Firefox extension. Fails the job on errors
+      # (e.g. invalid manifest, wrong icon size); benign warnings (such as
+      # data_collection_permissions min-version notes) do not fail the build.
+      - name: Lint Firefox build (web-ext)
+        run: npx --yes web-ext lint --source-dir=dist-firefox
