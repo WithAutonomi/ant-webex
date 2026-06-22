@@ -1,6 +1,6 @@
 # Privacy Policy — Autonomi Browser Extension
 
-_Last updated: 2026-06-10_
+_Last updated: 2026-06-22_
 
 This policy describes the data practices of the **Autonomi** browser extension
 ("the extension"), published by the **Autonomi Foundation** (Place de Longemalle 1,
@@ -67,6 +67,5 @@ Material changes will be reflected here with an updated date.
 
 ## Contact
 
-Data protection inquiries: <!-- TODO: confirm the Autonomi Foundation data-protection
-contact email shown on https://autonomi.com/privacy-notice -->.
-Autonomi Foundation, Place de Longemalle 1, Geneva, Switzerland.
+Data protection inquiries: legal@autonomi.com.
+Autonomi Foundation, Attention: Data Protection, Place de Longemalle 1, 1204 Geneva, Switzerland.
