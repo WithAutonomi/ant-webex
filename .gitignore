@@ -1,0 +1,10 @@
+node_modules/
+dist/
+dist-firefox/
+web-ext-artifacts/
+native-host/target/
+*.log
+CLAUDE.md
+.DS_Store
+Thumbs.db
+.claude/

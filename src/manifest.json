@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Autonomi",
+  "version": "0.1.0",
+  "description": "Download and view content from the Autonomi decentralized network directly in your browser",
+  "permissions": [
+    "storage",
+    "downloads",
+    "downloads.open",
+    "alarms"
+  ],
+  "host_permissions": [
+    "http://localhost:*/*",
+    "http://127.0.0.1:*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/index.html",
+    "default_title": "Autonomi"
+  },
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  }
+}

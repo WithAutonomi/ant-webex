@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ant-webex Test Page</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; background: #0f172a; color: #e2e8f0; }
+    h1 { color: #60a5fa; }
+    h2 { color: #94a3b8; margin-top: 40px; }
+    .test-case { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 16px; margin: 12px 0; }
+    .test-case h3 { margin: 0 0 8px; color: #60a5fa; font-size: 14px; }
+    .test-case p { color: #94a3b8; font-size: 13px; margin: 4px 0; }
+    code { background: #334155; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+    a { color: #60a5fa; }
+    img { border: 2px solid #334155; border-radius: 4px; }
+    .embed-container { width: 100%; height: 200px; border: 2px solid #334155; border-radius: 4px; }
+    .status { padding: 8px 12px; border-radius: 4px; margin: 20px 0; font-size: 13px; }
+    .status.info { background: #1e3a5f; border: 1px solid #3b82f6; }
+  </style>
+</head>
+<body>
+  <h1>ant-webex Test Page</h1>
+  <div class="status info">
+    If the extension is installed and antd is running, the resources below will load automatically.
+    Check the extension popup (click the icon) to see daemon status and detected resources.
+  </div>
+
+  <h2>1. Download Link</h2>
+  <div class="test-case">
+    <h3><code>&lt;a href="autonomi://..."&gt;</code></h3>
+    <p>Clicking this should trigger a browser download via the extension (watch the progress fill).
+       The <code>name=</code> and <code>filetype=</code> params drive the popup's filename + download button:</p>
+    <p><a href="autonomi://9703216cb34a6d736ce768cac8859d2bb7efabfb7e92d9cac85f880133a7f471?name=large-test&filetype=dat">Download test file from Autonomi</a></p>
+  </div>
+
+  <h2>2. Inline Image</h2>
+  <div class="test-case">
+    <h3><code>&lt;img data-ant-src="autonomi://..."&gt;</code></h3>
+    <p>The extension should fetch this image and set the src attribute:</p>
+    <img data-ant-src="autonomi://d304bb960a542c11410e30878c1452f25457196e1788d9d4b0ae88e5accb92a0" data-ant-type="image/png"
+         alt="Test image from Autonomi" width="64" height="64"
+         style="image-rendering: pixelated;" />
+  </div>
+
+  <h2>3. Generic Embed</h2>
+  <div class="test-case">
+    <h3><code>&lt;div data-ant-embed="autonomi://..." data-ant-type="text/html"&gt;</code></h3>
+    <p>The extension should fetch this HTML and render it in an iframe:</p>
+    <div data-ant-embed="autonomi://3a1372f7f5c3a830756fade1a1fc19a2f7e1de8edcf856849d420b22745c577b" data-ant-type="text/html"
+         class="embed-container">
+    </div>
+  </div>
+
+  <h2>4. Source HTML</h2>
+  <div class="test-case">
+    <h3>What the page author wrote</h3>
+    <pre style="background:#0f172a;padding:12px;border-radius:4px;font-size:11px;overflow-x:auto;color:#94a3b8;">
+&lt;a href="autonomi://d51056f571a91433d4f8859e5b88e7d62b4f20289b8f19261084ce040ed2a0a4"&gt;Download&lt;/a&gt;
+
+&lt;img data-ant-src="autonomi://d304bb960a542c11410e30878c1452f25457196e1788d9d4b0ae88e5accb92a0"
+     data-ant-type="image/png" /&gt;
+
+&lt;div data-ant-embed="autonomi://3a1372f7f5c3a830756fade1a1fc19a2f7e1de8edcf856849d420b22745c577b"
+     data-ant-type="text/html"&gt;&lt;/div&gt;
+    </pre>
+  </div>
+
+  <h2>Addresses</h2>
+  <div class="test-case">
+    <p>PNG: <code>d304bb960a542c11410e30878c1452f25457196e1788d9d4b0ae88e5accb92a0</code></p>
+    <p>Text: <code>d51056f571a91433d4f8859e5b88e7d62b4f20289b8f19261084ce040ed2a0a4</code></p>
+    <p>HTML: <code>3a1372f7f5c3a830756fade1a1fc19a2f7e1de8edcf856849d420b22745c577b</code></p>
+  </div>
+</body>
+</html>

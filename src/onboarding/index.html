@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Welcome to Autonomi</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <!-- Brand -->
+      <header class="brand">
+        <img src="../assets/icons/icon-128.png" alt="Autonomi" class="logo" />
+        <h1 class="wordmark">Autonomi</h1>
+      </header>
+
+      <section class="welcome" id="welcome">
+        <h2>Welcome to Autonomi</h2>
+        <p class="lede">
+          You're almost ready to browse content from the Autonomi network. One quick
+          setup step and you're in.
+        </p>
+      </section>
+
+      <!-- Live connection banner -->
+      <div id="status-banner" class="status status-checking">
+        <span class="status-dot"></span>
+        <span id="status-text">Checking for the network daemon…</span>
+      </div>
+
+      <!-- Steps -->
+      <ol class="steps" id="steps">
+        <li class="step" id="step-1">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Download the network daemon</h3>
+            <p>
+              Autonomi content lives on a decentralized network. A small local program
+              called <code>antd</code> runs on your computer and fetches that content for
+              the extension — your browser can't reach the network on its own. It runs
+              quietly in the background and only listens on your own machine.
+            </p>
+            <div class="step-actions">
+              <button id="btn-download" class="primary">Download for <span id="os-label">your platform</span></button>
+              <a id="releases-link" href="#" target="_blank" rel="noopener" class="secondary-link">All downloads on GitHub</a>
+            </div>
+            <p class="hint" id="download-hint"></p>
+          </div>
+        </li>
+
+        <li class="step" id="step-2">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Run the installer</h3>
+            <p>
+              Open the file you just downloaded and follow the prompts. It installs
+              <code>antd</code>, starts it, and sets it to launch automatically each time
+              you sign in — so you only do this once.
+            </p>
+
+            <!-- Already installed? find & run an existing antd -->
+            <details class="already" id="run-guide">
+              <summary>Already installed antd? Find &amp; run it</summary>
+              <div class="already-body">
+                <p>
+                  If you set up antd before, it may simply be stopped — or running without
+                  the option the extension needs. The extension reaches antd at
+                  <code id="guide-url">http://localhost:8082</code> and needs it started
+                  <strong>with the <code>--cors</code> option</strong>.
+                </p>
+
+                <h4>1 · Open a terminal</h4>
+                <p class="sub" id="guide-terminal"></p>
+
+                <h4>2 · Start the daemon</h4>
+                <pre id="guide-cmd">antd --cors</pre>
+                <p class="sub">
+                  Keep that window open while you browse. If you see
+                  <em>“command not found”</em>, antd isn't on your PATH — run it using the
+                  full path shown below (still adding <code>--cors</code>).
+                </p>
+
+                <h4>Where to find it</h4>
+                <ul class="paths">
+                  <li><span class="paths-label">Program</span><code id="guide-install">—</code></li>
+                  <li>
+                    <span class="paths-label">Running check</span><code id="guide-portfile">—</code>
+                    <span class="sub">— this file appears once antd has started.</span>
+                  </li>
+                </ul>
+
+                <p class="sub">
+                  Once it's running, this page connects automatically — or click
+                  <strong>Detect daemon</strong> in the toolbar popup.
+                </p>
+              </div>
+            </details>
+          </div>
+        </li>
+
+        <li class="step" id="step-3">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Check the extension for a connection</h3>
+            <p>
+              This page detects the daemon automatically. Once it's running, the banner
+              above turns green and you're connected to the network. You can also click
+              the Autonomi icon in your browser toolbar any time to see your status.
+            </p>
+          </div>
+        </li>
+      </ol>
+
+      <section id="done-panel" class="done hidden">
+        <h2>🎉 You're connected!</h2>
+        <p class="lede">
+          The extension can now load Autonomi content. Visit a page with
+          <code>autonomi://</code> references, or open the toolbar popup to see what's
+          detected.
+        </p>
+      </section>
+    </main>
+
+    <script src="index.js"></script>
+  </body>
+</html>
