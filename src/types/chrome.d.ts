@@ -22,6 +22,11 @@ declare namespace chrome {
       addListener(callback: (details: { reason: string }) => void): void;
     };
     function connectNative(hostName: string): Port;
+    function connect(connectInfo?: { name?: string }): Port;
+    const onConnect: {
+      addListener(callback: (port: Port) => void): void;
+    };
+    const lastError: { message?: string } | undefined;
     function getURL(path: string): string;
 
     interface MessageSender {
@@ -75,6 +80,8 @@ declare namespace chrome {
     }): Promise<DownloadItem[]>;
     /** Open the downloaded file's containing folder in the OS file manager. */
     function show(downloadId: number): void;
+    /** Open the downloaded file with the OS default app (needs downloads.open). */
+    function open(downloadId: number): void;
     function erase(query: { id?: number }): Promise<number[]>;
     interface DownloadDelta {
       id: number;

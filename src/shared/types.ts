@@ -40,7 +40,8 @@ export interface AntElement {
   kind: AntElementKind;
   /** Network address (the part after autonomi://, query stripped). */
   address: string;
-  /** Optional download filename from a ?name= query param. */
+  /** Optional download filename from the `name=` query param, with the
+   *  `filetype=` param appended as an extension when present. */
   name?: string;
   /** Optional MIME type hint from data-ant-type attribute. */
   mimeType?: string;

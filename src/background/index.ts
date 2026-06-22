@@ -11,13 +11,14 @@
 import { AntdClient } from '../shared/antd-client';
 import {
   ANTD_RELEASES_API,
+  DOWNLOAD_PORT,
   HEALTH_ALARM,
   HEALTH_POLL_MS,
   MIN_ANTD_VERSION,
   STORAGE_KEYS,
   UPDATE_CHECK_INTERVAL_MS,
 } from '../shared/constants';
-import type { Request, Response } from '../shared/messages';
+import type { DownloadFileReq, DownloadResp, Request, Response } from '../shared/messages';
 import { DEFAULT_SETTINGS, type DaemonStatus, type ExtensionSettings } from '../shared/types';
 import { isBelowMinimum, isUpdateAvailable, latestStableVersion } from '../shared/version';
 
@@ -25,6 +26,9 @@ import { isBelowMinimum, isUpdateAvailable, latestStableVersion } from '../share
 
 let settings: ExtensionSettings = { ...DEFAULT_SETTINGS };
 let client = new AntdClient(settings.daemonUrl);
+// Network address → chrome.downloads id, so the in-page button can offer "Open"
+// when a file has already been downloaded. Persisted (MV3 may suspend us).
+let downloadsByAddress: Record<string, number> = {};
 let status: DaemonStatus = {
   connected: false,
   url: settings.daemonUrl,
@@ -39,6 +43,7 @@ let status: DaemonStatus = {
 
 chrome.runtime.onInstalled.addListener(async (details) => {
   await loadSettings();
+  await loadDownloads();
   await checkHealth();
   startHealthAlarm();
 
@@ -51,6 +56,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
 // Also restore state when the service worker wakes up (MV3 can suspend it).
 loadSettings().then(() => checkHealth());
+loadDownloads();
 
 // ── Health polling ──────────────────────────────────────────────────
 
@@ -169,6 +175,39 @@ async function saveSettings(next: ExtensionSettings): Promise<void> {
   await checkHealth();
 }
 
+// ── Download history (address → download id) ────────────────────────
+
+async function loadDownloads(): Promise<void> {
+  const stored = await chrome.storage.local.get(STORAGE_KEYS.DOWNLOADS);
+  downloadsByAddress = stored[STORAGE_KEYS.DOWNLOADS] || {};
+}
+
+async function recordDownload(address: string, id: number): Promise<void> {
+  downloadsByAddress[address] = id;
+  await chrome.storage.local.set({ [STORAGE_KEYS.DOWNLOADS]: downloadsByAddress });
+}
+
+async function forgetDownload(address: string): Promise<void> {
+  if (!(address in downloadsByAddress)) return;
+  delete downloadsByAddress[address];
+  await chrome.storage.local.set({ [STORAGE_KEYS.DOWNLOADS]: downloadsByAddress });
+}
+
+/** Look up the live, on-disk download item for an address, if any. */
+async function findDownload(address: string): Promise<chrome.downloads.DownloadItem | null> {
+  const id = downloadsByAddress[address];
+  if (id == null) return null;
+  try {
+    const [item] = await chrome.downloads.search({ id });
+    if (item && item.state === 'complete' && item.exists) return item;
+  } catch {
+    /* search failed — treat as not present */
+  }
+  // Stale (erased, deleted, or moved) — drop it so the button reverts.
+  await forgetDownload(address);
+  return null;
+}
+
 // ── Port probing (daemon auto-discovery) ────────────────────────────
 
 // ── Message handler ─────────────────────────────────────────────────
@@ -181,6 +220,27 @@ chrome.runtime.onMessage.addListener(
     if (msg?.type) return handleMessage(msg, sender);
   },
 );
+
+// Streaming-download port. The content script opens this for a download so the
+// worker can push DOWNLOAD_PROGRESS ticks while the daemon streams the file,
+// then a final DOWNLOAD_RESULT. The open port also keeps the MV3 worker alive
+// for the whole download.
+chrome.runtime.onConnect.addListener((port) => {
+  if (port.name !== DOWNLOAD_PORT) return;
+  port.onMessage.addListener(async (msg: DownloadFileReq) => {
+    if (msg?.type !== 'DOWNLOAD_FILE') return;
+    const result = await performDownload(msg.address, msg.filename, (received, total) => {
+      // postMessage throws if the page navigated away mid-download — ignore.
+      try {
+        port.postMessage({ type: 'DOWNLOAD_PROGRESS', address: msg.address, received, total });
+      } catch { /* port closed */ }
+    });
+    try {
+      port.postMessage(result);
+    } catch { /* port closed */ }
+    port.disconnect();
+  });
+});
 
 async function handleMessage(msg: Request, sender?: chrome.runtime.MessageSender): Promise<Response> {
   switch (msg.type) {
@@ -226,66 +286,30 @@ async function handleMessage(msg: Request, sender?: chrome.runtime.MessageSender
       }
     }
 
-    case 'DOWNLOAD_FILE': {
-      if (!(await ensureConnected())) {
-        return {
-          type: 'DOWNLOAD_RESULT',
-          address: msg.address,
-          ok: false,
-          error: 'Daemon not connected',
-        };
+    case 'DOWNLOAD_FILE':
+      // One-shot download with no progress reporting. Content scripts use the
+      // streaming port (onConnect below) instead; this remains for any caller
+      // that just wants fire-and-forget.
+      return performDownload(msg.address, msg.filename);
+
+    case 'CHECK_DOWNLOADED': {
+      const item = await findDownload(msg.address);
+      return { type: 'DOWNLOAD_STATE', address: msg.address, downloaded: !!item };
+    }
+
+    case 'OPEN_DOWNLOAD': {
+      const item = await findDownload(msg.address);
+      if (!item) {
+        return { type: 'DOWNLOAD_RESULT', address: msg.address, ok: false, error: 'file no longer available' };
       }
-      const filename =
-        (msg.filename && sanitizeFilename(msg.filename)) ||
-        `autonomi-${msg.address.slice(0, 12)}`;
       try {
-        // Fetch via the client (resolves public-data DataMaps, falls back to
-        // raw chunks) and hand the bytes to chrome.downloads. A direct
-        // daemon→browser download via /v1/data/public/:addr/stream would avoid
-        // buffering, but needs a newer antd binary than is currently shipped.
-        const buf = await client.getData(msg.address);
-        const bytes = new Uint8Array(buf);
-        const mime = sniffMime(bytes) || 'application/octet-stream';
-
-        // Pick the download source per browser. Chrome's MV3 service worker has
-        // no URL.createObjectURL, so it uses a data: URL. Firefox's event-page
-        // background has createObjectURL and *refuses* to download data: URLs
-        // ("Access denied"), so it uses a blob: URL.
-        let url: string;
-        let objectUrl: string | null = null;
-        if (typeof URL.createObjectURL === 'function') {
-          objectUrl = URL.createObjectURL(new Blob([bytes], { type: mime }));
-          url = objectUrl;
-        } else {
-          url = `data:${mime};base64,${uint8ToBase64(bytes)}`;
-        }
-
-        try {
-          const id = await chrome.downloads.download({ url, filename, saveAs: false });
-          // Firefox's chrome.* namespace can report failures via lastError
-          // rather than rejecting the promise, so check it explicitly.
-          const lastErr = (chrome.runtime as any)?.lastError;
-          if (lastErr) throw new Error(lastErr.message);
-          // Revoke the blob URL once the download reaches a terminal state —
-          // revoking earlier can cancel an in-flight download.
-          if (objectUrl) revokeWhenDone(id, objectUrl);
-          console.debug(`[ant-webex] download started: ${filename} (${bytes.length} bytes, id ${id})`);
-          return { type: 'DOWNLOAD_RESULT', address: msg.address, ok: true };
-        } catch (e) {
-          if (objectUrl) URL.revokeObjectURL(objectUrl);
-          throw e;
-        }
-      } catch (e: any) {
-        // Log so failures are visible in the background console — the fetch
-        // error carries the failing endpoint + status (e.g. .../public: 501).
-        console.error(`[ant-webex] download failed for ${msg.address} → ${filename}:`, e);
-        return {
-          type: 'DOWNLOAD_RESULT',
-          address: msg.address,
-          ok: false,
-          error: e?.message || 'download failed',
-        };
+        chrome.downloads.open(item.id);
+      } catch {
+        // open() needs the downloads.open permission / a complete file — if it
+        // fails, fall back to revealing the file in the OS file manager.
+        try { chrome.downloads.show(item.id); } catch { /* nothing more to do */ }
       }
+      return { type: 'DOWNLOAD_RESULT', address: msg.address, ok: true };
     }
 
     case 'DETECT_DAEMON': {
@@ -325,6 +349,81 @@ async function handleMessage(msg: Request, sender?: chrome.runtime.MessageSender
       }
       return { type: 'DAEMON_STATUS', status }; // ack
     }
+  }
+}
+
+// ── Download ────────────────────────────────────────────────────────
+
+/**
+ * Fetch `address` and hand the bytes to chrome.downloads. Prefers the
+ * streaming endpoint (raw bytes + progress via `onProgress`), falling back to
+ * the buffered getData path on daemons that predate /stream. Returns a
+ * DownloadResp rather than throwing, so both the message and port callers can
+ * forward it directly.
+ */
+async function performDownload(
+  address: string,
+  filename?: string,
+  onProgress?: (received: number, total: number | null) => void,
+): Promise<DownloadResp> {
+  if (!(await ensureConnected())) {
+    return { type: 'DOWNLOAD_RESULT', address, ok: false, error: 'Daemon not connected' };
+  }
+  const fname =
+    (filename && sanitizeFilename(filename)) || `autonomi-${address.slice(0, 12)}`;
+  try {
+    // Stream the raw bytes (reports progress, skips the daemon-side base64 +
+    // JSON). Older daemons lack the endpoint (404) — fall back to getData,
+    // which also resolves DataMaps and raw chunks.
+    let buf: ArrayBuffer;
+    try {
+      buf = await client.streamData(address, onProgress);
+    } catch (e: any) {
+      if (e?.streamUnsupported) {
+        console.debug('[ant-webex] /stream unavailable; falling back to getData');
+        buf = await client.getData(address);
+      } else {
+        throw e;
+      }
+    }
+    const bytes = new Uint8Array(buf);
+    const mime = sniffMime(bytes) || 'application/octet-stream';
+
+    // Pick the download source per browser. Chrome's MV3 service worker has no
+    // URL.createObjectURL, so it uses a data: URL. Firefox's event-page
+    // background has createObjectURL and *refuses* to download data: URLs
+    // ("Access denied"), so it uses a blob: URL.
+    let url: string;
+    let objectUrl: string | null = null;
+    if (typeof URL.createObjectURL === 'function') {
+      objectUrl = URL.createObjectURL(new Blob([bytes], { type: mime }));
+      url = objectUrl;
+    } else {
+      url = `data:${mime};base64,${uint8ToBase64(bytes)}`;
+    }
+
+    try {
+      const id = await chrome.downloads.download({ url, filename: fname, saveAs: false });
+      // Firefox's chrome.* namespace can report failures via lastError
+      // rather than rejecting the promise, so check it explicitly.
+      const lastErr = (chrome.runtime as any)?.lastError;
+      if (lastErr) throw new Error(lastErr.message);
+      // Revoke the blob URL once the download reaches a terminal state —
+      // revoking earlier can cancel an in-flight download.
+      if (objectUrl) revokeWhenDone(id, objectUrl);
+      // Remember it so the in-page button can later offer "Open".
+      await recordDownload(address, id);
+      console.debug(`[ant-webex] download started: ${fname} (${bytes.length} bytes, id ${id})`);
+      return { type: 'DOWNLOAD_RESULT', address, ok: true };
+    } catch (e) {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      throw e;
+    }
+  } catch (e: any) {
+    // Log so failures are visible in the background console — the fetch error
+    // carries the failing endpoint + status (e.g. .../stream: 500).
+    console.error(`[ant-webex] download failed for ${address} → ${fname}:`, e);
+    return { type: 'DOWNLOAD_RESULT', address, ok: false, error: e?.message || 'download failed' };
   }
 }
 
