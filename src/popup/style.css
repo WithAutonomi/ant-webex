@@ -326,7 +326,8 @@ button:hover {
   margin: 6px 0;
 }
 
-.version-warning a {
+.version-warning a,
+.version-warning .link-btn {
   margin-left: 6px;
 }
 
@@ -342,7 +343,8 @@ button:hover {
   margin: 6px 0;
 }
 
-.update-nudge a {
+.update-nudge a,
+.update-nudge .link-btn {
   margin-left: 6px;
 }
 

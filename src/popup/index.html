@@ -27,14 +27,22 @@
         <code id="daemon-url"></code>
       </p>
 
+      <!-- Every update path is a one-click installer download, the same as the
+           first-run flow — never a link dumping the user on a releases page to
+           pick an asset by hand. -->
       <p id="version-warning" class="version-warning hidden">
         This antd version is too old. The extension needs
         <strong id="min-version"></strong> or newer.
-        <a id="warning-update-link" href="#" target="_blank" rel="noopener">Update antd</a>
+        <button id="warning-update-btn" class="link-btn">Update antd</button>
+      </p>
+      <p id="prerelease-warning" class="version-warning hidden">
+        This is a pre-release antd build (<strong id="prerelease-version"></strong>).
+        The extension supports stable releases only.
+        <button id="prerelease-update-btn" class="link-btn">Install the stable release</button>
       </p>
       <p id="update-nudge" class="update-nudge hidden">
         Update available: <strong id="latest-version"></strong>
-        <a id="update-link" href="#" target="_blank" rel="noopener">Get the latest</a>
+        <button id="update-btn" class="link-btn">Get the latest</button>
       </p>
 
       <section class="panel" id="page-resources">
@@ -107,20 +115,31 @@
         </div>
       </details>
 
-      <div id="install-info" class="panel hidden">
-        <h3 class="section-label">Install antd</h3>
-        <ol class="install-steps">
-          <li>Run the installer that just downloaded (<code id="install-file"></code>).</li>
-          <li>It starts antd and sets it to launch on login.</li>
-          <li>This panel updates automatically once antd is detected.</li>
-        </ol>
-        <p class="muted" id="install-waiting"><span class="spinner"></span> Waiting for antd…</p>
-        <p class="muted">
-          Other platforms or manual install:
-          <a id="install-releases-link" href="#" target="_blank">antd releases</a>
-        </p>
-      </div>
     </section>
+
+    <!--
+      Installer download panel — shared by the first-run install flow and by
+      every version warning/nudge, so updating is exactly as one-click as
+      installing.
+
+      Deliberately outside both views: running an installer over a live daemon
+      makes it flap connected → disconnected → connected as it restarts, and
+      this panel has to survive that. Inside disconnected-view it would vanish
+      the moment the new daemon came up.
+    -->
+    <div id="install-info" class="panel hidden">
+      <h3 class="section-label" id="install-title">Install antd</h3>
+      <ol class="install-steps">
+        <li>Run the installer that just downloaded (<code id="install-file"></code>).</li>
+        <li id="install-step-2">It starts antd and sets it to launch on login.</li>
+        <li>This panel updates automatically once antd is detected.</li>
+      </ol>
+      <p class="muted" id="install-waiting"><span class="spinner"></span> Waiting for antd…</p>
+      <p class="muted">
+        Other platforms or manual install:
+        <a id="install-releases-link" href="#" target="_blank">antd releases</a>
+      </p>
+    </div>
 
     <!-- Settings -->
     <details id="settings-panel">

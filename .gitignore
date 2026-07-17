@@ -2,6 +2,12 @@ node_modules/
 dist/
 dist-firefox/
 web-ext-artifacts/
+
+# Packaged release artifacts — rebuilt from a tagged tree per release, never
+# committed. (The AMO source zip is regenerated for each submission.)
+*.zip
+*.xpi
+*.crx
 native-host/target/
 *.log
 CLAUDE.md
