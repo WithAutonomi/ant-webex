@@ -13,6 +13,13 @@ export interface DaemonStatus {
   updateAvailable: boolean;
   /** True when the running version is older than MIN_ANTD_VERSION. */
   belowMinimum: boolean;
+  /**
+   * True when the daemon is a pre-release build (e.g. "0.10.1-rc.3"). The
+   * extension supports stable antd releases only. Tracked separately from
+   * belowMinimum because a pre-release can be *newer* than the floor and still
+   * be unsupported — "too old" would be the wrong thing to tell that user.
+   */
+  prerelease: boolean;
 }
 
 // ── Settings ────────────────────────────────────────────────────────

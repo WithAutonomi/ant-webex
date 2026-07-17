@@ -56,13 +56,17 @@ export const ANTD_RELEASE_REPO = 'WithAutonomi/ant-sdk';
  * `/releases/latest/` alias which skips pre-releases) so the downloaded binary
  * is reproducible and auditable.
  *
- * TODO (TEST FEATURE — NEEDS UPDATING BEFORE RELEASE): temporarily pinned to the
- * `v0.10.1-rc.3` *pre-release*, the only tag that currently carries the installer
- * assets (antd-windows-x64-setup.msi / antd-macos.pkg / antd-linux-x64.deb). This
- * lets the "Download daemon" flow be tested end-to-end. Revert to a stable
- * release tag once the installers ship on one.
+ * v0.11.1 is the first *stable* antd release to carry the installer assets
+ * (antd-windows-x64-setup.msi / antd-macos.pkg / antd-linux-x64.deb). Every
+ * earlier stable tag shipped bare binaries only, because the installer +
+ * signing pipeline had never merged to ant-sdk's main — which is why this was
+ * pinned to the v0.10.1-rc.3 *pre-release* until now.
+ *
+ * Keep this on a stable tag: MIN_ANTD_VERSION rejects pre-releases, so pinning
+ * an rc here would make the "Download daemon" flow install a daemon the
+ * extension immediately flags as unsupported.
  */
-export const ANTD_RELEASE_TAG = 'v0.10.1-rc.3';
+export const ANTD_RELEASE_TAG = 'v0.11.1';
 
 /** Releases landing page — fallback / "other builds" link. */
 export const ANTD_RELEASES_URL = `https://github.com/${ANTD_RELEASE_REPO}/releases`;
@@ -98,15 +102,20 @@ export const ANTD_RELEASES_API = `https://api.github.com/repos/${ANTD_RELEASE_RE
 export const UPDATE_CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000; // 6 hours
 
 /**
- * Minimum antd version the extension's REST usage requires. When the running
- * daemon is older, the popup shows a hard "update required" warning (this is
- * independent of the optional update-available nudge).
+ * Minimum antd version the extension accepts. When the running daemon is older,
+ * the popup shows a hard "update required" warning (independent of the optional
+ * update-available nudge).
  *
- * The extension ships fresh against the current SDK, so the floor is set to
- * the current antd release (v0.9.2). Bump this when the extension starts
- * relying on endpoints/behavior added in a later antd version.
+ * Set to the current antd release (v0.11.0): the extension ships fresh against
+ * the current SDK and supports stable releases only. Note this floor is a
+ * deliberate policy choice rather than a technical requirement — the extension's
+ * REST usage very likely still works on 0.9.x/0.10.x, but those daemons are
+ * hard-failed anyway to keep everyone on one known-good version.
+ *
+ * Pre-releases are rejected separately (see isPrerelease) — they can sit *above*
+ * this floor and still be unsupported.
  */
-export const MIN_ANTD_VERSION = '0.9.2';
+export const MIN_ANTD_VERSION = '0.11.0';
 
 /** Map the current user agent to an installer OS key, or null if unknown. */
 export function detectOs(): OsKey | null {

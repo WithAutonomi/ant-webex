@@ -20,7 +20,12 @@ import {
 } from '../shared/constants';
 import type { DownloadFileReq, DownloadResp, Request, Response } from '../shared/messages';
 import { DEFAULT_SETTINGS, type DaemonStatus, type ExtensionSettings } from '../shared/types';
-import { isBelowMinimum, isUpdateAvailable, latestStableVersion } from '../shared/version';
+import {
+  isBelowMinimum,
+  isPrerelease,
+  isUpdateAvailable,
+  latestStableVersion,
+} from '../shared/version';
 
 // ── State ───────────────────────────────────────────────────────────
 
@@ -37,6 +42,7 @@ let status: DaemonStatus = {
   latestVersion: null,
   updateAvailable: false,
   belowMinimum: false,
+  prerelease: false,
 };
 
 // ── Init ────────────────────────────────────────────────────────────
@@ -75,17 +81,19 @@ async function checkHealth(): Promise<void> {
   status.connected = health.ok;
   status.url = settings.daemonUrl;
   status.version = health.version;
-  // Compatibility floor — always evaluated, regardless of the update setting.
+  // Compatibility floor and the stable-only policy — both always evaluated,
+  // regardless of the update setting.
   status.belowMinimum = health.version
     ? isBelowMinimum(health.version, MIN_ANTD_VERSION)
     : false;
+  status.prerelease = health.version ? isPrerelease(health.version) : false;
   if (health.ok) status.lastSeen = new Date().toISOString();
 
   await refreshUpdateStatus();
 
   await chrome.storage.local.set({ [STORAGE_KEYS.DAEMON_STATUS]: status });
   // Flag the toolbar icon when disconnected OR running an unsupported version.
-  updateBadge(status.connected && !status.belowMinimum);
+  updateBadge(status.connected && !status.belowMinimum && !status.prerelease);
 }
 
 /**

@@ -30,10 +30,13 @@ const daemonUrlEl = document.getElementById('daemon-url')!;
 const antdVersion = document.getElementById('antd-version')!;
 const updateNudge = document.getElementById('update-nudge')!;
 const latestVersionEl = document.getElementById('latest-version')!;
-const updateLink = document.getElementById('update-link') as HTMLAnchorElement;
+const updateBtn = document.getElementById('update-btn') as HTMLButtonElement;
 const versionWarning = document.getElementById('version-warning')!;
 const minVersionEl = document.getElementById('min-version')!;
-const warningUpdateLink = document.getElementById('warning-update-link') as HTMLAnchorElement;
+const warningUpdateBtn = document.getElementById('warning-update-btn') as HTMLButtonElement;
+const prereleaseWarning = document.getElementById('prerelease-warning')!;
+const prereleaseVersionEl = document.getElementById('prerelease-version')!;
+const prereleaseUpdateBtn = document.getElementById('prerelease-update-btn') as HTMLButtonElement;
 const connectedView = document.getElementById('connected-view')!;
 const disconnectedView = document.getElementById('disconnected-view')!;
 const noResources = document.getElementById('no-resources')!;
@@ -43,6 +46,8 @@ const noDownloads = document.getElementById('no-downloads')!;
 const btnClearDownloads = document.getElementById('btn-clear-downloads') as HTMLButtonElement;
 const installInfo = document.getElementById('install-info')!;
 const installFile = document.getElementById('install-file')!;
+const installTitle = document.getElementById('install-title')!;
+const installStep2 = document.getElementById('install-step-2')!;
 const installReleasesLink = document.getElementById('install-releases-link') as HTMLAnchorElement;
 
 const btnDetect = document.getElementById('btn-detect') as HTMLButtonElement;
@@ -78,24 +83,48 @@ async function refreshStatus() {
     statusText.textContent = 'Connected';
     daemonUrlEl.textContent = s.url;
     antdVersion.textContent = s.version ?? 'unknown';
+    // Precedence: the two hard rejections (too old, then pre-release) outrank
+    // the optional update nudge. Both can be true at once — an rc behind the
+    // floor — and "too old" is the more actionable message, so it wins.
     if (s.belowMinimum) {
-      // Hard compatibility warning takes precedence over the update nudge.
       minVersionEl.textContent = MIN_ANTD_VERSION;
-      warningUpdateLink.href = ANTD_RELEASES_URL;
       show(versionWarning);
+      hide(prereleaseWarning);
+      hide(updateNudge);
+    } else if (s.prerelease) {
+      prereleaseVersionEl.textContent = s.version ?? 'unknown';
+      hide(versionWarning);
+      show(prereleaseWarning);
       hide(updateNudge);
     } else if (s.updateAvailable && s.latestVersion) {
       hide(versionWarning);
+      hide(prereleaseWarning);
       latestVersionEl.textContent = s.latestVersion;
-      updateLink.href = ANTD_RELEASES_URL;
       show(updateNudge);
     } else {
       hide(versionWarning);
+      hide(prereleaseWarning);
       hide(updateNudge);
     }
     show(connectedView);
     hide(disconnectedView);
-    stopAutoPoll();
+
+    // Connected is NOT enough to settle: during an update the daemon stays
+    // connected the whole time, just reporting an unsupported version.
+    //
+    // Poll whenever it's unsupported — not only after the update button is
+    // clicked. This view renders the service worker's *cached* status, which
+    // only refreshes on its own HEALTH_POLL_MS alarm (Chrome clamps that, so
+    // ~30-60s). Without a poll here, a popup opened straight after running the
+    // installer shows a stale "too old" warning and sits on it, which reads as
+    // "the upgrade failed" and invites the user to run the installer again.
+    // Re-probing makes it self-correct within seconds.
+    if (s.belowMinimum || s.prerelease) {
+      startAutoPoll();
+    } else {
+      stopAutoPoll();
+      hide(installInfo);
+    }
   } else {
     statusDot.className = 'disconnected';
     statusText.textContent = 'Daemon not detected';
@@ -282,8 +311,27 @@ function setupRunGuide() {
   if (port) port.textContent = g.portFile;
 }
 
-btnInstall.addEventListener('click', async () => {
+/**
+ * Download the pinned installer for this OS and watch for the daemon to come
+ * (back) up.
+ *
+ * Shared by the first-run "Download daemon" button and by every version
+ * warning/nudge: updating has to be exactly as one-click as installing. The
+ * alternative — linking to the releases page — makes the user pick the right
+ * asset out of ~11 by hand, which is a worse experience than a first install
+ * and would land on the entire existing user base at once.
+ *
+ * Falls back to the releases page only when we genuinely can't choose an asset
+ * (unknown OS) or the download fails.
+ */
+async function downloadInstaller(mode: 'install' | 'update'): Promise<void> {
   installReleasesLink.href = ANTD_RELEASES_URL;
+  installTitle.textContent = mode === 'update' ? 'Update antd' : 'Install antd';
+  installStep2.textContent =
+    mode === 'update'
+      ? 'It replaces your current antd and restarts it.'
+      : 'It starts antd and sets it to launch on login.';
+
   const os = detectOs();
 
   // Unknown platform — can't pick an asset; send them to the releases page.
@@ -302,9 +350,14 @@ btnInstall.addEventListener('click', async () => {
     // Download failed (e.g. asset missing) — fall back to the releases page.
     window.open(ANTD_RELEASES_URL, '_blank');
   }
-  // Begin watching for the daemon to come up after the user runs the installer.
+  // Watch for the daemon to come up (install) or be swapped out (update).
   startAutoPoll();
-});
+}
+
+btnInstall.addEventListener('click', () => downloadInstaller('install'));
+warningUpdateBtn.addEventListener('click', () => downloadInstaller('update'));
+prereleaseUpdateBtn.addEventListener('click', () => downloadInstaller('update'));
+updateBtn.addEventListener('click', () => downloadInstaller('update'));
 
 // ── Downloads ───────────────────────────────────────────────────────
 
