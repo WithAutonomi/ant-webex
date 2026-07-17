@@ -68,7 +68,9 @@ dist-firefox/
 ├── background.js
 ├── content.js
 ├── assets/icons/icon-16.png
+├── assets/icons/icon-32.png
 ├── assets/icons/icon-48.png
+├── assets/icons/icon-96.png
 ├── assets/icons/icon-128.png
 ├── onboarding/index.html
 ├── onboarding/index.js
