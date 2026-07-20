@@ -11,11 +11,16 @@
     "watch": "node build.mjs --watch",
     "watch:firefox": "node build.mjs --firefox --watch",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
     "test": "node --test \"src/**/*.test.ts\"",
+    "size": "node scripts/check-bundle-size.mjs",
     "clean": "rm -rf dist dist-firefox"
   },
   "devDependencies": {
+    "@typescript-eslint/parser": "^8.64.0",
     "esbuild": "^0.25.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-no-unsanitized": "^4.1.5",
     "typescript": "^5.7.0"
   }
 }
