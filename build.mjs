@@ -63,7 +63,10 @@ function buildManifest() {
 function generateContentLocales() {
   const localesDir = src('i18n/locales');
   const out = {};
-  for (const file of readdirSync(localesDir)) {
+  // Sorted so the generated JSON's key order is deterministic regardless of the
+  // filesystem's readdir order — keeps the build reproducible across machines
+  // (readdirSync order is unspecified and differs between macOS and Linux/CI).
+  for (const file of readdirSync(localesDir).sort()) {
     if (!file.endsWith('.json')) continue;
     const lang = file.slice(0, -'.json'.length);
     const catalog = JSON.parse(readFileSync(resolve(localesDir, file), 'utf-8'));
