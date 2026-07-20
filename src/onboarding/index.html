@@ -15,17 +15,17 @@
       </header>
 
       <section class="welcome" id="welcome">
-        <h2>Welcome to Autonomi</h2>
-        <p class="lede">
+        <h2 data-i18n="onboarding.welcome_title">Welcome to Autonomi</h2>
+        <p class="lede" data-i18n="onboarding.welcome_lede">
           You're almost ready to browse content from the Autonomi network. One quick
           setup step and you're in.
         </p>
       </section>
 
-      <!-- Live connection banner -->
+      <!-- Live connection banner (text set from the catalog in index.ts) -->
       <div id="status-banner" class="status status-checking">
         <span class="status-dot"></span>
-        <span id="status-text">Checking for the network daemon…</span>
+        <span id="status-text" data-i18n="onboarding.status_checking">Checking for the network daemon…</span>
       </div>
 
       <!-- Steps -->
@@ -33,16 +33,16 @@
         <li class="step" id="step-1">
           <div class="step-num">1</div>
           <div class="step-body">
-            <h3>Download the network daemon</h3>
-            <p>
+            <h3 data-i18n="onboarding.step1_title">Download the network daemon</h3>
+            <p data-i18n="onboarding.step1_body">
               Autonomi content lives on a decentralized network. A small local program
-              called <code>antd</code> runs on your computer and fetches that content for
+              called antd runs on your computer and fetches that content for
               the extension — your browser can't reach the network on its own. It runs
               quietly in the background and only listens on your own machine.
             </p>
             <div class="step-actions">
-              <button id="btn-download" class="primary">Download for <span id="os-label">your platform</span></button>
-              <a id="releases-link" href="#" target="_blank" rel="noopener" class="secondary-link">All downloads on GitHub</a>
+              <button id="btn-download" class="primary"><!-- text set from onboarding.download_for in index.ts --></button>
+              <a id="releases-link" href="#" target="_blank" rel="noopener" class="secondary-link" data-i18n="onboarding.all_downloads">All downloads on GitHub</a>
             </div>
             <p class="hint" id="download-hint"></p>
           </div>
@@ -51,47 +51,43 @@
         <li class="step" id="step-2">
           <div class="step-num">2</div>
           <div class="step-body">
-            <h3>Run the installer</h3>
-            <p>
+            <h3 data-i18n="onboarding.step2_title">Run the installer</h3>
+            <p data-i18n="onboarding.step2_body">
               Open the file you just downloaded and follow the prompts. It installs
-              <code>antd</code>, starts it, and sets it to launch automatically each time
+              antd, starts it, and sets it to launch automatically each time
               you sign in — so you only do this once.
             </p>
 
             <!-- Already installed? find & run an existing antd -->
             <details class="already" id="run-guide">
-              <summary>Already installed antd? Find &amp; run it</summary>
+              <summary data-i18n="guide.summary">Already installed antd? Find &amp; run it</summary>
               <div class="already-body">
-                <p>
-                  If you set up antd before, it may simply be stopped — or running without
-                  the option the extension needs. The extension reaches antd at
-                  <code id="guide-url">http://localhost:8082</code> and needs it started
-                  <strong>with the <code>--cors</code> option</strong>.
-                </p>
+                <!-- Reaches-antd sentence interpolates the daemon URL; set in index.ts. -->
+                <p id="guide-reach"></p>
 
-                <h4>1 · Open a terminal</h4>
+                <h4 data-i18n="guide.step1_terminal">1 · Open a terminal</h4>
                 <p class="sub" id="guide-terminal"></p>
 
-                <h4>2 · Start the daemon</h4>
+                <h4 data-i18n="guide.step2_start">2 · Start the daemon</h4>
                 <pre id="guide-cmd">antd --cors</pre>
-                <p class="sub">
-                  Keep that window open while you browse. If you see
-                  <em>“command not found”</em>, antd isn't on your PATH — run it using the
-                  full path shown below (still adding <code>--cors</code>).
+                <p class="sub" data-i18n="guide.cmd_not_found">
+                  Keep that window open while you browse. If you see “command not found”,
+                  antd isn't on your PATH — run it using the full path shown below (still
+                  adding --cors).
                 </p>
 
-                <h4>Where to find it</h4>
+                <h4 data-i18n="guide.where_to_find">Where to find it</h4>
                 <ul class="paths">
-                  <li><span class="paths-label">Program</span><code id="guide-install">—</code></li>
+                  <li><span class="paths-label" data-i18n="guide.label_program">Program</span><code id="guide-install">—</code></li>
                   <li>
-                    <span class="paths-label">Running check</span><code id="guide-portfile">—</code>
-                    <span class="sub">— this file appears once antd has started.</span>
+                    <span class="paths-label" data-i18n="guide.label_running_check">Running check</span><code id="guide-portfile">—</code>
+                    <span class="sub" data-i18n="guide.portfile_hint">— this file appears once antd has started.</span>
                   </li>
                 </ul>
 
-                <p class="sub">
+                <p class="sub" data-i18n="guide.connects_automatically">
                   Once it's running, this page connects automatically — or click
-                  <strong>Detect daemon</strong> in the toolbar popup.
+                  Detect daemon in the toolbar popup.
                 </p>
               </div>
             </details>
@@ -101,8 +97,8 @@
         <li class="step" id="step-3">
           <div class="step-num">3</div>
           <div class="step-body">
-            <h3>Check the extension for a connection</h3>
-            <p>
+            <h3 data-i18n="onboarding.step3_title">Check the extension for a connection</h3>
+            <p data-i18n="onboarding.step3_body">
               This page detects the daemon automatically. Once it's running, the banner
               above turns green and you're connected to the network. You can also click
               the Autonomi icon in your browser toolbar any time to see your status.
@@ -112,11 +108,10 @@
       </ol>
 
       <section id="done-panel" class="done hidden">
-        <h2>🎉 You're connected!</h2>
-        <p class="lede">
+        <h2 data-i18n="onboarding.done_title">🎉 You're connected!</h2>
+        <p class="lede" data-i18n="onboarding.done_body">
           The extension can now load Autonomi content. Visit a page with
-          <code>autonomi://</code> references, or open the toolbar popup to see what's
-          detected.
+          autonomi:// references, or open the toolbar popup to see what's detected.
         </p>
       </section>
     </main>

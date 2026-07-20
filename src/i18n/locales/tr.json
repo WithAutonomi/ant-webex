@@ -1,0 +1,116 @@
+{
+  "_translator_notes": "Machine-translated baseline. Native-speaker polish via PR welcome.",
+  "common": {
+    "download": "İndir",
+    "save": "Kaydet",
+    "connected": "Bağlı",
+    "checking": "Denetleniyor…",
+    "downloading": "İndiriliyor…",
+    "settings": "Ayarlar",
+    "downloads": "İndirmeler",
+    "unknown": "bilinmiyor"
+  },
+  "status": {
+    "not_detected": "Daemon algılanmadı",
+    "not_running": "Daemon çalışmıyor"
+  },
+  "popup": {
+    "version_too_old": "Bu antd sürümü çok eski. Uzantı {min} veya daha yeni bir sürüm gerektiriyor.",
+    "update_antd": "antd'yi güncelle",
+    "prerelease_warning": "Bu, ön sürüm bir antd yapısıdır ({version}). Uzantı yalnızca kararlı sürümleri destekler.",
+    "install_stable": "Kararlı sürümü yükle",
+    "update_available": "Güncelleme mevcut: {version}",
+    "get_latest": "En son sürümü al",
+    "resources_heading": "Bu sayfadaki kaynaklar",
+    "no_resources": "autonomi:// referansı algılanmadı.",
+    "clear_finished": "Tamamlananları temizle",
+    "no_downloads": "Henüz indirme yok.",
+    "disconnected_help": "Uzantı, ağdan içerik almak için Autonomi daemon'ına (antd) ihtiyaç duyar.",
+    "detect_daemon": "Daemon'ı algıla",
+    "detecting": "Algılanıyor…",
+    "download_daemon": "Daemon'ı indir",
+    "then_detect_prefix": "Ardından yukarıdaki Daemon'ı algıla düğmesine tıklayın veya",
+    "open_setup_guide": "tam kurulum kılavuzunu açın",
+    "setup_guide": "Kurulum kılavuzu"
+  },
+  "guide": {
+    "summary": "antd zaten yüklü mü? Bulun ve çalıştırın",
+    "reach_antd": "antd'yi daha önce kurduysanız, yalnızca durdurulmuş olabilir — veya uzantının ihtiyaç duyduğu seçenek olmadan çalışıyor olabilir. Uzantı antd'ye {url} adresinden erişir ve onun --cors seçeneğiyle başlatılmasını gerektirir.",
+    "step1_terminal": "1 · Bir terminal açın",
+    "step2_start": "2 · Daemon'ı başlatın",
+    "terminal_on": "{os} üzerinde: {instr}.",
+    "terminal_generic": "Terminal uygulamanızı açın.",
+    "terminal": {
+      "windows": "Win tuşuna basın, “PowerShell” yazın, ardından Enter'a basın",
+      "macos": "Cmd+Space'e basın, “Terminal” yazın, ardından Enter'a basın",
+      "linux": "Ctrl+Alt+T tuşlarına basın (veya terminal uygulamanızı açın)"
+    },
+    "cmd_not_found": "Gezinirken o pencereyi açık tutun. “command not found” görürseniz, antd PATH üzerinde değildir — aşağıda gösterilen tam yolu kullanarak çalıştırın (yine de --cors ekleyerek).",
+    "where_to_find": "Nerede bulunur",
+    "label_program": "Program",
+    "label_running_check": "Çalışma denetimi",
+    "path_varies": "platforma göre değişir — kurulum kılavuzuna bakın",
+    "path_varies_short": "platforma göre değişir",
+    "portfile_hint": "— bu dosya, antd başladıktan sonra görünür.",
+    "connects_automatically": "Çalışmaya başladığında bu sayfa otomatik olarak bağlanır — veya araç çubuğu açılır penceresindeki Daemon'ı algıla düğmesine tıklayın."
+  },
+  "install": {
+    "title_install": "antd'yi yükle",
+    "title_update": "antd'yi güncelle",
+    "step_run": "Az önce indirilen yükleyiciyi çalıştırın ({file}).",
+    "step2_install": "antd'yi başlatır ve oturum açıldığında başlatılacak şekilde ayarlar.",
+    "step2_update": "Mevcut antd'nizin yerine geçer ve yeniden başlatır.",
+    "step_detected": "Bu panel, antd algılandığında otomatik olarak güncellenir.",
+    "waiting": "antd bekleniyor…",
+    "other_platforms": "Diğer platformlar veya elle kurulum:",
+    "releases_link": "antd sürümleri",
+    "see_releases": "(sürümler sayfasına bakın)"
+  },
+  "downloads": {
+    "progress_pct": "İndiriliyor… %{pct} ({received} / {total})",
+    "progress_indeterminate": "İndiriliyor… {received}",
+    "open_folder": "Klasörü aç",
+    "failed": "Başarısız"
+  },
+  "settings": {
+    "daemon_url": "Daemon URL'si",
+    "auto_fetch": "Satır içi kaynakları otomatik al",
+    "check_updates": "antd güncellemelerini denetle",
+    "saving": "Kaydediliyor…",
+    "saved": "Kaydedildi!",
+    "language": "Dil",
+    "language_system": "Sistem varsayılanı"
+  },
+  "onboarding": {
+    "welcome_title": "Autonomi'ye hoş geldiniz",
+    "welcome_lede": "Autonomi ağındaki içeriğe göz atmaya neredeyse hazırsınız. Tek bir hızlı kurulum adımı ve içerdesiniz.",
+    "status_checking": "Ağ daemon'ı denetleniyor…",
+    "step1_title": "Ağ daemon'ını indirin",
+    "step1_body": "Autonomi içeriği merkeziyetsiz bir ağda bulunur. antd adlı küçük bir yerel program bilgisayarınızda çalışır ve bu içeriği uzantı için alır — tarayıcınız ağa kendi başına erişemez. Arka planda sessizce çalışır ve yalnızca kendi makinenizde dinler.",
+    "download_for": "{platform} için indir",
+    "your_platform": "platformunuz",
+    "all_downloads": "GitHub'daki tüm indirmeler",
+    "step2_title": "Yükleyiciyi çalıştırın",
+    "step2_body": "Az önce indirdiğiniz dosyayı açın ve yönergeleri izleyin. antd'yi yükler, başlatır ve her oturum açtığınızda otomatik olarak başlatılacak şekilde ayarlar — böylece bunu yalnızca bir kez yaparsınız.",
+    "step3_title": "Uzantıda bağlantı olup olmadığını denetleyin",
+    "step3_body": "Bu sayfa daemon'ı otomatik olarak algılar. Çalışmaya başladığında yukarıdaki banner yeşile döner ve ağa bağlanmış olursunuz. Durumunuzu görmek için tarayıcı araç çubuğunuzdaki Autonomi simgesine istediğiniz zaman tıklayabilirsiniz.",
+    "done_title": "🎉 Bağlandınız!",
+    "done_body": "Uzantı artık Autonomi içeriğini yükleyebilir. autonomi:// referansları içeren bir sayfayı ziyaret edin veya algılananları görmek için araç çubuğu açılır penceresini açın.",
+    "os_undetected": "İşletim sisteminizi algılayamadık — GitHub'dan doğru yapıyı seçin.",
+    "downloading_asset": "{asset} indiriliyor…",
+    "download_failed_fallback": "İndirme başarısız oldu — bunun yerine GitHub sürümler sayfası açılıyor.",
+    "banner_connected": "Autonomi ağına bağlanıldı",
+    "banner_idle": "Ağ daemon'ı algılanmadı — aşağıdaki adımları izleyin. Çalışmaya başladığında bu sayfa otomatik olarak bağlanır.",
+    "banner_preview": "Önizleme modu — daemon'ı algılamak için uzantıyı yükleyin."
+  },
+  "content": {
+    "download": "İndir",
+    "open": "Aç",
+    "fetching": "Alınıyor…",
+    "downloading_pct": "İndiriliyor… %{pct}",
+    "download_failed": "İndirme başarısız",
+    "title_download": "Autonomi ağından indir",
+    "title_open": "İndirilen dosyayı aç",
+    "failed_to_load": "Autonomi'den yüklenemedi"
+  }
+}

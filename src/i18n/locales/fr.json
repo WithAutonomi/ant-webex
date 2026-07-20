@@ -1,0 +1,116 @@
+{
+  "_translator_notes": "Machine-translated baseline. Native-speaker polish via PR welcome.",
+  "common": {
+    "download": "Télécharger",
+    "save": "Enregistrer",
+    "connected": "Connecté",
+    "checking": "Vérification…",
+    "downloading": "Téléchargement…",
+    "settings": "Paramètres",
+    "downloads": "Téléchargements",
+    "unknown": "inconnu"
+  },
+  "status": {
+    "not_detected": "Démon non détecté",
+    "not_running": "Le démon n'est pas en cours d'exécution"
+  },
+  "popup": {
+    "version_too_old": "Cette version d'antd est trop ancienne. L'extension nécessite {min} ou une version plus récente.",
+    "update_antd": "Mettre à jour antd",
+    "prerelease_warning": "Ceci est une préversion d'antd ({version}). L'extension ne prend en charge que les versions stables.",
+    "install_stable": "Installer la version stable",
+    "update_available": "Mise à jour disponible : {version}",
+    "get_latest": "Obtenir la dernière version",
+    "resources_heading": "Ressources sur cette page",
+    "no_resources": "Aucune référence autonomi:// détectée.",
+    "clear_finished": "Effacer les éléments terminés",
+    "no_downloads": "Aucun téléchargement pour le moment.",
+    "disconnected_help": "L'extension a besoin du démon Autonomi (antd) pour récupérer du contenu depuis le réseau.",
+    "detect_daemon": "Détecter le démon",
+    "detecting": "Détection…",
+    "download_daemon": "Télécharger le démon",
+    "then_detect_prefix": "Puis cliquez sur Détecter le démon ci-dessus, ou",
+    "open_setup_guide": "ouvrez le guide de configuration complet",
+    "setup_guide": "Guide de configuration"
+  },
+  "guide": {
+    "summary": "antd déjà installé ? Trouvez-le et exécutez-le",
+    "reach_antd": "Si vous avez déjà configuré antd, il est peut-être simplement arrêté — ou en cours d'exécution sans l'option dont l'extension a besoin. L'extension accède à antd à l'adresse {url} et nécessite qu'il soit démarré avec l'option --cors.",
+    "step1_terminal": "1 · Ouvrez un terminal",
+    "step2_start": "2 · Démarrez le démon",
+    "terminal_on": "Sur {os} : {instr}.",
+    "terminal_generic": "Ouvrez votre application de terminal.",
+    "terminal": {
+      "windows": "appuyez sur Win, tapez « PowerShell », puis Enter",
+      "macos": "appuyez sur Cmd+Space, tapez « Terminal », puis Enter",
+      "linux": "appuyez sur Ctrl+Alt+T (ou ouvrez votre application de terminal)"
+    },
+    "cmd_not_found": "Gardez cette fenêtre ouverte pendant que vous naviguez. Si vous voyez « command not found », antd n'est pas dans votre PATH — exécutez-le à l'aide du chemin complet indiqué ci-dessous (en ajoutant toujours --cors).",
+    "where_to_find": "Où le trouver",
+    "label_program": "Programme",
+    "label_running_check": "Vérification de l'exécution",
+    "path_varies": "varie selon la plateforme — voir le guide de configuration",
+    "path_varies_short": "varie selon la plateforme",
+    "portfile_hint": "— ce fichier apparaît une fois qu'antd a démarré.",
+    "connects_automatically": "Une fois qu'il est en cours d'exécution, cette page se connecte automatiquement — ou cliquez sur Détecter le démon dans la fenêtre contextuelle de la barre d'outils."
+  },
+  "install": {
+    "title_install": "Installer antd",
+    "title_update": "Mettre à jour antd",
+    "step_run": "Exécutez le programme d'installation qui vient d'être téléchargé ({file}).",
+    "step2_install": "Il démarre antd et le configure pour se lancer à la connexion.",
+    "step2_update": "Il remplace votre antd actuel et le redémarre.",
+    "step_detected": "Ce panneau se met à jour automatiquement une fois qu'antd est détecté.",
+    "waiting": "En attente d'antd…",
+    "other_platforms": "Autres plateformes ou installation manuelle :",
+    "releases_link": "Versions d'antd",
+    "see_releases": "(voir la page des versions)"
+  },
+  "downloads": {
+    "progress_pct": "Téléchargement… {pct}% ({received} / {total})",
+    "progress_indeterminate": "Téléchargement… {received}",
+    "open_folder": "Ouvrir le dossier",
+    "failed": "Échec"
+  },
+  "settings": {
+    "daemon_url": "URL du démon",
+    "auto_fetch": "Récupérer automatiquement les ressources intégrées",
+    "check_updates": "Rechercher les mises à jour d'antd",
+    "saving": "Enregistrement…",
+    "saved": "Enregistré !",
+    "language": "Langue",
+    "language_system": "Valeur par défaut du système"
+  },
+  "onboarding": {
+    "welcome_title": "Bienvenue sur Autonomi",
+    "welcome_lede": "Vous êtes presque prêt à parcourir le contenu du réseau Autonomi. Une petite étape de configuration et vous y êtes.",
+    "status_checking": "Recherche du démon réseau…",
+    "step1_title": "Téléchargez le démon réseau",
+    "step1_body": "Le contenu d'Autonomi réside sur un réseau décentralisé. Un petit programme local appelé antd s'exécute sur votre ordinateur et récupère ce contenu pour l'extension — votre navigateur ne peut pas atteindre le réseau par lui-même. Il s'exécute discrètement en arrière-plan et n'écoute que sur votre propre machine.",
+    "download_for": "Télécharger pour {platform}",
+    "your_platform": "votre plateforme",
+    "all_downloads": "Tous les téléchargements sur GitHub",
+    "step2_title": "Exécutez le programme d'installation",
+    "step2_body": "Ouvrez le fichier que vous venez de télécharger et suivez les instructions. Il installe antd, le démarre et le configure pour qu'il se lance automatiquement à chaque connexion — vous ne faites donc cela qu'une seule fois.",
+    "step3_title": "Vérifiez la connexion dans l'extension",
+    "step3_body": "Cette page détecte le démon automatiquement. Une fois qu'il est en cours d'exécution, la bannière ci-dessus devient verte et vous êtes connecté au réseau. Vous pouvez également cliquer sur l'icône Autonomi dans la barre d'outils de votre navigateur à tout moment pour voir votre statut.",
+    "done_title": "🎉 Vous êtes connecté !",
+    "done_body": "L'extension peut désormais charger du contenu Autonomi. Visitez une page contenant des références autonomi://, ou ouvrez la fenêtre contextuelle de la barre d'outils pour voir ce qui a été détecté.",
+    "os_undetected": "Nous n'avons pas pu détecter votre système d'exploitation — choisissez la bonne version sur GitHub.",
+    "downloading_asset": "Téléchargement de {asset}…",
+    "download_failed_fallback": "Échec du téléchargement — ouverture de la page des versions GitHub à la place.",
+    "banner_connected": "Connecté au réseau Autonomi",
+    "banner_idle": "Démon réseau non détecté — suivez les étapes ci-dessous. Cette page se connecte automatiquement une fois qu'il est en cours d'exécution.",
+    "banner_preview": "Mode aperçu — installez l'extension pour détecter le démon."
+  },
+  "content": {
+    "download": "Télécharger",
+    "open": "Ouvrir",
+    "fetching": "Récupération…",
+    "downloading_pct": "Téléchargement… {pct}%",
+    "download_failed": "Échec du téléchargement",
+    "title_download": "Télécharger depuis le réseau Autonomi",
+    "title_open": "Ouvrir le fichier téléchargé",
+    "failed_to_load": "Échec du chargement depuis Autonomi"
+  }
+}

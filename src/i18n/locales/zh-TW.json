@@ -1,0 +1,116 @@
+{
+  "_translator_notes": "Machine-translated baseline. Native-speaker polish via PR welcome.",
+  "common": {
+    "download": "下載",
+    "save": "儲存",
+    "connected": "已連線",
+    "checking": "檢查中…",
+    "downloading": "下載中…",
+    "settings": "設定",
+    "downloads": "下載",
+    "unknown": "未知"
+  },
+  "status": {
+    "not_detected": "未偵測到守護行程",
+    "not_running": "守護行程未執行"
+  },
+  "popup": {
+    "version_too_old": "此 antd 版本過舊。擴充功能需要 {min} 或更新的版本。",
+    "update_antd": "更新 antd",
+    "prerelease_warning": "這是 antd 的預先發布版本（{version}）。擴充功能僅支援穩定版本。",
+    "install_stable": "安裝穩定版本",
+    "update_available": "有可用更新：{version}",
+    "get_latest": "取得最新版本",
+    "resources_heading": "此頁面上的資源",
+    "no_resources": "未偵測到 autonomi:// 參照。",
+    "clear_finished": "清除已完成",
+    "no_downloads": "尚無下載。",
+    "disconnected_help": "擴充功能需要 Autonomi 守護行程（antd）才能從網路取得內容。",
+    "detect_daemon": "偵測守護行程",
+    "detecting": "偵測中…",
+    "download_daemon": "下載守護行程",
+    "then_detect_prefix": "然後點按上方的「偵測守護行程」，或",
+    "open_setup_guide": "開啟完整的設定指南",
+    "setup_guide": "設定指南"
+  },
+  "guide": {
+    "summary": "已經安裝了 antd？尋找並執行它",
+    "reach_antd": "如果您之前設定過 antd，它可能只是被停止了——或在執行時缺少擴充功能所需的選項。擴充功能透過 {url} 存取 antd，並需要以 --cors 選項啟動它。",
+    "step1_terminal": "1 · 開啟終端機",
+    "step2_start": "2 · 啟動守護行程",
+    "terminal_on": "在 {os} 上：{instr}。",
+    "terminal_generic": "開啟您的終端機應用程式。",
+    "terminal": {
+      "windows": "按 Win 鍵，輸入「PowerShell」，然後按 Enter",
+      "macos": "按 Cmd+Space，輸入「Terminal」，然後按 Enter",
+      "linux": "按 Ctrl+Alt+T（或開啟您的終端機應用程式）"
+    },
+    "cmd_not_found": "瀏覽時請保持該視窗開啟。如果您看到“command not found”，表示 antd 不在您的 PATH 中——請使用下方顯示的完整路徑執行它（仍需加上 --cors）。",
+    "where_to_find": "在哪裡找到它",
+    "label_program": "程式",
+    "label_running_check": "執行檢查",
+    "path_varies": "因平台而異——請參閱設定指南",
+    "path_varies_short": "因平台而異",
+    "portfile_hint": "—— antd 啟動後此檔案才會出現。",
+    "connects_automatically": "一旦執行，此頁面將自動連線——或點按工具列彈出視窗中的「偵測守護行程」。"
+  },
+  "install": {
+    "title_install": "安裝 antd",
+    "title_update": "更新 antd",
+    "step_run": "執行剛剛下載的安裝程式（{file}）。",
+    "step2_install": "它會啟動 antd 並將其設定為登入時啟動。",
+    "step2_update": "它會取代您目前的 antd 並重新啟動它。",
+    "step_detected": "偵測到 antd 後，此面板會自動更新。",
+    "waiting": "正在等待 antd…",
+    "other_platforms": "其他平台或手動安裝：",
+    "releases_link": "antd 發布版本",
+    "see_releases": "（請參閱發布頁面）"
+  },
+  "downloads": {
+    "progress_pct": "下載中… {pct}%（{received} / {total}）",
+    "progress_indeterminate": "下載中… {received}",
+    "open_folder": "開啟資料夾",
+    "failed": "失敗"
+  },
+  "settings": {
+    "daemon_url": "守護行程 URL",
+    "auto_fetch": "自動取得內嵌資源",
+    "check_updates": "檢查 antd 更新",
+    "saving": "儲存中…",
+    "saved": "已儲存！",
+    "language": "語言",
+    "language_system": "系統預設"
+  },
+  "onboarding": {
+    "welcome_title": "歡迎使用 Autonomi",
+    "welcome_lede": "您即將可以瀏覽 Autonomi 網路中的內容。只需一個快速設定步驟即可開始。",
+    "status_checking": "正在檢查網路守護行程…",
+    "step1_title": "下載網路守護行程",
+    "step1_body": "Autonomi 內容存放於去中心化網路上。一個名為 antd 的本機小程式在您的電腦上執行，為擴充功能取得這些內容——您的瀏覽器無法自行存取該網路。它在背景安靜地執行，並且只監聽您自己的電腦。",
+    "download_for": "下載適用於 {platform} 的版本",
+    "your_platform": "您的平台",
+    "all_downloads": "GitHub 上的所有下載",
+    "step2_title": "執行安裝程式",
+    "step2_body": "開啟您剛剛下載的檔案並依照提示操作。它會安裝 antd、啟動它，並將其設定為每次登入時自動啟動——因此您只需執行一次。",
+    "step3_title": "檢查擴充功能的連線",
+    "step3_body": "此頁面會自動偵測守護行程。一旦它開始執行，上方的橫幅就會變綠，您便已連線到網路。您也可以隨時點按瀏覽器工具列中的 Autonomi 圖示查看您的狀態。",
+    "done_title": "🎉 您已連線！",
+    "done_body": "擴充功能現在可以載入 Autonomi 內容了。造訪帶有 autonomi:// 參照的頁面，或開啟工具列彈出視窗查看偵測到的內容。",
+    "os_undetected": "我們無法偵測到您的作業系統——請在 GitHub 上選擇正確的版本。",
+    "downloading_asset": "正在下載 {asset}…",
+    "download_failed_fallback": "下載失敗——改為開啟 GitHub 發布頁面。",
+    "banner_connected": "已連線到 Autonomi 網路",
+    "banner_idle": "未偵測到網路守護行程——請依照以下步驟操作。此頁面將在其執行後自動連線。",
+    "banner_preview": "預覽模式——安裝擴充功能以偵測守護行程。"
+  },
+  "content": {
+    "download": "下載",
+    "open": "開啟",
+    "fetching": "取得中…",
+    "downloading_pct": "下載中… {pct}%",
+    "download_failed": "下載失敗",
+    "title_download": "從 Autonomi 網路下載",
+    "title_open": "開啟已下載的檔案",
+    "failed_to_load": "無法從 Autonomi 載入"
+  }
+}

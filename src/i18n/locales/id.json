@@ -1,0 +1,116 @@
+{
+  "_translator_notes": "Machine-translated baseline. Native-speaker polish via PR welcome.",
+  "common": {
+    "download": "Unduh",
+    "save": "Simpan",
+    "connected": "Terhubung",
+    "checking": "Memeriksa…",
+    "downloading": "Mengunduh…",
+    "settings": "Pengaturan",
+    "downloads": "Unduhan",
+    "unknown": "tidak diketahui"
+  },
+  "status": {
+    "not_detected": "Daemon tidak terdeteksi",
+    "not_running": "Daemon tidak berjalan"
+  },
+  "popup": {
+    "version_too_old": "Versi antd ini terlalu lama. Ekstensi memerlukan {min} atau yang lebih baru.",
+    "update_antd": "Perbarui antd",
+    "prerelease_warning": "Ini adalah build antd pra-rilis ({version}). Ekstensi hanya mendukung rilis stabil.",
+    "install_stable": "Instal rilis stabil",
+    "update_available": "Pembaruan tersedia: {version}",
+    "get_latest": "Dapatkan yang terbaru",
+    "resources_heading": "Sumber daya di halaman ini",
+    "no_resources": "Tidak ada referensi autonomi:// yang terdeteksi.",
+    "clear_finished": "Bersihkan yang selesai",
+    "no_downloads": "Belum ada unduhan.",
+    "disconnected_help": "Ekstensi memerlukan daemon Autonomi (antd) untuk mengambil konten dari jaringan.",
+    "detect_daemon": "Deteksi daemon",
+    "detecting": "Mendeteksi…",
+    "download_daemon": "Unduh daemon",
+    "then_detect_prefix": "Lalu klik Deteksi daemon di atas, atau",
+    "open_setup_guide": "buka panduan penyiapan lengkap",
+    "setup_guide": "Panduan penyiapan"
+  },
+  "guide": {
+    "summary": "Sudah menginstal antd? Temukan & jalankan",
+    "reach_antd": "Jika Anda menyiapkan antd sebelumnya, mungkin saja ia hanya berhenti — atau berjalan tanpa opsi yang dibutuhkan ekstensi. Ekstensi menjangkau antd di {url} dan memerlukannya dijalankan dengan opsi --cors.",
+    "step1_terminal": "1 · Buka terminal",
+    "step2_start": "2 · Jalankan daemon",
+    "terminal_on": "Di {os}: {instr}.",
+    "terminal_generic": "Buka aplikasi terminal Anda.",
+    "terminal": {
+      "windows": "tekan Win, ketik “PowerShell”, lalu Enter",
+      "macos": "tekan Cmd+Space, ketik “Terminal”, lalu Enter",
+      "linux": "tekan Ctrl+Alt+T (atau buka aplikasi terminal Anda)"
+    },
+    "cmd_not_found": "Biarkan jendela itu tetap terbuka saat Anda menjelajah. Jika Anda melihat “command not found”, antd tidak ada di PATH Anda — jalankan menggunakan jalur lengkap yang ditampilkan di bawah (tetap menambahkan --cors).",
+    "where_to_find": "Tempat menemukannya",
+    "label_program": "Program",
+    "label_running_check": "Pemeriksaan berjalan",
+    "path_varies": "bervariasi menurut platform — lihat panduan penyiapan",
+    "path_varies_short": "bervariasi menurut platform",
+    "portfile_hint": "— berkas ini muncul setelah antd dimulai.",
+    "connects_automatically": "Setelah berjalan, halaman ini terhubung secara otomatis — atau klik Deteksi daemon di pop-up bilah alat."
+  },
+  "install": {
+    "title_install": "Instal antd",
+    "title_update": "Perbarui antd",
+    "step_run": "Jalankan penginstal yang baru saja diunduh ({file}).",
+    "step2_install": "Ia memulai antd dan mengaturnya untuk diluncurkan saat masuk.",
+    "step2_update": "Ia menggantikan antd Anda saat ini dan memulainya ulang.",
+    "step_detected": "Panel ini diperbarui secara otomatis setelah antd terdeteksi.",
+    "waiting": "Menunggu antd…",
+    "other_platforms": "Platform lain atau instalasi manual:",
+    "releases_link": "Rilis antd",
+    "see_releases": "(lihat halaman rilis)"
+  },
+  "downloads": {
+    "progress_pct": "Mengunduh… {pct}% ({received} / {total})",
+    "progress_indeterminate": "Mengunduh… {received}",
+    "open_folder": "Buka folder",
+    "failed": "Gagal"
+  },
+  "settings": {
+    "daemon_url": "URL daemon",
+    "auto_fetch": "Ambil otomatis sumber daya sebaris",
+    "check_updates": "Periksa pembaruan antd",
+    "saving": "Menyimpan…",
+    "saved": "Tersimpan!",
+    "language": "Bahasa",
+    "language_system": "Default sistem"
+  },
+  "onboarding": {
+    "welcome_title": "Selamat datang di Autonomi",
+    "welcome_lede": "Anda hampir siap menjelajahi konten dari jaringan Autonomi. Satu langkah penyiapan cepat dan Anda siap.",
+    "status_checking": "Memeriksa daemon jaringan…",
+    "step1_title": "Unduh daemon jaringan",
+    "step1_body": "Konten Autonomi berada di jaringan terdesentralisasi. Sebuah program lokal kecil bernama antd berjalan di komputer Anda dan mengambil konten itu untuk ekstensi — browser Anda tidak dapat menjangkau jaringan sendiri. Ia berjalan diam-diam di latar belakang dan hanya mendengarkan di mesin Anda sendiri.",
+    "download_for": "Unduh untuk {platform}",
+    "your_platform": "platform Anda",
+    "all_downloads": "Semua unduhan di GitHub",
+    "step2_title": "Jalankan penginstal",
+    "step2_body": "Buka berkas yang baru saja Anda unduh dan ikuti petunjuknya. Ia menginstal antd, memulainya, dan mengaturnya untuk diluncurkan secara otomatis setiap kali Anda masuk — jadi Anda hanya melakukannya sekali.",
+    "step3_title": "Periksa koneksi pada ekstensi",
+    "step3_body": "Halaman ini mendeteksi daemon secara otomatis. Setelah berjalan, spanduk di atas berubah menjadi hijau dan Anda terhubung ke jaringan. Anda juga dapat mengklik ikon Autonomi di bilah alat browser Anda kapan saja untuk melihat status Anda.",
+    "done_title": "🎉 Anda terhubung!",
+    "done_body": "Ekstensi kini dapat memuat konten Autonomi. Kunjungi halaman dengan referensi autonomi://, atau buka pop-up bilah alat untuk melihat apa yang terdeteksi.",
+    "os_undetected": "Kami tidak dapat mendeteksi sistem operasi Anda — pilih build yang tepat di GitHub.",
+    "downloading_asset": "Mengunduh {asset}…",
+    "download_failed_fallback": "Unduhan gagal — membuka halaman rilis GitHub sebagai gantinya.",
+    "banner_connected": "Terhubung ke jaringan Autonomi",
+    "banner_idle": "Daemon jaringan tidak terdeteksi — ikuti langkah-langkah di bawah. Halaman ini terhubung secara otomatis setelah berjalan.",
+    "banner_preview": "Mode pratinjau — instal ekstensi untuk mendeteksi daemon."
+  },
+  "content": {
+    "download": "Unduh",
+    "open": "Buka",
+    "fetching": "Mengambil…",
+    "downloading_pct": "Mengunduh… {pct}%",
+    "download_failed": "Unduhan gagal",
+    "title_download": "Unduh dari jaringan Autonomi",
+    "title_open": "Buka berkas yang diunduh",
+    "failed_to_load": "Gagal memuat dari Autonomi"
+  }
+}

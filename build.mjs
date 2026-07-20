@@ -1,5 +1,13 @@
 import * as esbuild from 'esbuild';
-import { copyFileSync, mkdirSync, cpSync, existsSync, readFileSync, writeFileSync } from 'fs';
+import {
+  copyFileSync,
+  mkdirSync,
+  cpSync,
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+} from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -45,7 +53,41 @@ function buildManifest() {
   writeFileSync(dist('manifest.json'), JSON.stringify(merged, null, 2));
 }
 
+/**
+ * Regenerate src/i18n/content-locales.json from the `content` section of every
+ * locale file, so the content script can bundle its (small) string subset
+ * without fetching packaged assets. The per-locale files stay the single
+ * source of truth; this artifact is committed only so `tsc` resolves the
+ * import — it's rewritten on every build.
+ */
+function generateContentLocales() {
+  const localesDir = src('i18n/locales');
+  const out = {};
+  for (const file of readdirSync(localesDir)) {
+    if (!file.endsWith('.json')) continue;
+    const lang = file.slice(0, -'.json'.length);
+    const catalog = JSON.parse(readFileSync(resolve(localesDir, file), 'utf-8'));
+    if (catalog.content) out[lang] = catalog.content;
+  }
+  writeFileSync(
+    src('i18n/content-locales.json'),
+    JSON.stringify(out, null, 2) + '\n',
+  );
+}
+
+/** Copy both locale stores into a dist: native _locales (manifest __MSG__
+ *  fields) and the runtime dictionary fetched by popup/onboarding. */
+function copyLocaleAssets() {
+  if (existsSync(src('_locales'))) {
+    cpSync(src('_locales'), dist('_locales'), { recursive: true });
+  }
+  cpSync(src('i18n/locales'), dist('i18n/locales'), { recursive: true });
+}
+
 async function build() {
+  // Must run before esbuild bundles content/index.ts, which imports the
+  // generated content-locales.json.
+  generateContentLocales();
   await Promise.all([
     esbuild.build({
       ...commonOptions,
@@ -74,6 +116,7 @@ async function build() {
   ]);
 
   buildManifest();
+  copyLocaleAssets();
   copyFileSync(src('popup/index.html'), dist('popup/index.html'));
   copyFileSync(src('popup/style.css'), dist('popup/style.css'));
   copyFileSync(src('onboarding/index.html'), dist('onboarding/index.html'));

@@ -51,6 +51,7 @@ declare namespace chrome {
     interface StorageArea {
       get(keys: string | string[]): Promise<Record<string, any>>;
       set(items: Record<string, any>): Promise<void>;
+      remove(keys: string | string[]): Promise<void>;
     }
   }
 

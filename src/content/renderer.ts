@@ -23,6 +23,7 @@ import type {
 import type { AntElement } from '../shared/types';
 import { DOWNLOAD_PORT } from '../shared/constants';
 import { parseAntUri } from './scanner';
+import { tc } from './i18n';
 // Bundled as a data URL (esbuild dataurl loader) so it works on any page
 // without web_accessible_resources.
 import antLogo from '../../assets/icons/icon-48.png';
@@ -83,7 +84,7 @@ function injectStyles(): void {
       min-height: 32px;
     }
     .ant-error::after {
-      content: 'Failed to load from Autonomi';
+      content: ${JSON.stringify(tc('failed_to_load'))};
       position: absolute;
       top: 50%;
       left: 50%;
@@ -197,7 +198,7 @@ function bindLink(el: AntElement): void {
     // preserving the author's original text as the accessible label.
     const origText = (a.textContent || '').trim();
     if (origText) a.setAttribute('aria-label', origText);
-    a.setAttribute('title', 'Download from the Autonomi network');
+    a.setAttribute('title', tc('title_download'));
     a.classList.add('ant-dl');
     a.replaceChildren();
 
@@ -207,7 +208,7 @@ function bindLink(el: AntElement): void {
     img.alt = '';
     const label = document.createElement('span');
     label.className = 'ant-dl-label';
-    label.textContent = 'Download';
+    label.textContent = tc('download');
     const spinner = document.createElement('span');
     spinner.className = 'ant-dl-spinner';
     a.append(img, label, spinner);
@@ -219,8 +220,8 @@ function bindLink(el: AntElement): void {
       a.removeAttribute('data-ant-spinner');
       a.style.removeProperty('--ant-progress');
       a.setAttribute('data-ant-open', '1');
-      label.textContent = 'Open';
-      a.setAttribute('title', 'Open the downloaded file');
+      label.textContent = tc('open');
+      a.setAttribute('title', tc('title_open'));
     };
 
     // Ask the worker whether this address was already downloaded (and the file
@@ -248,7 +249,7 @@ function bindLink(el: AntElement): void {
       // Show a circular spinner until the first chunk's % arrives; the animator
       // then swaps it for the determinate fill and eases upward from there.
       a.setAttribute('data-ant-spinner', '1');
-      label.textContent = 'Fetching…';
+      label.textContent = tc('fetching');
 
       // Filename precedence: the standard HTML download attribute wins, then
       // the ?name= from this anchor's own href, else the background falls back
@@ -308,9 +309,9 @@ function bindLink(el: AntElement): void {
         if (settled || completed) return;
         settled = true;
         console.error('[ant-webex] download failed:', detail ?? '(no detail)');
-        label.textContent = 'Download failed';
+        label.textContent = tc('download_failed');
         reset();
-        setTimeout(() => { label.textContent = 'Download'; }, 3_000);
+        setTimeout(() => { label.textContent = tc('download'); }, 3_000);
       };
 
       // rAF loop: ease displayedPct up to (never past) the confirmed level at the
@@ -327,7 +328,7 @@ function bindLink(el: AntElement): void {
         }
         const shown = Math.max(0, Math.min(100, Math.floor(displayedPct)));
         a.style.setProperty('--ant-progress', `${shown}%`);
-        label.textContent = `Downloading… ${shown}%`;
+        label.textContent = tc('downloading_pct', { pct: shown });
         if (completed && displayedPct >= 99.5) { finish(); return; }
         rafId = requestAnimationFrame(animate);
       };
@@ -414,7 +415,7 @@ function fetchInline(el: AntElement): void {
         t.classList.add(ERROR_CLASS);
         t.setAttribute(
           'title',
-          `Failed to load from Autonomi: ${resp.result.error}`,
+          `${tc('failed_to_load')}: ${resp.result.error}`,
         );
       });
     }
