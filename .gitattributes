@@ -1,0 +1,16 @@
+# Reproducible builds: normalize all text files to LF in the repository and on
+# checkout, so a working-tree build byte-matches a `git archive` build — the one
+# an AMO reviewer reproduces from the source zip. See Linear V2-679.
+* text=auto eol=lf
+
+# Binary assets — never apply text detection or EOL conversion.
+*.png  binary
+*.ico  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.woff  binary
+*.woff2 binary
+*.zip binary
+*.xpi binary
