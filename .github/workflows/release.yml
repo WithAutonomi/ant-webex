@@ -1,0 +1,134 @@
+name: Release artifacts
+
+# Produces the store-ready, distributable artifacts from a clean checkout:
+#   • ant-webex-chrome-vX.Y.Z.zip   — Chrome Web Store upload package
+#   • ant-webex-firefox-vX.Y.Z.xpi  — signed, unlisted Firefox build (installable
+#                                     by testers) when AMO creds are configured;
+#                                     falls back to an unsigned .zip otherwise
+#   • ant-webex-source-vX.Y.Z.zip   — source tree for AMO's source-code submission
+# and attaches them to the GitHub Release for the tag.
+#
+# Trigger: push a version tag (e.g. `git tag v0.1.3 && git push origin v0.1.3`),
+# or run manually from the Actions tab (workflow_dispatch).
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write # create the GitHub Release + upload assets
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  package:
+    name: build · package · sign · release
+    runs-on: ubuntu-latest
+    # Scopes the AMO signing secrets and lets you optionally gate the run behind
+    # a required reviewer (Settings → Environments → release → protection rules).
+    environment: release
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Single source of truth for the version + a guard against drift: the tag
+      # (when tag-triggered) must equal manifest.json, which must equal package.json.
+      - name: Resolve and verify version
+        id: ver
+        run: |
+          MANIFEST="$(node -p "require('./src/manifest.json').version")"
+          PKG="$(node -p "require('./package.json').version")"
+          if [ "$MANIFEST" != "$PKG" ]; then
+            echo "::error::Version mismatch — src/manifest.json ($MANIFEST) != package.json ($PKG)"
+            exit 1
+          fi
+          if [ "${{ github.event_name }}" = "push" ]; then
+            TAG="${GITHUB_REF_NAME#v}"
+            if [ "$TAG" != "$MANIFEST" ]; then
+              echo "::error::Tag v$TAG does not match the manifest/package version $MANIFEST — bump the version before tagging."
+              exit 1
+            fi
+          fi
+          echo "version=$MANIFEST" >> "$GITHUB_OUTPUT"
+          echo "Releasing v$MANIFEST"
+
+      - name: Build (Chrome + Firefox)
+        run: npm run build:all
+
+      # Catch store-rejection issues before we spend an AMO version number signing.
+      - name: Lint Firefox build (web-ext)
+        run: npx --yes web-ext lint --source-dir=dist-firefox
+
+      - name: Package Chrome zip
+        run: |
+          mkdir -p artifacts
+          (cd dist && zip -rX "../artifacts/ant-webex-chrome-v${{ steps.ver.outputs.version }}.zip" .)
+
+      # AMO requires the source for minified/bundled add-ons. git archive gives a
+      # clean tree (tracked files only — no node_modules/dist) matching the tag.
+      - name: Package source zip (AMO source submission)
+        run: git archive --format=zip -o "artifacts/ant-webex-source-v${{ steps.ver.outputs.version }}.zip" HEAD
+
+      # Signing needs AMO API creds. When present → signed, installable .xpi.
+      # When absent → an unsigned .zip so the rest of the release still succeeds.
+      - name: Detect AMO signing credentials
+        id: amo
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+        run: |
+          if [ -n "$WEB_EXT_API_KEY" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Sign Firefox (unlisted → signed .xpi)
+        if: steps.amo.outputs.present == 'true'
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+        run: |
+          npx --yes web-ext sign \
+            --source-dir=dist-firefox \
+            --channel=unlisted \
+            --api-key="$WEB_EXT_API_KEY" \
+            --api-secret="$WEB_EXT_API_SECRET" \
+            --artifacts-dir=artifacts
+          # web-ext names the signed file <id>-<version>.xpi; normalize it.
+          XPI="$(ls artifacts/*.xpi | head -1)"
+          mv "$XPI" "artifacts/ant-webex-firefox-v${{ steps.ver.outputs.version }}.xpi"
+
+      - name: Package Firefox unsigned zip (fallback — no AMO creds)
+        if: steps.amo.outputs.present != 'true'
+        run: |
+          echo "::warning::AMO signing credentials (WEB_EXT_API_KEY / WEB_EXT_API_SECRET) are not set — producing an UNSIGNED Firefox zip, which will not install in release Firefox. Add the secrets to get a signed, installable .xpi. See RELEASING.md."
+          npx --yes web-ext build \
+            --source-dir=dist-firefox \
+            --filename="ant-webex-firefox-v${{ steps.ver.outputs.version }}-unsigned.zip" \
+            --artifacts-dir=artifacts \
+            --overwrite-dest
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ant-webex-v${{ steps.ver.outputs.version }}
+          path: artifacts/*
+          if-no-files-found: error
+
+      # Only cut a GitHub Release on a real tag (not on manual/dispatch runs).
+      - name: Attach to GitHub Release
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          fail_on_unmatched_files: true
