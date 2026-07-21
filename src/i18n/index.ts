@@ -59,10 +59,32 @@ function isSupported(value: string): value is SupportedLocale {
 }
 
 /**
+ * A few languages we ship only in regional/script variants — Chinese
+ * (zh-CN/zh-TW) and Portuguese (pt-BR) — never as a bare `zh`/`pt`. So a tag
+ * like `pt-PT`, `zh-HK`, or the script forms `zh-Hant`/`zh-Hans` matches nothing
+ * above and would otherwise fall all the way to English. Map each to the closest
+ * variant we do ship instead: Portuguese → pt-BR; Chinese → Traditional
+ * (zh-TW) when the tag carries a Traditional script (Hant) or a Traditional
+ * region (TW/HK/MO), else Simplified (zh-CN).
+ */
+function regionalFallback(parts: string[]): SupportedLocale | undefined {
+  const lang = parts[0].toLowerCase();
+  const rest = parts.slice(1).map((p) => p.toLowerCase());
+  if (lang === 'pt') return 'pt-BR';
+  if (lang === 'zh') {
+    const traditional =
+      rest.includes('hant') || rest.some((p) => ['tw', 'hk', 'mo'].includes(p));
+    return traditional ? 'zh-TW' : 'zh-CN';
+  }
+  return undefined;
+}
+
+/**
  * Map a raw BCP 47 tag to a supported locale. Tries the region-qualified tag
  * first (so zh-CN/zh-TW/pt-BR keep the region that carries the meaning), then
- * falls back to the bare language (fr-CA → fr), then to English. Ported from
- * ant-ui's useLocale.ts.
+ * the bare language (fr-CA → fr), then a regional fallback for languages we
+ * ship only regionally (pt-PT → pt-BR, zh-Hant → zh-TW), then English. Ported
+ * from ant-ui's useLocale.ts.
  */
 export function normalizeLocale(raw: string | null | undefined): SupportedLocale {
   if (!raw) return DEFAULT_LOCALE;
@@ -72,7 +94,8 @@ export function normalizeLocale(raw: string | null | undefined): SupportedLocale
     if (isSupported(tagged)) return tagged;
   }
   const base = parts[0].toLowerCase();
-  return isSupported(base) ? base : DEFAULT_LOCALE;
+  if (isSupported(base)) return base;
+  return regionalFallback(parts) ?? DEFAULT_LOCALE;
 }
 
 type Catalog = Record<string, unknown>;
