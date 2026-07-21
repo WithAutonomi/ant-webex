@@ -20,6 +20,7 @@ import {
   installerDownloadUrl,
   MIN_ANTD_VERSION,
   OS_LABELS,
+  STORAGE_KEYS,
 } from '../shared/constants';
 import {
   applyStaticTranslations,
@@ -487,10 +488,30 @@ function renderDownloads(items: chrome.downloads.DownloadItem[]) {
   }
 }
 
+/**
+ * The download ids the extension itself created for autonomi:// content — the
+ * background records every one under STORAGE_KEYS.DOWNLOADS (address → id). This
+ * is the authoritative "ours" set: we filter the browser-wide download list to
+ * it so the box shows only the extension's own downloads, never the user's other
+ * downloads. (byExtensionId is unreliable — undefined on Firefox, and if
+ * chrome.runtime.id ever reads falsy the `=== id` test silently inverts and
+ * lets every unowned download through.)
+ */
+async function ownedDownloadIds(): Promise<Set<number>> {
+  try {
+    const stored = await chrome.storage.local.get(STORAGE_KEYS.DOWNLOADS);
+    const byAddress = (stored?.[STORAGE_KEYS.DOWNLOADS] ?? {}) as Record<string, number>;
+    return new Set(Object.values(byAddress));
+  } catch {
+    return new Set();
+  }
+}
+
 async function refreshDownloads() {
   try {
+    const owned = await ownedDownloadIds();
     const items = await chrome.downloads.search({ limit: 100, orderBy: ['-startTime'] });
-    renderDownloads(items.filter((i) => i.byExtensionId === chrome.runtime.id));
+    renderDownloads(items.filter((i) => owned.has(i.id)));
   } catch {
     // downloads API unavailable / transient — the next tick retries.
   }
@@ -502,11 +523,10 @@ downloadList.addEventListener('click', (e) => {
 });
 
 btnClearDownloads.addEventListener('click', async () => {
+  const owned = await ownedDownloadIds();
   const items = await chrome.downloads.search({ limit: 1000 });
   const finished = items.filter(
-    (i) =>
-      i.byExtensionId === chrome.runtime.id &&
-      (i.state === 'complete' || i.state === 'interrupted'),
+    (i) => owned.has(i.id) && (i.state === 'complete' || i.state === 'interrupted'),
   );
   await Promise.all(finished.map((i) => chrome.downloads.erase({ id: i.id })));
   refreshDownloads();
