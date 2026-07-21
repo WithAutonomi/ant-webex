@@ -1,0 +1,109 @@
+name: Publish to stores
+
+# Publishes an already-tagged release to the PUBLIC store listings:
+#   • Chrome Web Store  (upload + publish; audience selectable)
+#   • Firefox AMO        (listed channel via web-ext sign)
+#
+# Manual-only and gated: it runs on workflow_dispatch in the `store-publish`
+# environment, so you can require a reviewer to approve every publish. It does
+# NOT run on tags or merges — publishing is always a deliberate button press.
+#
+# Prerequisites (one-time, manual — see PUBLISHING.md):
+#   • Both store listings already created (name, description, screenshots…).
+#     This automates *version* uploads, not the initial listing.
+#   • Store credentials configured as `store-publish` environment secrets.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to publish (must already exist, e.g. v0.1.3)'
+        required: true
+      stores:
+        description: 'Which store(s) to publish to'
+        type: choice
+        options: [both, chrome, firefox]
+        default: both
+      chrome_target:
+        description: 'Chrome audience (start with trustedTesters)'
+        type: choice
+        options: [trustedTesters, default]
+        default: trustedTesters
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: publish to stores
+    runs-on: ubuntu-latest
+    # Gate: add a required reviewer to this environment (Settings → Environments
+    # → store-publish) so every publish needs approval. Holds the store secrets;
+    # they're never exposed to fork-PR runs.
+    environment: store-publish
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify tag matches the manifest version
+        run: |
+          VER="$(node -p "require('./src/manifest.json').version")"
+          TAG="${{ inputs.tag }}"; TAG="${TAG#v}"
+          if [ "$VER" != "$TAG" ]; then
+            echo "::error::Tag ${{ inputs.tag }} does not match manifest version $VER"
+            exit 1
+          fi
+          echo "Publishing v$VER"
+
+      - name: Build (Chrome + Firefox)
+        run: npm run build:all
+
+      # ---- Chrome Web Store ----
+      - name: Publish to Chrome Web Store
+        if: ${{ inputs.stores == 'both' || inputs.stores == 'chrome' }}
+        env:
+          CWS_CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CWS_CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          CWS_REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+          CWS_EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
+        run: |
+          if [ -z "$CWS_CLIENT_ID" ]; then
+            echo "::error::Chrome selected but CWS_* secrets are not configured — see PUBLISHING.md."
+            exit 1
+          fi
+          (cd dist && zip -rX ../chrome.zip .)
+          node scripts/cws-publish.mjs --source chrome.zip --target "${{ inputs.chrome_target }}"
+
+      # ---- Firefox AMO (listed) ----
+      - name: Publish to Firefox AMO (listed)
+        if: ${{ inputs.stores == 'both' || inputs.stores == 'firefox' }}
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+        run: |
+          if [ -z "$WEB_EXT_API_KEY" ]; then
+            echo "::error::Firefox selected but WEB_EXT_API_* secrets are not configured — see PUBLISHING.md."
+            exit 1
+          fi
+          # Submits a new version to the listed AMO channel; enters AMO review.
+          # NOTE: AMO requires source for minified add-ons — see PUBLISHING.md for
+          # the source-submission step if web-ext's automatic handling isn't
+          # sufficient on first run.
+          npx --yes web-ext sign \
+            --source-dir=dist-firefox \
+            --channel=listed \
+            --api-key="$WEB_EXT_API_KEY" \
+            --api-secret="$WEB_EXT_API_SECRET"
