@@ -17,9 +17,13 @@ version bump and a tag.
 3. **Grab the artifacts.** They're attached to the GitHub Release for the tag
    (and also downloadable from the workflow run under *Actions*):
    - `ant-webex-chrome-vX.Y.Z.zip` — upload to the Chrome Web Store dashboard.
-   - `ant-webex-firefox-vX.Y.Z.xpi` — the **signed, unlisted** Firefox build;
-     testers install it directly (drag into Firefox). *Requires AMO creds — see
-     below; without them you get `…-unsigned.zip` instead, which won't install.*
+   - `ant-webex-firefox-vX.Y.Z.xpi` — **rc tags only**: the signed, unlisted
+     Firefox build; testers install it directly (drag into Firefox). *Requires
+     AMO creds — see below; without them you get `…-unsigned.zip` instead,
+     which won't install.* Final tags build no Firefox artifact — AMO version
+     numbers are one-shot **across channels**, so an unlisted-signed version
+     could never be submitted to the store; finals ship to Firefox via the AMO
+     **listed** channel instead (`publish.yml`, see PUBLISHING.md).
    - `ant-webex-source-vX.Y.Z.zip` — upload as the AMO **source-code submission**.
 
 You can also run it without tagging: **Actions → Release artifacts → Run
@@ -42,9 +46,12 @@ in the manifest's 4th component and CI verifies the mapping:
 
 Each iteration bumps the rc number (`rc.2` ↔ manifest `0.2.0.2`) — AMO signs a
 given version string only once, so never re-tag without bumping. The final
-release drops the suffix everywhere (tag `v0.2.0`, manifest `0.2.0`); if AMO
-refuses the final version because an earlier signing attempt already registered
-it, bump the patch version instead.
+release drops the suffix everywhere (tag `v0.2.0`, manifest `0.2.0`) and must be
+a version AMO has never seen in **any** channel — rc manifests burn their own
+numbers, and anything unlisted-signed can never go listed. CI therefore signs
+unlisted only on rc tags; finals reach Firefox through `publish.yml`'s listed
+submission. If a final version was ever accidentally signed (e.g. a stray tag),
+bump the patch and re-tag.
 
 ## One-time setup: AMO signing (for the Firefox `.xpi`)
 

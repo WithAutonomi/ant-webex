@@ -64,7 +64,10 @@ environment, it pauses for approval first.
 - **Neither store bypasses review.** The API submits; Google/Mozilla still review
   (hours to days). "Published" means "submitted + accepted," not "instant."
 - **Versions are one-shot.** Each store rejects a version it has already seen —
-  bump `manifest.json`/`package.json` and re-tag before re-publishing.
+  bump `manifest.json`/`package.json` and re-tag before re-publishing. On AMO
+  this holds **across channels**: a version signed unlisted (rc/tester builds)
+  can never be submitted listed, which is why `release.yml` only unlisted-signs
+  `-rc.` tags. Only publish versions that have never touched AMO.
 - **AMO source submission.** AMO requires source for minified/bundled add-ons.
   `web-ext sign --channel=listed` submits the build; if AMO also wants the source
   archive attached, upload `ant-webex-source-vX.Y.Z.zip` (from the release) via

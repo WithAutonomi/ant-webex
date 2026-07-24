@@ -1,12 +1,17 @@
 name: Release artifacts
 
 # Produces the store-ready, distributable artifacts from a clean checkout:
-#   • ant-webex-chrome-vX.Y.Z.zip   — Chrome Web Store upload package
-#   • ant-webex-firefox-vX.Y.Z.xpi  — signed, unlisted Firefox build (installable
-#                                     by testers) when AMO creds are configured;
-#                                     falls back to an unsigned .zip otherwise
-#   • ant-webex-source-vX.Y.Z.zip   — source tree for AMO's source-code submission
+#   • ant-webex-chrome-v….zip   — Chrome Web Store upload package (every build)
+#   • ant-webex-firefox-v….xpi  — signed, UNLISTED Firefox build for testers,
+#                                 built ONLY on -rc.N tags (unsigned .zip
+#                                 fallback without AMO creds)
+#   • ant-webex-source-v….zip   — source tree for AMO's source-code submission
 # and attaches them to the GitHub Release for the tag.
+#
+# Final (non-rc) tags get NO Firefox artifact on purpose: AMO version numbers
+# are one-shot ACROSS channels, so unlisted-signing a final would permanently
+# block that version from the listed store. Finals reach Firefox through
+# publish.yml's listed submission instead.
 #
 # Trigger: push a version tag (e.g. `git tag v0.1.3 && git push origin v0.1.3`),
 # or run manually from the Actions tab (workflow_dispatch).
@@ -96,8 +101,10 @@ jobs:
             echo "present=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Sign Firefox (unlisted → signed .xpi)
-        if: steps.amo.outputs.present == 'true'
+      # rc tags only — unlisted-signing a final would burn its version for the
+      # listed channel (see header comment).
+      - name: Sign Firefox (unlisted → signed .xpi, rc tags only)
+        if: steps.amo.outputs.present == 'true' && contains(github.ref_name, '-rc.')
         env:
           WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
           WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
@@ -113,7 +120,7 @@ jobs:
           mv "$XPI" "artifacts/ant-webex-firefox-v${{ steps.ver.outputs.version }}.xpi"
 
       - name: Package Firefox unsigned zip (fallback — no AMO creds)
-        if: steps.amo.outputs.present != 'true'
+        if: steps.amo.outputs.present != 'true' && contains(github.ref_name, '-rc.')
         run: |
           echo "::warning::AMO signing credentials (WEB_EXT_API_KEY / WEB_EXT_API_SECRET) are not set — producing an UNSIGNED Firefox zip, which will not install in release Firefox. Add the secrets to get a signed, installable .xpi. See RELEASING.md."
           npx --yes web-ext build \
