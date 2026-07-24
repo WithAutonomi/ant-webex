@@ -50,6 +50,12 @@ jobs:
         with:
           ref: ${{ inputs.tag }}
 
+      # Publish tooling comes from the dispatch ref (normally main), not the
+      # release tag — older tags predate scripts added later.
+      - uses: actions/checkout@v4
+        with:
+          path: .ci-tools
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -99,11 +105,28 @@ jobs:
             exit 1
           fi
           # Submits a new version to the listed AMO channel; enters AMO review.
-          # NOTE: AMO requires source for minified add-ons — see PUBLISHING.md for
-          # the source-submission step if web-ext's automatic handling isn't
-          # sufficient on first run.
+          # --approval-timeout=0: don't poll for approval — listed review takes
+          # hours/days, and the run only needs the submission to be accepted.
+          # (Source attach happens in the next step.)
           npx --yes web-ext sign \
             --source-dir=dist-firefox \
             --channel=listed \
+            --approval-timeout=0 \
             --api-key="$WEB_EXT_API_KEY" \
             --api-secret="$WEB_EXT_API_SECRET"
+
+      # AMO requires source for minified/bundled add-ons (this extension is
+      # esbuild-bundled) and web-ext can't send it — attach it to the version
+      # just created above. Fails the run if the attach fails: a listed version
+      # must never sit in review source-less (attach by hand via the AMO
+      # dashboard if this ever breaks — see PUBLISHING.md).
+      - name: Attach AMO source-code submission
+        if: ${{ inputs.stores == 'both' || inputs.stores == 'firefox' }}
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+        run: |
+          git archive --format=zip -o source.zip HEAD
+          node .ci-tools/scripts/amo-attach-source.mjs \
+            --manifest dist-firefox/manifest.json \
+            --source source.zip

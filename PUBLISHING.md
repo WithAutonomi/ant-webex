@@ -68,10 +68,13 @@ environment, it pauses for approval first.
   this holds **across channels**: a version signed unlisted (rc/tester builds)
   can never be submitted listed, which is why `release.yml` only unlisted-signs
   `-rc.` tags. Only publish versions that have never touched AMO.
-- **AMO source submission.** AMO requires source for minified/bundled add-ons.
-  `web-ext sign --channel=listed` submits the build; if AMO also wants the source
-  archive attached, upload `ant-webex-source-vX.Y.Z.zip` (from the release) via
-  the AMO dashboard, or attach it through the API. Verify what's needed on the
-  first listed submission.
+- **AMO source submission is automatic.** AMO requires source for
+  minified/bundled add-ons — this extension is esbuild-bundled, so treat it as
+  mandatory on every listed version. After the `web-ext` submission the workflow
+  PATCHes a `git archive` source zip onto the new version through the add-ons
+  API (`scripts/amo-attach-source.mjs`, same JWT credentials), and fails the run
+  if the attach doesn't stick. In that case attach
+  `ant-webex-source-vX.Y.Z.zip` (from the GitHub Release) by hand via the AMO
+  dashboard — never leave a listed version in review without source.
 - **Safe first run:** publish Chrome to `trustedTesters` and Firefox to a small
   audience, confirm the listing looks right, then go public.
