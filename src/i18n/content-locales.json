@@ -1,0 +1,182 @@
+{
+  "ar": {
+    "download": "تنزيل",
+    "open": "فتح",
+    "fetching": "جارٍ الجلب…",
+    "downloading_pct": "جارٍ التنزيل… {pct}%",
+    "download_failed": "فشل التنزيل",
+    "title_download": "التنزيل من شبكة Autonomi",
+    "title_open": "فتح الملف الذي تم تنزيله",
+    "failed_to_load": "فشل التحميل من Autonomi"
+  },
+  "bg": {
+    "download": "Изтегли",
+    "open": "Отвори",
+    "fetching": "Извличане…",
+    "downloading_pct": "Изтегляне… {pct}%",
+    "download_failed": "Неуспешно изтегляне",
+    "title_download": "Изтегли от мрежата Autonomi",
+    "title_open": "Отвори изтегления файл",
+    "failed_to_load": "Неуспешно зареждане от Autonomi"
+  },
+  "de": {
+    "download": "Herunterladen",
+    "open": "Öffnen",
+    "fetching": "Wird abgerufen…",
+    "downloading_pct": "Herunterladen… {pct}%",
+    "download_failed": "Download fehlgeschlagen",
+    "title_download": "Aus dem Autonomi-Netzwerk herunterladen",
+    "title_open": "Heruntergeladene Datei öffnen",
+    "failed_to_load": "Laden von Autonomi fehlgeschlagen"
+  },
+  "en": {
+    "download": "Download",
+    "open": "Open",
+    "fetching": "Fetching…",
+    "downloading_pct": "Downloading… {pct}%",
+    "download_failed": "Download failed",
+    "title_download": "Download from the Autonomi network",
+    "title_open": "Open the downloaded file",
+    "failed_to_load": "Failed to load from Autonomi"
+  },
+  "es": {
+    "download": "Descargar",
+    "open": "Abrir",
+    "fetching": "Obteniendo…",
+    "downloading_pct": "Descargando… {pct}%",
+    "download_failed": "La descarga falló",
+    "title_download": "Descargar de la red Autonomi",
+    "title_open": "Abrir el archivo descargado",
+    "failed_to_load": "Error al cargar desde Autonomi"
+  },
+  "fr": {
+    "download": "Télécharger",
+    "open": "Ouvrir",
+    "fetching": "Récupération…",
+    "downloading_pct": "Téléchargement… {pct}%",
+    "download_failed": "Échec du téléchargement",
+    "title_download": "Télécharger depuis le réseau Autonomi",
+    "title_open": "Ouvrir le fichier téléchargé",
+    "failed_to_load": "Échec du chargement depuis Autonomi"
+  },
+  "he": {
+    "download": "הורד",
+    "open": "פתח",
+    "fetching": "מביא…",
+    "downloading_pct": "מוריד… {pct}%",
+    "download_failed": "ההורדה נכשלה",
+    "title_download": "הורד מרשת Autonomi",
+    "title_open": "פתח את הקובץ שהורד",
+    "failed_to_load": "הטעינה מ-Autonomi נכשלה"
+  },
+  "id": {
+    "download": "Unduh",
+    "open": "Buka",
+    "fetching": "Mengambil…",
+    "downloading_pct": "Mengunduh… {pct}%",
+    "download_failed": "Unduhan gagal",
+    "title_download": "Unduh dari jaringan Autonomi",
+    "title_open": "Buka berkas yang diunduh",
+    "failed_to_load": "Gagal memuat dari Autonomi"
+  },
+  "ja": {
+    "download": "ダウンロード",
+    "open": "開く",
+    "fetching": "取得中…",
+    "downloading_pct": "ダウンロード中… {pct}%",
+    "download_failed": "ダウンロードに失敗しました",
+    "title_download": "Autonomi ネットワークからダウンロード",
+    "title_open": "ダウンロードしたファイルを開く",
+    "failed_to_load": "Autonomi からの読み込みに失敗しました"
+  },
+  "ko": {
+    "download": "다운로드",
+    "open": "열기",
+    "fetching": "가져오는 중…",
+    "downloading_pct": "다운로드 중… {pct}%",
+    "download_failed": "다운로드 실패",
+    "title_download": "Autonomi 네트워크에서 다운로드",
+    "title_open": "다운로드한 파일 열기",
+    "failed_to_load": "Autonomi에서 로드하지 못했습니다"
+  },
+  "nl": {
+    "download": "Downloaden",
+    "open": "Openen",
+    "fetching": "Ophalen…",
+    "downloading_pct": "Downloaden… {pct}%",
+    "download_failed": "Downloaden mislukt",
+    "title_download": "Downloaden van het Autonomi-netwerk",
+    "title_open": "Het gedownloade bestand openen",
+    "failed_to_load": "Laden van Autonomi mislukt"
+  },
+  "pt-BR": {
+    "download": "Baixar",
+    "open": "Abrir",
+    "fetching": "Buscando…",
+    "downloading_pct": "Baixando… {pct}%",
+    "download_failed": "O download falhou",
+    "title_download": "Baixar da rede Autonomi",
+    "title_open": "Abrir o arquivo baixado",
+    "failed_to_load": "Falha ao carregar do Autonomi"
+  },
+  "ru": {
+    "download": "Скачать",
+    "open": "Открыть",
+    "fetching": "Получение…",
+    "downloading_pct": "Скачивание… {pct}%",
+    "download_failed": "Ошибка скачивания",
+    "title_download": "Скачать из сети Autonomi",
+    "title_open": "Открыть скачанный файл",
+    "failed_to_load": "Не удалось загрузить из Autonomi"
+  },
+  "tr": {
+    "download": "İndir",
+    "open": "Aç",
+    "fetching": "Alınıyor…",
+    "downloading_pct": "İndiriliyor… %{pct}",
+    "download_failed": "İndirme başarısız",
+    "title_download": "Autonomi ağından indir",
+    "title_open": "İndirilen dosyayı aç",
+    "failed_to_load": "Autonomi'den yüklenemedi"
+  },
+  "uk": {
+    "download": "Завантажити",
+    "open": "Відкрити",
+    "fetching": "Отримання…",
+    "downloading_pct": "Скачування… {pct}%",
+    "download_failed": "Помилка завантаження",
+    "title_download": "Завантажити з мережі Autonomi",
+    "title_open": "Відкрити завантажений файл",
+    "failed_to_load": "Не вдалося завантажити з Autonomi"
+  },
+  "vi": {
+    "download": "Tải xuống",
+    "open": "Mở",
+    "fetching": "Đang tìm nạp…",
+    "downloading_pct": "Đang tải xuống… {pct}%",
+    "download_failed": "Tải xuống thất bại",
+    "title_download": "Tải xuống từ mạng Autonomi",
+    "title_open": "Mở tệp đã tải xuống",
+    "failed_to_load": "Không tải được từ Autonomi"
+  },
+  "zh-CN": {
+    "download": "下载",
+    "open": "打开",
+    "fetching": "获取中…",
+    "downloading_pct": "下载中… {pct}%",
+    "download_failed": "下载失败",
+    "title_download": "从 Autonomi 网络下载",
+    "title_open": "打开已下载的文件",
+    "failed_to_load": "从 Autonomi 加载失败"
+  },
+  "zh-TW": {
+    "download": "下載",
+    "open": "開啟",
+    "fetching": "取得中…",
+    "downloading_pct": "下載中… {pct}%",
+    "download_failed": "下載失敗",
+    "title_download": "從 Autonomi 網路下載",
+    "title_open": "開啟已下載的檔案",
+    "failed_to_load": "無法從 Autonomi 載入"
+  }
+}

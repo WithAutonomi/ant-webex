@@ -1,0 +1,116 @@
+{
+  "_translator_notes": "Machine-translated baseline. Native-speaker polish via PR welcome.",
+  "common": {
+    "download": "ダウンロード",
+    "save": "保存",
+    "connected": "接続済み",
+    "checking": "確認中…",
+    "downloading": "ダウンロード中…",
+    "settings": "設定",
+    "downloads": "ダウンロード",
+    "unknown": "不明"
+  },
+  "status": {
+    "not_detected": "デーモンが検出されません",
+    "not_running": "デーモンが実行されていません"
+  },
+  "popup": {
+    "version_too_old": "この antd のバージョンは古すぎます。この拡張機能には {min} 以降が必要です。",
+    "update_antd": "antd を更新",
+    "prerelease_warning": "これはプレリリース版の antd ビルド（{version}）です。この拡張機能は安定版リリースのみをサポートしています。",
+    "install_stable": "安定版リリースをインストール",
+    "update_available": "更新が利用可能です：{version}",
+    "get_latest": "最新版を入手",
+    "resources_heading": "このページのリソース",
+    "no_resources": "autonomi:// の参照は検出されませんでした。",
+    "clear_finished": "完了したものをクリア",
+    "no_downloads": "まだダウンロードはありません。",
+    "disconnected_help": "この拡張機能がネットワークからコンテンツを取得するには、Autonomi デーモン（antd）が必要です。",
+    "detect_daemon": "デーモンを検出",
+    "detecting": "検出中…",
+    "download_daemon": "デーモンをダウンロード",
+    "then_detect_prefix": "その後、上の「デーモンを検出」をクリックするか、",
+    "open_setup_guide": "完全なセットアップガイドを開く",
+    "setup_guide": "セットアップガイド"
+  },
+  "guide": {
+    "summary": "すでに antd をインストール済みですか？ 見つけて実行する",
+    "reach_antd": "以前に antd をセットアップした場合は、単に停止しているか、拡張機能に必要なオプションなしで実行されているだけかもしれません。この拡張機能は {url} で antd に接続するため、--cors オプションを付けて起動する必要があります。",
+    "step1_terminal": "1 · ターミナルを開く",
+    "step2_start": "2 · デーモンを起動する",
+    "terminal_on": "{os} の場合：{instr}。",
+    "terminal_generic": "ターミナルアプリを開きます。",
+    "terminal": {
+      "windows": "Win キーを押し、「PowerShell」と入力して Enter キーを押す",
+      "macos": "Cmd+Space を押し、「Terminal」と入力して Enter キーを押す",
+      "linux": "Ctrl+Alt+T を押す（またはターミナルアプリを開く）"
+    },
+    "cmd_not_found": "ブラウジング中はそのウィンドウを開いたままにしてください。\"command not found\" と表示される場合は、antd が PATH に含まれていません。下に表示されるフルパスを使って実行してください（その際も --cors を付けます）。",
+    "where_to_find": "見つける場所",
+    "label_program": "プログラム",
+    "label_running_check": "実行確認",
+    "path_varies": "プラットフォームによって異なります — セットアップガイドを参照してください",
+    "path_varies_short": "プラットフォームによって異なります",
+    "portfile_hint": "— このファイルは antd が起動すると表示されます。",
+    "connects_automatically": "起動すると、このページは自動的に接続します — または、ツールバーのポップアップで「デーモンを検出」をクリックしてください。"
+  },
+  "install": {
+    "title_install": "antd をインストール",
+    "title_update": "antd を更新",
+    "step_run": "ダウンロードしたインストーラー（{file}）を実行します。",
+    "step2_install": "antd が起動し、ログイン時に自動的に起動するよう設定されます。",
+    "step2_update": "現在の antd を置き換えて再起動します。",
+    "step_detected": "antd が検出されると、このパネルは自動的に更新されます。",
+    "waiting": "antd を待機中…",
+    "other_platforms": "その他のプラットフォーム、または手動インストール：",
+    "releases_link": "antd のリリース",
+    "see_releases": "（リリースページを参照）"
+  },
+  "downloads": {
+    "progress_pct": "ダウンロード中… {pct}%（{received} / {total}）",
+    "progress_indeterminate": "ダウンロード中… {received}",
+    "open_folder": "フォルダーを開く",
+    "failed": "失敗"
+  },
+  "settings": {
+    "daemon_url": "デーモンの URL",
+    "auto_fetch": "インラインリソースを自動取得",
+    "check_updates": "antd の更新を確認",
+    "saving": "保存中…",
+    "saved": "保存しました！",
+    "language": "言語",
+    "language_system": "システムのデフォルト"
+  },
+  "onboarding": {
+    "welcome_title": "Autonomi へようこそ",
+    "welcome_lede": "Autonomi ネットワークのコンテンツを閲覧する準備はもうすぐ整います。簡単なセットアップを 1 ステップ行えば完了です。",
+    "status_checking": "ネットワークデーモンを確認中…",
+    "step1_title": "ネットワークデーモンをダウンロード",
+    "step1_body": "Autonomi のコンテンツは分散型ネットワーク上に存在します。antd という小さなローカルプログラムがコンピューター上で実行され、拡張機能のためにそのコンテンツを取得します — ブラウザ単体ではネットワークにアクセスできません。antd はバックグラウンドで静かに動作し、お使いのマシン上でのみ待ち受けます。",
+    "download_for": "{platform} 用をダウンロード",
+    "your_platform": "お使いのプラットフォーム",
+    "all_downloads": "GitHub のすべてのダウンロード",
+    "step2_title": "インストーラーを実行",
+    "step2_body": "ダウンロードしたファイルを開き、画面の指示に従ってください。antd をインストールして起動し、サインインするたびに自動的に起動するよう設定します — この操作は一度だけで済みます。",
+    "step3_title": "拡張機能で接続を確認",
+    "step3_body": "このページはデーモンを自動的に検出します。起動すると上部のバナーが緑色になり、ネットワークに接続されます。ブラウザのツールバーにある Autonomi アイコンをいつでもクリックして、ステータスを確認することもできます。",
+    "done_title": "🎉 接続されました！",
+    "done_body": "拡張機能で Autonomi のコンテンツを読み込めるようになりました。autonomi:// の参照を含むページにアクセスするか、ツールバーのポップアップを開いて検出されたものを確認してください。",
+    "os_undetected": "オペレーティングシステムを検出できませんでした — GitHub で適切なビルドを選んでください。",
+    "downloading_asset": "{asset} をダウンロード中…",
+    "download_failed_fallback": "ダウンロードに失敗しました — 代わりに GitHub のリリースページを開きます。",
+    "banner_connected": "Autonomi ネットワークに接続しました",
+    "banner_idle": "ネットワークデーモンが検出されません — 以下の手順に従ってください。起動すると、このページは自動的に接続します。",
+    "banner_preview": "プレビューモード — デーモンを検出するには拡張機能をインストールしてください。"
+  },
+  "content": {
+    "download": "ダウンロード",
+    "open": "開く",
+    "fetching": "取得中…",
+    "downloading_pct": "ダウンロード中… {pct}%",
+    "download_failed": "ダウンロードに失敗しました",
+    "title_download": "Autonomi ネットワークからダウンロード",
+    "title_open": "ダウンロードしたファイルを開く",
+    "failed_to_load": "Autonomi からの読み込みに失敗しました"
+  }
+}

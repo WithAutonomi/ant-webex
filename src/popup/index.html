@@ -15,7 +15,7 @@
       </div>
       <div id="status-bar" class="status-pill">
         <span id="status-dot"></span>
-        <span id="status-text">Checking…</span>
+        <span id="status-text" data-i18n="common.checking">Checking…</span>
       </div>
     </header>
 
@@ -29,36 +29,35 @@
 
       <!-- Every update path is a one-click installer download, the same as the
            first-run flow — never a link dumping the user on a releases page to
-           pick an asset by hand. -->
+           pick an asset by hand. The message text is set from the catalog in
+           index.ts (it interpolates the version/min-version). -->
       <p id="version-warning" class="version-warning hidden">
-        This antd version is too old. The extension needs
-        <strong id="min-version"></strong> or newer.
-        <button id="warning-update-btn" class="link-btn">Update antd</button>
+        <span id="version-warning-text"></span>
+        <button id="warning-update-btn" class="link-btn" data-i18n="popup.update_antd">Update antd</button>
       </p>
       <p id="prerelease-warning" class="version-warning hidden">
-        This is a pre-release antd build (<strong id="prerelease-version"></strong>).
-        The extension supports stable releases only.
-        <button id="prerelease-update-btn" class="link-btn">Install the stable release</button>
+        <span id="prerelease-warning-text"></span>
+        <button id="prerelease-update-btn" class="link-btn" data-i18n="popup.install_stable">Install the stable release</button>
       </p>
       <p id="update-nudge" class="update-nudge hidden">
-        Update available: <strong id="latest-version"></strong>
-        <button id="update-btn" class="link-btn">Get the latest</button>
+        <span id="update-nudge-text"></span>
+        <button id="update-btn" class="link-btn" data-i18n="popup.get_latest">Get the latest</button>
       </p>
 
       <section class="panel" id="page-resources">
         <div class="section-head">
-          <h3 class="section-label">Resources on this page</h3>
+          <h3 class="section-label" data-i18n="popup.resources_heading">Resources on this page</h3>
         </div>
-        <p class="muted empty" id="no-resources">No autonomi:// references detected.</p>
+        <p class="muted empty" id="no-resources" data-i18n="popup.no_resources">No autonomi:// references detected.</p>
         <ul id="resource-list"></ul>
       </section>
 
       <section class="panel" id="downloads-section">
         <div class="section-head">
-          <h3 class="section-label">Downloads</h3>
-          <button id="btn-clear-downloads" class="link-btn hidden">Clear finished</button>
+          <h3 class="section-label" data-i18n="common.downloads">Downloads</h3>
+          <button id="btn-clear-downloads" class="link-btn hidden" data-i18n="popup.clear_finished">Clear finished</button>
         </div>
-        <p class="muted empty" id="no-downloads">No downloads yet.</p>
+        <p class="muted empty" id="no-downloads" data-i18n="popup.no_downloads">No downloads yet.</p>
         <ul id="download-list"></ul>
       </section>
     </section>
@@ -66,51 +65,48 @@
     <!-- Disconnected view -->
     <section id="disconnected-view" class="hidden">
       <div class="panel notice">
-        <p><strong>Daemon not running</strong></p>
-        <p class="muted">
-          The extension needs the Autonomi daemon (<code>antd</code>) to fetch
-          content from the network.
+        <p><strong data-i18n="status.not_running">Daemon not running</strong></p>
+        <p class="muted" data-i18n="popup.disconnected_help">
+          The extension needs the Autonomi daemon (antd) to fetch content from
+          the network.
         </p>
         <div class="btn-row">
-          <button id="btn-detect">Detect daemon</button>
-          <button id="btn-install" class="secondary">Download daemon</button>
+          <button id="btn-detect" data-i18n="popup.detect_daemon">Detect daemon</button>
+          <button id="btn-install" class="secondary" data-i18n="popup.download_daemon">Download daemon</button>
         </div>
       </div>
 
       <!-- Already-installed guide: find & run an existing antd -->
       <details class="panel guide" id="run-guide">
-        <summary>Already installed antd? Find &amp; run it</summary>
+        <summary data-i18n="guide.summary">Already installed antd? Find &amp; run it</summary>
         <div class="guide-body">
-          <p class="muted">
-            If you set up antd before, it may just be stopped — or running without the
-            option the extension needs. The extension reaches antd over
-            <code id="guide-url">http://localhost:8082</code> and needs it started
-            <strong>with <code>--cors</code></strong>.
-          </p>
+          <!-- Reaches-antd sentence interpolates the daemon URL; set in index.ts. -->
+          <p class="muted" id="guide-reach"></p>
 
-          <p class="guide-step"><strong>1 · Open a terminal</strong></p>
+          <p class="guide-step" data-i18n="guide.step1_terminal">1 · Open a terminal</p>
           <p class="muted guide-sub" id="guide-terminal"></p>
 
-          <p class="guide-step"><strong>2 · Start the daemon</strong></p>
+          <p class="guide-step" data-i18n="guide.step2_start">2 · Start the daemon</p>
           <pre id="guide-cmd">antd --cors</pre>
-          <p class="muted guide-sub">
-            Leave this window open while you browse. Seeing
-            <em>“command not found”</em>? antd isn't on your PATH — run it with the full
-            path shown below instead (still adding <code>--cors</code>).
+          <p class="muted guide-sub" data-i18n="guide.cmd_not_found">
+            Leave this window open while you browse. Seeing “command not found”?
+            antd isn't on your PATH — run it with the full path shown below
+            instead (still adding --cors).
           </p>
 
-          <p class="guide-step"><strong>Where to find it</strong></p>
+          <p class="guide-step" data-i18n="guide.where_to_find">Where to find it</p>
           <ul class="guide-paths">
-            <li>Program: <code id="guide-install">—</code></li>
+            <li><span data-i18n="guide.label_program">Program</span>: <code id="guide-install">—</code></li>
             <li>
-              Running check: <code id="guide-portfile">—</code>
-              <span class="guide-sub">— this file exists once antd has started.</span>
+              <span data-i18n="guide.label_running_check">Running check</span>:
+              <code id="guide-portfile">—</code>
+              <span class="guide-sub" data-i18n="guide.portfile_hint">— this file exists once antd has started.</span>
             </li>
           </ul>
 
           <p class="muted">
-            Then click <strong>Detect daemon</strong> above, or
-            <a href="#" class="open-setup">open the full setup guide</a>.
+            <span data-i18n="popup.then_detect_prefix">Then click Detect daemon above, or</span>
+            <a href="#" class="open-setup" data-i18n="popup.open_setup_guide">open the full setup guide</a>.
           </p>
         </div>
       </details>
@@ -128,39 +124,43 @@
       the moment the new daemon came up.
     -->
     <div id="install-info" class="panel hidden">
-      <h3 class="section-label" id="install-title">Install antd</h3>
+      <h3 class="section-label" id="install-title" data-i18n="install.title_install">Install antd</h3>
       <ol class="install-steps">
-        <li>Run the installer that just downloaded (<code id="install-file"></code>).</li>
-        <li id="install-step-2">It starts antd and sets it to launch on login.</li>
-        <li>This panel updates automatically once antd is detected.</li>
+        <li id="install-step-run"></li>
+        <li id="install-step-2" data-i18n="install.step2_install">It starts antd and sets it to launch on login.</li>
+        <li data-i18n="install.step_detected">This panel updates automatically once antd is detected.</li>
       </ol>
-      <p class="muted" id="install-waiting"><span class="spinner"></span> Waiting for antd…</p>
+      <p class="muted" id="install-waiting"><span class="spinner"></span> <span data-i18n="install.waiting">Waiting for antd…</span></p>
       <p class="muted">
-        Other platforms or manual install:
-        <a id="install-releases-link" href="#" target="_blank">antd releases</a>
+        <span data-i18n="install.other_platforms">Other platforms or manual install:</span>
+        <a id="install-releases-link" href="#" target="_blank" data-i18n="install.releases_link">antd releases</a>
       </p>
     </div>
 
     <!-- Settings -->
     <details id="settings-panel">
-      <summary>Settings</summary>
+      <summary data-i18n="common.settings">Settings</summary>
       <label>
-        Daemon URL
+        <span data-i18n="settings.daemon_url">Daemon URL</span>
         <input type="text" id="input-url" placeholder="http://localhost:8082" />
       </label>
       <label class="checkbox">
         <input type="checkbox" id="input-auto-fetch" />
-        Auto-fetch inline resources
+        <span data-i18n="settings.auto_fetch">Auto-fetch inline resources</span>
       </label>
       <label class="checkbox">
         <input type="checkbox" id="input-check-updates" />
-        Check for antd updates
+        <span data-i18n="settings.check_updates">Check for antd updates</span>
       </label>
-      <button id="btn-save">Save</button>
+      <label>
+        <span data-i18n="settings.language">Language</span>
+        <select id="input-language"></select>
+      </label>
+      <button id="btn-save" data-i18n="common.save">Save</button>
     </details>
 
     <footer class="app-footer">
-      <a href="#" class="open-setup">Setup guide</a>
+      <a href="#" class="open-setup" data-i18n="popup.setup_guide">Setup guide</a>
     </footer>
 
     <script src="index.js"></script>

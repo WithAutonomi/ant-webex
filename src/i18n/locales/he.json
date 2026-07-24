@@ -1,0 +1,116 @@
+{
+  "_translator_notes": "Machine-translated baseline. Native-speaker polish via PR welcome.",
+  "common": {
+    "download": "הורד",
+    "save": "שמור",
+    "connected": "מחובר",
+    "checking": "בודק…",
+    "downloading": "מוריד…",
+    "settings": "הגדרות",
+    "downloads": "הורדות",
+    "unknown": "לא ידוע"
+  },
+  "status": {
+    "not_detected": "הדמון לא זוהה",
+    "not_running": "הדמון אינו פועל"
+  },
+  "popup": {
+    "version_too_old": "גרסת antd זו ישנה מדי. התוסף זקוק ל-{min} או חדשה יותר.",
+    "update_antd": "עדכן את antd",
+    "prerelease_warning": "זוהי גרסת antd מוקדמת ({version}). התוסף תומך בגרסאות יציבות בלבד.",
+    "install_stable": "התקן את הגרסה היציבה",
+    "update_available": "עדכון זמין: {version}",
+    "get_latest": "קבל את הגרסה האחרונה",
+    "resources_heading": "משאבים בעמוד זה",
+    "no_resources": "לא זוהו הפניות autonomi://.",
+    "clear_finished": "נקה שהושלמו",
+    "no_downloads": "אין הורדות עדיין.",
+    "disconnected_help": "התוסף זקוק לדמון של Autonomi ‏(antd) כדי להביא תוכן מהרשת.",
+    "detect_daemon": "זהה דמון",
+    "detecting": "מזהה…",
+    "download_daemon": "הורד דמון",
+    "then_detect_prefix": "לאחר מכן לחץ על ‘זהה דמון’ למעלה, או",
+    "open_setup_guide": "פתח את מדריך ההתקנה המלא",
+    "setup_guide": "מדריך התקנה"
+  },
+  "guide": {
+    "summary": "כבר התקנת את antd? מצא אותו והפעל אותו",
+    "reach_antd": "אם הגדרת את antd בעבר, ייתכן שהוא פשוט מופסק — או פועל ללא האפשרות שהתוסף זקוק לה. התוסף מגיע ל-antd בכתובת {url} וזקוק להפעלתו עם האפשרות --cors.",
+    "step1_terminal": "1 · פתח את Terminal",
+    "step2_start": "2 · הפעל את הדמון",
+    "terminal_on": "ב-{os}: {instr}.",
+    "terminal_generic": "פתח את אפליקציית Terminal שלך.",
+    "terminal": {
+      "windows": "לחץ Win, הקלד “PowerShell”, ואז Enter",
+      "macos": "לחץ Cmd+Space, הקלד “Terminal”, ואז Enter",
+      "linux": "לחץ Ctrl+Alt+T (או פתח את אפליקציית Terminal שלך)"
+    },
+    "cmd_not_found": "השאר את החלון פתוח בזמן הגלישה. אם מופיע “command not found”, ‏antd אינו נמצא ב-PATH שלך — הפעל אותו באמצעות הנתיב המלא המוצג למטה (עדיין עם הוספת --cors).",
+    "where_to_find": "היכן למצוא אותו",
+    "label_program": "תוכנית",
+    "label_running_check": "בדיקת פעילות",
+    "path_varies": "משתנה לפי הפלטפורמה — ראה את מדריך ההתקנה",
+    "path_varies_short": "משתנה לפי הפלטפורמה",
+    "portfile_hint": "— קובץ זה מופיע לאחר ש-antd הופעל.",
+    "connects_automatically": "לאחר שהוא פועל, עמוד זה מתחבר אוטומטית — או לחץ על ‘זהה דמון’ בחלון הקופץ של סרגל הכלים."
+  },
+  "install": {
+    "title_install": "התקן את antd",
+    "title_update": "עדכן את antd",
+    "step_run": "הפעל את תוכנת ההתקנה שהורדה זה עתה ({file}).",
+    "step2_install": "היא מפעילה את antd ומגדירה אותו לעלות בעת הכניסה למערכת.",
+    "step2_update": "היא מחליפה את antd הנוכחי שלך ומפעילה אותו מחדש.",
+    "step_detected": "פאנל זה מתעדכן אוטומטית לאחר ש-antd מזוהה.",
+    "waiting": "ממתין ל-antd…",
+    "other_platforms": "פלטפורמות אחרות או התקנה ידנית:",
+    "releases_link": "גרסאות antd",
+    "see_releases": "(ראה את עמוד הגרסאות)"
+  },
+  "downloads": {
+    "progress_pct": "מוריד… {pct}% ({received} / {total})",
+    "progress_indeterminate": "מוריד… {received}",
+    "open_folder": "פתח תיקייה",
+    "failed": "נכשל"
+  },
+  "settings": {
+    "daemon_url": "כתובת URL של הדמון",
+    "auto_fetch": "הבאה אוטומטית של משאבים מוטבעים",
+    "check_updates": "בדוק אם יש עדכונים ל-antd",
+    "saving": "שומר…",
+    "saved": "נשמר!",
+    "language": "שפה",
+    "language_system": "ברירת המחדל של המערכת"
+  },
+  "onboarding": {
+    "welcome_title": "ברוך הבא ל-Autonomi",
+    "welcome_lede": "אתה כמעט מוכן לגלוש בתוכן מרשת Autonomi. שלב הגדרה מהיר אחד ואתה בפנים.",
+    "status_checking": "בודק אם דמון הרשת קיים…",
+    "step1_title": "הורד את דמון הרשת",
+    "step1_body": "תוכן Autonomi נמצא ברשת מבוזרת. תוכנית מקומית קטנה בשם antd פועלת במחשב שלך ומביאה את התוכן הזה עבור התוסף — הדפדפן שלך אינו יכול להגיע לרשת בכוחות עצמו. היא פועלת בשקט ברקע ומאזינה רק במחשב שלך.",
+    "download_for": "הורד עבור {platform}",
+    "your_platform": "הפלטפורמה שלך",
+    "all_downloads": "כל ההורדות ב-GitHub",
+    "step2_title": "הפעל את תוכנת ההתקנה",
+    "step2_body": "פתח את הקובץ שהורדת זה עתה ופעל לפי ההנחיות. היא מתקינה את antd, מפעילה אותו, ומגדירה אותו לעלות אוטומטית בכל פעם שאתה נכנס — כך שתעשה זאת רק פעם אחת.",
+    "step3_title": "בדוק בתוסף אם קיים חיבור",
+    "step3_body": "עמוד זה מזהה את הדמון אוטומטית. לאחר שהוא פועל, הכרזה שלמעלה הופכת לירוקה ואתה מחובר לרשת. תוכל גם ללחוץ על סמל Autonomi בסרגל הכלים של הדפדפן בכל עת כדי לראות את הסטטוס שלך.",
+    "done_title": "🎉 אתה מחובר!",
+    "done_body": "התוסף יכול כעת לטעון תוכן Autonomi. בקר בעמוד עם הפניות autonomi://, או פתח את החלון הקופץ של סרגל הכלים כדי לראות מה זוהה.",
+    "os_undetected": "לא הצלחנו לזהות את מערכת ההפעלה שלך — בחר את הגרסה המתאימה ב-GitHub.",
+    "downloading_asset": "מוריד את {asset}…",
+    "download_failed_fallback": "ההורדה נכשלה — פותח במקום זאת את עמוד הגרסאות של GitHub.",
+    "banner_connected": "מחובר לרשת Autonomi",
+    "banner_idle": "דמון הרשת לא זוהה — פעל לפי השלבים שלמטה. עמוד זה מתחבר אוטומטית לאחר שהוא פועל.",
+    "banner_preview": "מצב תצוגה מקדימה — התקן את התוסף כדי לזהות את הדמון."
+  },
+  "content": {
+    "download": "הורד",
+    "open": "פתח",
+    "fetching": "מביא…",
+    "downloading_pct": "מוריד… {pct}%",
+    "download_failed": "ההורדה נכשלה",
+    "title_download": "הורד מרשת Autonomi",
+    "title_open": "פתח את הקובץ שהורד",
+    "failed_to_load": "הטעינה מ-Autonomi נכשלה"
+  }
+}

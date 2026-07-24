@@ -1,0 +1,116 @@
+{
+  "_translator_notes": "Machine-translated baseline. Native-speaker polish via PR welcome.",
+  "common": {
+    "download": "Tải xuống",
+    "save": "Lưu",
+    "connected": "Đã kết nối",
+    "checking": "Đang kiểm tra…",
+    "downloading": "Đang tải xuống…",
+    "settings": "Cài đặt",
+    "downloads": "Tải xuống",
+    "unknown": "không xác định"
+  },
+  "status": {
+    "not_detected": "Không phát hiện thấy daemon",
+    "not_running": "Daemon không chạy"
+  },
+  "popup": {
+    "version_too_old": "Phiên bản antd này quá cũ. Tiện ích cần {min} hoặc mới hơn.",
+    "update_antd": "Cập nhật antd",
+    "prerelease_warning": "Đây là bản dựng antd tiền phát hành ({version}). Tiện ích chỉ hỗ trợ các bản phát hành ổn định.",
+    "install_stable": "Cài đặt bản phát hành ổn định",
+    "update_available": "Có bản cập nhật: {version}",
+    "get_latest": "Nhận bản mới nhất",
+    "resources_heading": "Tài nguyên trên trang này",
+    "no_resources": "Không phát hiện tham chiếu autonomi:// nào.",
+    "clear_finished": "Xóa các mục đã hoàn tất",
+    "no_downloads": "Chưa có mục tải xuống nào.",
+    "disconnected_help": "Tiện ích cần daemon Autonomi (antd) để tải nội dung từ mạng.",
+    "detect_daemon": "Phát hiện daemon",
+    "detecting": "Đang phát hiện…",
+    "download_daemon": "Tải xuống daemon",
+    "then_detect_prefix": "Sau đó nhấp vào Phát hiện daemon ở trên, hoặc",
+    "open_setup_guide": "mở hướng dẫn thiết lập đầy đủ",
+    "setup_guide": "Hướng dẫn thiết lập"
+  },
+  "guide": {
+    "summary": "Đã cài đặt antd? Tìm và chạy nó",
+    "reach_antd": "Nếu bạn đã thiết lập antd trước đó, có thể nó chỉ đơn giản là đã dừng — hoặc đang chạy mà không có tùy chọn mà tiện ích cần. Tiện ích kết nối tới antd tại {url} và cần nó được khởi động với tùy chọn --cors.",
+    "step1_terminal": "1 · Mở một terminal",
+    "step2_start": "2 · Khởi động daemon",
+    "terminal_on": "Trên {os}: {instr}.",
+    "terminal_generic": "Mở ứng dụng terminal của bạn.",
+    "terminal": {
+      "windows": "nhấn Win, gõ “PowerShell”, rồi nhấn Enter",
+      "macos": "nhấn Cmd+Space, gõ “Terminal”, rồi nhấn Enter",
+      "linux": "nhấn Ctrl+Alt+T (hoặc mở ứng dụng terminal của bạn)"
+    },
+    "cmd_not_found": "Giữ cửa sổ đó mở trong khi bạn duyệt web. Nếu bạn thấy “command not found”, antd không có trong PATH của bạn — hãy chạy nó bằng đường dẫn đầy đủ hiển thị bên dưới (vẫn thêm --cors).",
+    "where_to_find": "Nơi tìm thấy nó",
+    "label_program": "Chương trình",
+    "label_running_check": "Kiểm tra đang chạy",
+    "path_varies": "tùy theo nền tảng — xem hướng dẫn thiết lập",
+    "path_varies_short": "tùy theo nền tảng",
+    "portfile_hint": "— tệp này xuất hiện sau khi antd đã khởi động.",
+    "connects_automatically": "Sau khi nó chạy, trang này sẽ tự động kết nối — hoặc nhấp vào Phát hiện daemon trong cửa sổ bật lên trên thanh công cụ."
+  },
+  "install": {
+    "title_install": "Cài đặt antd",
+    "title_update": "Cập nhật antd",
+    "step_run": "Chạy trình cài đặt vừa tải xuống ({file}).",
+    "step2_install": "Nó khởi động antd và đặt để khởi chạy khi đăng nhập.",
+    "step2_update": "Nó thay thế antd hiện tại của bạn và khởi động lại nó.",
+    "step_detected": "Bảng điều khiển này tự động cập nhật sau khi phát hiện thấy antd.",
+    "waiting": "Đang chờ antd…",
+    "other_platforms": "Nền tảng khác hoặc cài đặt thủ công:",
+    "releases_link": "Các bản phát hành antd",
+    "see_releases": "(xem trang phát hành)"
+  },
+  "downloads": {
+    "progress_pct": "Đang tải xuống… {pct}% ({received} / {total})",
+    "progress_indeterminate": "Đang tải xuống… {received}",
+    "open_folder": "Mở thư mục",
+    "failed": "Thất bại"
+  },
+  "settings": {
+    "daemon_url": "URL của daemon",
+    "auto_fetch": "Tự động tải tài nguyên nội tuyến",
+    "check_updates": "Kiểm tra cập nhật antd",
+    "saving": "Đang lưu…",
+    "saved": "Đã lưu!",
+    "language": "Ngôn ngữ",
+    "language_system": "Mặc định của hệ thống"
+  },
+  "onboarding": {
+    "welcome_title": "Chào mừng đến với Autonomi",
+    "welcome_lede": "Bạn gần như đã sẵn sàng duyệt nội dung từ mạng Autonomi. Chỉ một bước thiết lập nhanh và bạn đã vào.",
+    "status_checking": "Đang kiểm tra daemon mạng…",
+    "step1_title": "Tải xuống daemon mạng",
+    "step1_body": "Nội dung Autonomi nằm trên một mạng phi tập trung. Một chương trình cục bộ nhỏ tên là antd chạy trên máy tính của bạn và tải nội dung đó cho tiện ích — trình duyệt của bạn không thể tự truy cập mạng. Nó chạy âm thầm trong nền và chỉ lắng nghe trên máy của riêng bạn.",
+    "download_for": "Tải xuống cho {platform}",
+    "your_platform": "nền tảng của bạn",
+    "all_downloads": "Tất cả bản tải xuống trên GitHub",
+    "step2_title": "Chạy trình cài đặt",
+    "step2_body": "Mở tệp bạn vừa tải xuống và làm theo hướng dẫn. Nó cài đặt antd, khởi động nó và đặt để tự động khởi chạy mỗi lần bạn đăng nhập — vì vậy bạn chỉ làm điều này một lần.",
+    "step3_title": "Kiểm tra kết nối trong tiện ích",
+    "step3_body": "Trang này tự động phát hiện daemon. Sau khi nó chạy, biểu ngữ ở trên chuyển sang màu xanh lá và bạn đã kết nối với mạng. Bạn cũng có thể nhấp vào biểu tượng Autonomi trên thanh công cụ trình duyệt bất cứ lúc nào để xem trạng thái của bạn.",
+    "done_title": "🎉 Bạn đã kết nối!",
+    "done_body": "Tiện ích giờ đây có thể tải nội dung Autonomi. Hãy truy cập một trang có tham chiếu autonomi://, hoặc mở cửa sổ bật lên trên thanh công cụ để xem những gì được phát hiện.",
+    "os_undetected": "Chúng tôi không thể phát hiện hệ điều hành của bạn — hãy chọn bản dựng phù hợp trên GitHub.",
+    "downloading_asset": "Đang tải xuống {asset}…",
+    "download_failed_fallback": "Tải xuống thất bại — đang mở trang phát hành GitHub thay thế.",
+    "banner_connected": "Đã kết nối với mạng Autonomi",
+    "banner_idle": "Không phát hiện thấy daemon mạng — hãy làm theo các bước bên dưới. Trang này sẽ tự động kết nối sau khi nó chạy.",
+    "banner_preview": "Chế độ xem trước — cài đặt tiện ích để phát hiện daemon."
+  },
+  "content": {
+    "download": "Tải xuống",
+    "open": "Mở",
+    "fetching": "Đang tìm nạp…",
+    "downloading_pct": "Đang tải xuống… {pct}%",
+    "download_failed": "Tải xuống thất bại",
+    "title_download": "Tải xuống từ mạng Autonomi",
+    "title_open": "Mở tệp đã tải xuống",
+    "failed_to_load": "Không tải được từ Autonomi"
+  }
+}

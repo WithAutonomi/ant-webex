@@ -300,7 +300,7 @@ button:hover {
   display: inline-block;
   width: 10px;
   height: 10px;
-  margin-right: 4px;
+  margin-inline-end: 4px;
   vertical-align: -1px;
   border: 2px solid #475569;
   border-top-color: #60a5fa;
@@ -328,7 +328,7 @@ button:hover {
 
 .version-warning a,
 .version-warning .link-btn {
-  margin-left: 6px;
+  margin-inline-start: 6px;
 }
 
 /* ── Update nudge ────────────────────────────────────────────────── */
@@ -345,7 +345,7 @@ button:hover {
 
 .update-nudge a,
 .update-nudge .link-btn {
-  margin-left: 6px;
+  margin-inline-start: 6px;
 }
 
 /* ── Resources list ──────────────────────────────────────────────── */
@@ -387,7 +387,7 @@ button:hover {
   word-break: normal;
   color: #60a5fa;
   font-weight: 500;
-  margin-right: 4px;
+  margin-inline-end: 4px;
 }
 
 .res-main {
@@ -521,7 +521,8 @@ button:hover {
 }
 
 #settings-panel input[type='text'],
-#settings-panel input[type='number'] {
+#settings-panel input[type='number'],
+#settings-panel select {
   width: 100%;
   padding: 4px 8px;
   margin-top: 2px;
@@ -530,4 +531,29 @@ button:hover {
   border-radius: 4px;
   color: #e2e8f0;
   font-size: 12px;
+}
+
+/* The native <select> otherwise renders as a white system control against the
+   dark popup. Strip the native chrome and supply a matching caret (inline SVG,
+   no external asset — the extension can't load remote resources). */
+#settings-panel select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 26px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'><path d='M1 1l4 4 4-4' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+/* Themes the opened option list where the platform honours it (Chrome/Firefox
+   on Windows/Linux; macOS draws a native menu that ignores these). */
+#settings-panel select option {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+#settings-panel select:focus-visible {
+  outline: none;
+  border-color: #60a5fa;
 }

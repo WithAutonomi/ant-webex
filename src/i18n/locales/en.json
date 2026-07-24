@@ -1,0 +1,115 @@
+{
+  "common": {
+    "download": "Download",
+    "save": "Save",
+    "connected": "Connected",
+    "checking": "Checking…",
+    "downloading": "Downloading…",
+    "settings": "Settings",
+    "downloads": "Downloads",
+    "unknown": "unknown"
+  },
+  "status": {
+    "not_detected": "Daemon not detected",
+    "not_running": "Daemon not running"
+  },
+  "popup": {
+    "version_too_old": "This antd version is too old. The extension needs {min} or newer.",
+    "update_antd": "Update antd",
+    "prerelease_warning": "This is a pre-release antd build ({version}). The extension supports stable releases only.",
+    "install_stable": "Install the stable release",
+    "update_available": "Update available: {version}",
+    "get_latest": "Get the latest",
+    "resources_heading": "Resources on this page",
+    "no_resources": "No autonomi:// references detected.",
+    "clear_finished": "Clear finished",
+    "no_downloads": "No downloads yet.",
+    "disconnected_help": "The extension needs the Autonomi daemon (antd) to fetch content from the network.",
+    "detect_daemon": "Detect daemon",
+    "detecting": "Detecting…",
+    "download_daemon": "Download daemon",
+    "then_detect_prefix": "Then click Detect daemon above, or",
+    "open_setup_guide": "open the full setup guide",
+    "setup_guide": "Setup guide"
+  },
+  "guide": {
+    "summary": "Already installed antd? Find & run it",
+    "reach_antd": "If you set up antd before, it may simply be stopped — or running without the option the extension needs. The extension reaches antd at {url} and needs it started with the --cors option.",
+    "step1_terminal": "1 · Open a terminal",
+    "step2_start": "2 · Start the daemon",
+    "terminal_on": "On {os}: {instr}.",
+    "terminal_generic": "Open your terminal app.",
+    "terminal": {
+      "windows": "press Win, type “PowerShell”, then Enter",
+      "macos": "press Cmd+Space, type “Terminal”, then Enter",
+      "linux": "press Ctrl+Alt+T (or open your terminal app)"
+    },
+    "cmd_not_found": "Keep that window open while you browse. If you see “command not found”, antd isn't on your PATH — run it using the full path shown below (still adding --cors).",
+    "where_to_find": "Where to find it",
+    "label_program": "Program",
+    "label_running_check": "Running check",
+    "path_varies": "varies by platform — see the setup guide",
+    "path_varies_short": "varies by platform",
+    "portfile_hint": "— this file appears once antd has started.",
+    "connects_automatically": "Once it's running, this page connects automatically — or click Detect daemon in the toolbar popup."
+  },
+  "install": {
+    "title_install": "Install antd",
+    "title_update": "Update antd",
+    "step_run": "Run the installer that just downloaded ({file}).",
+    "step2_install": "It starts antd and sets it to launch on login.",
+    "step2_update": "It replaces your current antd and restarts it.",
+    "step_detected": "This panel updates automatically once antd is detected.",
+    "waiting": "Waiting for antd…",
+    "other_platforms": "Other platforms or manual install:",
+    "releases_link": "antd releases",
+    "see_releases": "(see releases page)"
+  },
+  "downloads": {
+    "progress_pct": "Downloading… {pct}% ({received} / {total})",
+    "progress_indeterminate": "Downloading… {received}",
+    "open_folder": "Open folder",
+    "failed": "Failed"
+  },
+  "settings": {
+    "daemon_url": "Daemon URL",
+    "auto_fetch": "Auto-fetch inline resources",
+    "check_updates": "Check for antd updates",
+    "saving": "Saving…",
+    "saved": "Saved!",
+    "language": "Language",
+    "language_system": "System default"
+  },
+  "onboarding": {
+    "welcome_title": "Welcome to Autonomi",
+    "welcome_lede": "You're almost ready to browse content from the Autonomi network. One quick setup step and you're in.",
+    "status_checking": "Checking for the network daemon…",
+    "step1_title": "Download the network daemon",
+    "step1_body": "Autonomi content lives on a decentralized network. A small local program called antd runs on your computer and fetches that content for the extension — your browser can't reach the network on its own. It runs quietly in the background and only listens on your own machine.",
+    "download_for": "Download for {platform}",
+    "your_platform": "your platform",
+    "all_downloads": "All downloads on GitHub",
+    "step2_title": "Run the installer",
+    "step2_body": "Open the file you just downloaded and follow the prompts. It installs antd, starts it, and sets it to launch automatically each time you sign in — so you only do this once.",
+    "step3_title": "Check the extension for a connection",
+    "step3_body": "This page detects the daemon automatically. Once it's running, the banner above turns green and you're connected to the network. You can also click the Autonomi icon in your browser toolbar any time to see your status.",
+    "done_title": "🎉 You're connected!",
+    "done_body": "The extension can now load Autonomi content. Visit a page with autonomi:// references, or open the toolbar popup to see what's detected.",
+    "os_undetected": "We couldn't detect your operating system — pick the right build on GitHub.",
+    "downloading_asset": "Downloading {asset}…",
+    "download_failed_fallback": "Download failed — opening the GitHub releases page instead.",
+    "banner_connected": "Connected to the Autonomi network",
+    "banner_idle": "Network daemon not detected — follow the steps below. This page connects automatically once it's running.",
+    "banner_preview": "Preview mode — install the extension to detect the daemon."
+  },
+  "content": {
+    "download": "Download",
+    "open": "Open",
+    "fetching": "Fetching…",
+    "downloading_pct": "Downloading… {pct}%",
+    "download_failed": "Download failed",
+    "title_download": "Download from the Autonomi network",
+    "title_open": "Open the downloaded file",
+    "failed_to_load": "Failed to load from Autonomi"
+  }
+}

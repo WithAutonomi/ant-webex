@@ -145,8 +145,6 @@ export const OS_LABELS: Record<OsKey, string> = {
  * that file exists, antd has run at least once.
  */
 export interface RunGuide {
-  /** How to open a terminal on this OS. */
-  terminal: string;
   /** Conventional install location of the antd program. */
   installPath: string;
   /** Where antd writes its daemon.port file once running. */
@@ -156,22 +154,23 @@ export interface RunGuide {
 /** The command to start antd so the extension can reach it. */
 export const ANTD_RUN_COMMAND = 'antd --cors';
 
+// NOTE: the per-OS "how to open a terminal" copy is localized — it lives in the
+// i18n catalog under `guide.terminal.*` (see src/i18n/locales/en.json), not
+// here, because it's user-facing prose. The paths below are identifiers and
+// stay verbatim across locales.
 export const ANTD_RUN_GUIDE: Record<OsKey, RunGuide> = {
   // TODO (awaiting correct installer paths): the `installPath` values below are
   // conventional best-guesses per installer type. Confirm each against the real
   // installer once the asset locations are finalized.
   windows: {
-    terminal: 'press Win, type “PowerShell”, then Enter',
     installPath: 'C:\\Program Files\\Autonomi\\antd\\antd.exe',
     portFile: '%APPDATA%\\ant\\sdk\\daemon.port',
   },
   macos: {
-    terminal: 'press Cmd+Space, type “Terminal”, then Enter',
     installPath: '/usr/local/bin/antd',
     portFile: '~/Library/Application Support/ant/sdk/daemon.port',
   },
   linux: {
-    terminal: 'press Ctrl+Alt+T (or open your terminal app)',
     installPath: '/usr/bin/antd',
     portFile: '~/.local/share/ant/sdk/daemon.port',
   },

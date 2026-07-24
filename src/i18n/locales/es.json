@@ -1,0 +1,116 @@
+{
+  "_translator_notes": "Machine-translated baseline. Native-speaker polish via PR welcome.",
+  "common": {
+    "download": "Descargar",
+    "save": "Guardar",
+    "connected": "Conectado",
+    "checking": "Comprobando…",
+    "downloading": "Descargando…",
+    "settings": "Ajustes",
+    "downloads": "Descargas",
+    "unknown": "desconocido"
+  },
+  "status": {
+    "not_detected": "Daemon no detectado",
+    "not_running": "El daemon no está en ejecución"
+  },
+  "popup": {
+    "version_too_old": "Esta versión de antd es demasiado antigua. La extensión necesita {min} o una versión más reciente.",
+    "update_antd": "Actualizar antd",
+    "prerelease_warning": "Esta es una compilación preliminar de antd ({version}). La extensión solo admite versiones estables.",
+    "install_stable": "Instalar la versión estable",
+    "update_available": "Actualización disponible: {version}",
+    "get_latest": "Obtener la última versión",
+    "resources_heading": "Recursos en esta página",
+    "no_resources": "No se detectaron referencias autonomi://.",
+    "clear_finished": "Borrar finalizadas",
+    "no_downloads": "Aún no hay descargas.",
+    "disconnected_help": "La extensión necesita el daemon de Autonomi (antd) para obtener contenido de la red.",
+    "detect_daemon": "Detectar daemon",
+    "detecting": "Detectando…",
+    "download_daemon": "Descargar daemon",
+    "then_detect_prefix": "Luego haz clic en Detectar daemon arriba, o",
+    "open_setup_guide": "abre la guía de configuración completa",
+    "setup_guide": "Guía de configuración"
+  },
+  "guide": {
+    "summary": "¿Ya instalaste antd? Encuéntralo y ejecútalo",
+    "reach_antd": "Si configuraste antd antes, puede que simplemente esté detenido, o ejecutándose sin la opción que la extensión necesita. La extensión accede a antd en {url} y necesita que se inicie con la opción --cors.",
+    "step1_terminal": "1 · Abre una terminal",
+    "step2_start": "2 · Inicia el daemon",
+    "terminal_on": "En {os}: {instr}.",
+    "terminal_generic": "Abre tu aplicación de terminal.",
+    "terminal": {
+      "windows": "presiona Win, escribe “PowerShell” y luego Enter",
+      "macos": "presiona Cmd+Space, escribe “Terminal” y luego Enter",
+      "linux": "presiona Ctrl+Alt+T (o abre tu aplicación de terminal)"
+    },
+    "cmd_not_found": "Mantén esa ventana abierta mientras navegas. Si ves “command not found”, antd no está en tu PATH; ejecútalo usando la ruta completa que se muestra abajo (agregando igualmente --cors).",
+    "where_to_find": "Dónde encontrarlo",
+    "label_program": "Programa",
+    "label_running_check": "Comprobación de ejecución",
+    "path_varies": "varía según la plataforma; consulta la guía de configuración",
+    "path_varies_short": "varía según la plataforma",
+    "portfile_hint": "— este archivo aparece una vez que antd se ha iniciado.",
+    "connects_automatically": "Una vez que esté en ejecución, esta página se conecta automáticamente, o haz clic en Detectar daemon en el menú emergente de la barra de herramientas."
+  },
+  "install": {
+    "title_install": "Instalar antd",
+    "title_update": "Actualizar antd",
+    "step_run": "Ejecuta el instalador que acabas de descargar ({file}).",
+    "step2_install": "Inicia antd y lo configura para que se ejecute al iniciar sesión.",
+    "step2_update": "Reemplaza tu antd actual y lo reinicia.",
+    "step_detected": "Este panel se actualiza automáticamente una vez que se detecta antd.",
+    "waiting": "Esperando a antd…",
+    "other_platforms": "Otras plataformas o instalación manual:",
+    "releases_link": "Versiones de antd",
+    "see_releases": "(consulta la página de versiones)"
+  },
+  "downloads": {
+    "progress_pct": "Descargando… {pct}% ({received} / {total})",
+    "progress_indeterminate": "Descargando… {received}",
+    "open_folder": "Abrir carpeta",
+    "failed": "Error"
+  },
+  "settings": {
+    "daemon_url": "URL del daemon",
+    "auto_fetch": "Obtener recursos incrustados automáticamente",
+    "check_updates": "Buscar actualizaciones de antd",
+    "saving": "Guardando…",
+    "saved": "¡Guardado!",
+    "language": "Idioma",
+    "language_system": "Predeterminado del sistema"
+  },
+  "onboarding": {
+    "welcome_title": "Te damos la bienvenida a Autonomi",
+    "welcome_lede": "Ya casi estás listo para explorar contenido de la red Autonomi. Un rápido paso de configuración y estarás dentro.",
+    "status_checking": "Buscando el daemon de la red…",
+    "step1_title": "Descarga el daemon de la red",
+    "step1_body": "El contenido de Autonomi vive en una red descentralizada. Un pequeño programa local llamado antd se ejecuta en tu computadora y obtiene ese contenido para la extensión: tu navegador no puede acceder a la red por sí solo. Se ejecuta silenciosamente en segundo plano y solo escucha en tu propia máquina.",
+    "download_for": "Descargar para {platform}",
+    "your_platform": "tu plataforma",
+    "all_downloads": "Todas las descargas en GitHub",
+    "step2_title": "Ejecuta el instalador",
+    "step2_body": "Abre el archivo que acabas de descargar y sigue las indicaciones. Instala antd, lo inicia y lo configura para que se ejecute automáticamente cada vez que inicias sesión, así que solo tienes que hacer esto una vez.",
+    "step3_title": "Comprueba la conexión en la extensión",
+    "step3_body": "Esta página detecta el daemon automáticamente. Una vez que esté en ejecución, el banner de arriba se pone verde y estarás conectado a la red. También puedes hacer clic en el icono de Autonomi en la barra de herramientas de tu navegador en cualquier momento para ver tu estado.",
+    "done_title": "🎉 ¡Estás conectado!",
+    "done_body": "La extensión ya puede cargar contenido de Autonomi. Visita una página con referencias autonomi://, o abre el menú emergente de la barra de herramientas para ver lo que se ha detectado.",
+    "os_undetected": "No pudimos detectar tu sistema operativo; elige la versión correcta en GitHub.",
+    "downloading_asset": "Descargando {asset}…",
+    "download_failed_fallback": "La descarga falló; abriendo la página de versiones de GitHub en su lugar.",
+    "banner_connected": "Conectado a la red Autonomi",
+    "banner_idle": "Daemon de la red no detectado; sigue los pasos a continuación. Esta página se conecta automáticamente una vez que esté en ejecución.",
+    "banner_preview": "Modo de vista previa: instala la extensión para detectar el daemon."
+  },
+  "content": {
+    "download": "Descargar",
+    "open": "Abrir",
+    "fetching": "Obteniendo…",
+    "downloading_pct": "Descargando… {pct}%",
+    "download_failed": "La descarga falló",
+    "title_download": "Descargar de la red Autonomi",
+    "title_open": "Abrir el archivo descargado",
+    "failed_to_load": "Error al cargar desde Autonomi"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "_translator_notes": "Machine-translated baseline. Native-speaker polish via PR welcome.",
+  "common": {
+    "download": "下载",
+    "save": "保存",
+    "connected": "已连接",
+    "checking": "检查中…",
+    "downloading": "下载中…",
+    "settings": "设置",
+    "downloads": "下载",
+    "unknown": "未知"
+  },
+  "status": {
+    "not_detected": "未检测到守护进程",
+    "not_running": "守护进程未运行"
+  },
+  "popup": {
+    "version_too_old": "此 antd 版本过旧。扩展需要 {min} 或更高版本。",
+    "update_antd": "更新 antd",
+    "prerelease_warning": "这是 antd 的预发布版本（{version}）。扩展仅支持稳定版本。",
+    "install_stable": "安装稳定版本",
+    "update_available": "有可用更新：{version}",
+    "get_latest": "获取最新版本",
+    "resources_heading": "此页面上的资源",
+    "no_resources": "未检测到 autonomi:// 引用。",
+    "clear_finished": "清除已完成",
+    "no_downloads": "暂无下载。",
+    "disconnected_help": "扩展需要 Autonomi 守护进程（antd）才能从网络获取内容。",
+    "detect_daemon": "检测守护进程",
+    "detecting": "检测中…",
+    "download_daemon": "下载守护进程",
+    "then_detect_prefix": "然后点击上方的“检测守护进程”，或",
+    "open_setup_guide": "打开完整的设置指南",
+    "setup_guide": "设置指南"
+  },
+  "guide": {
+    "summary": "已经安装了 antd？查找并运行它",
+    "reach_antd": "如果您之前设置过 antd，它可能只是被停止了——或者在运行时缺少扩展所需的选项。扩展通过 {url} 访问 antd，并需要以 --cors 选项启动它。",
+    "step1_terminal": "1 · 打开终端",
+    "step2_start": "2 · 启动守护进程",
+    "terminal_on": "在 {os} 上：{instr}。",
+    "terminal_generic": "打开您的终端应用。",
+    "terminal": {
+      "windows": "按 Win 键，输入“PowerShell”，然后按 Enter",
+      "macos": "按 Cmd+Space，输入“Terminal”，然后按 Enter",
+      "linux": "按 Ctrl+Alt+T（或打开您的终端应用）"
+    },
+    "cmd_not_found": "浏览时请保持该窗口打开。如果您看到“command not found”，说明 antd 不在您的 PATH 中——请使用下方显示的完整路径运行它（仍需添加 --cors）。",
+    "where_to_find": "在哪里找到它",
+    "label_program": "程序",
+    "label_running_check": "运行检查",
+    "path_varies": "因平台而异——请参阅设置指南",
+    "path_varies_short": "因平台而异",
+    "portfile_hint": "—— antd 启动后此文件才会出现。",
+    "connects_automatically": "一旦运行，此页面将自动连接——或点击工具栏弹窗中的“检测守护进程”。"
+  },
+  "install": {
+    "title_install": "安装 antd",
+    "title_update": "更新 antd",
+    "step_run": "运行刚刚下载的安装程序（{file}）。",
+    "step2_install": "它会启动 antd 并将其设置为登录时启动。",
+    "step2_update": "它会替换您当前的 antd 并重新启动它。",
+    "step_detected": "检测到 antd 后，此面板会自动更新。",
+    "waiting": "正在等待 antd…",
+    "other_platforms": "其他平台或手动安装：",
+    "releases_link": "antd 发布版本",
+    "see_releases": "（请参阅发布页面）"
+  },
+  "downloads": {
+    "progress_pct": "下载中… {pct}%（{received} / {total}）",
+    "progress_indeterminate": "下载中… {received}",
+    "open_folder": "打开文件夹",
+    "failed": "失败"
+  },
+  "settings": {
+    "daemon_url": "守护进程 URL",
+    "auto_fetch": "自动获取内嵌资源",
+    "check_updates": "检查 antd 更新",
+    "saving": "保存中…",
+    "saved": "已保存！",
+    "language": "语言",
+    "language_system": "系统默认"
+  },
+  "onboarding": {
+    "welcome_title": "欢迎使用 Autonomi",
+    "welcome_lede": "您即将可以浏览 Autonomi 网络中的内容。只需一个快速设置步骤即可开始。",
+    "status_checking": "正在检查网络守护进程…",
+    "step1_title": "下载网络守护进程",
+    "step1_body": "Autonomi 内容存储在去中心化网络上。一个名为 antd 的本地小程序在您的计算机上运行，为扩展获取这些内容——您的浏览器无法自行访问该网络。它在后台安静地运行，并且只监听您自己的计算机。",
+    "download_for": "下载适用于 {platform} 的版本",
+    "your_platform": "您的平台",
+    "all_downloads": "GitHub 上的所有下载",
+    "step2_title": "运行安装程序",
+    "step2_body": "打开您刚刚下载的文件并按照提示操作。它会安装 antd、启动它，并将其设置为每次登录时自动启动——因此您只需执行一次。",
+    "step3_title": "检查扩展的连接",
+    "step3_body": "此页面会自动检测守护进程。一旦它运行起来，上方的横幅就会变绿，您便已连接到网络。您也可以随时点击浏览器工具栏中的 Autonomi 图标查看您的状态。",
+    "done_title": "🎉 您已连接！",
+    "done_body": "扩展现在可以加载 Autonomi 内容了。访问带有 autonomi:// 引用的页面，或打开工具栏弹窗查看检测到的内容。",
+    "os_undetected": "我们无法检测到您的操作系统——请在 GitHub 上选择正确的版本。",
+    "downloading_asset": "正在下载 {asset}…",
+    "download_failed_fallback": "下载失败——改为打开 GitHub 发布页面。",
+    "banner_connected": "已连接到 Autonomi 网络",
+    "banner_idle": "未检测到网络守护进程——请按照以下步骤操作。此页面将在其运行后自动连接。",
+    "banner_preview": "预览模式——安装扩展以检测守护进程。"
+  },
+  "content": {
+    "download": "下载",
+    "open": "打开",
+    "fetching": "获取中…",
+    "downloading_pct": "下载中… {pct}%",
+    "download_failed": "下载失败",
+    "title_download": "从 Autonomi 网络下载",
+    "title_open": "打开已下载的文件",
+    "failed_to_load": "从 Autonomi 加载失败"
+  }
+}

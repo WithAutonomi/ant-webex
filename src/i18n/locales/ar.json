@@ -1,0 +1,116 @@
+{
+  "_translator_notes": "Machine-translated baseline. Native-speaker polish via PR welcome.",
+  "common": {
+    "download": "تنزيل",
+    "save": "حفظ",
+    "connected": "متصل",
+    "checking": "جارٍ التحقق…",
+    "downloading": "جارٍ التنزيل…",
+    "settings": "الإعدادات",
+    "downloads": "عمليات التنزيل",
+    "unknown": "غير معروف"
+  },
+  "status": {
+    "not_detected": "لم يتم اكتشاف الخدمة الخلفية",
+    "not_running": "الخدمة الخلفية لا تعمل"
+  },
+  "popup": {
+    "version_too_old": "إصدار antd هذا قديم جدًا. تحتاج الإضافة إلى {min} أو أحدث.",
+    "update_antd": "تحديث antd",
+    "prerelease_warning": "هذه نسخة antd تجريبية ({version}). تدعم الإضافة الإصدارات المستقرة فقط.",
+    "install_stable": "تثبيت الإصدار المستقر",
+    "update_available": "يتوفر تحديث: {version}",
+    "get_latest": "احصل على الأحدث",
+    "resources_heading": "الموارد في هذه الصفحة",
+    "no_resources": "لم يتم اكتشاف أي مراجع autonomi://.",
+    "clear_finished": "مسح المكتملة",
+    "no_downloads": "لا توجد تنزيلات بعد.",
+    "disconnected_help": "تحتاج الإضافة إلى خدمة Autonomi ‏(antd) لجلب المحتوى من الشبكة.",
+    "detect_daemon": "اكتشاف الخدمة",
+    "detecting": "جارٍ الاكتشاف…",
+    "download_daemon": "تنزيل الخدمة",
+    "then_detect_prefix": "ثم انقر على اكتشاف الخدمة أعلاه، أو",
+    "open_setup_guide": "افتح دليل الإعداد الكامل",
+    "setup_guide": "دليل الإعداد"
+  },
+  "guide": {
+    "summary": "هل ثبّتّ antd بالفعل؟ ابحث عنه وشغّله",
+    "reach_antd": "إذا أعددت antd من قبل، فقد يكون متوقفًا فحسب — أو يعمل بدون الخيار الذي تحتاجه الإضافة. تصل الإضافة إلى antd على {url} وتحتاج إلى تشغيله باستخدام الخيار --cors.",
+    "step1_terminal": "1 · افتح نافذة Terminal",
+    "step2_start": "2 · شغّل الخدمة",
+    "terminal_on": "على {os}: {instr}.",
+    "terminal_generic": "افتح تطبيق Terminal.",
+    "terminal": {
+      "windows": "اضغط Win، واكتب “PowerShell”، ثم Enter",
+      "macos": "اضغط Cmd+Space، واكتب “Terminal”، ثم Enter",
+      "linux": "اضغط Ctrl+Alt+T (أو افتح تطبيق Terminal الخاص بك)"
+    },
+    "cmd_not_found": "أبقِ تلك النافذة مفتوحة أثناء التصفح. إذا رأيت “command not found”، فإن antd غير موجود في PATH لديك — شغّله باستخدام المسار الكامل الموضح أدناه (مع إضافة --cors أيضًا).",
+    "where_to_find": "أين تجده",
+    "label_program": "البرنامج",
+    "label_running_check": "التحقق من التشغيل",
+    "path_varies": "يختلف حسب النظام — راجع دليل الإعداد",
+    "path_varies_short": "يختلف حسب النظام",
+    "portfile_hint": "— يظهر هذا الملف بمجرد أن يبدأ antd.",
+    "connects_automatically": "بمجرد تشغيله، تتصل هذه الصفحة تلقائيًا — أو انقر على اكتشاف الخدمة في نافذة شريط الأدوات المنبثقة."
+  },
+  "install": {
+    "title_install": "تثبيت antd",
+    "title_update": "تحديث antd",
+    "step_run": "شغّل المُثبّت الذي تم تنزيله للتو ({file}).",
+    "step2_install": "يبدأ antd ويضبطه للتشغيل عند تسجيل الدخول.",
+    "step2_update": "يستبدل antd الحالي لديك ويعيد تشغيله.",
+    "step_detected": "تُحدَّث هذه اللوحة تلقائيًا بمجرد اكتشاف antd.",
+    "waiting": "في انتظار antd…",
+    "other_platforms": "أنظمة أخرى أو التثبيت اليدوي:",
+    "releases_link": "إصدارات antd",
+    "see_releases": "(انظر صفحة الإصدارات)"
+  },
+  "downloads": {
+    "progress_pct": "جارٍ التنزيل… {pct}% ({received} / {total})",
+    "progress_indeterminate": "جارٍ التنزيل… {received}",
+    "open_folder": "فتح المجلد",
+    "failed": "فشل"
+  },
+  "settings": {
+    "daemon_url": "عنوان URL للخدمة",
+    "auto_fetch": "الجلب التلقائي للموارد المضمّنة",
+    "check_updates": "التحقق من تحديثات antd",
+    "saving": "جارٍ الحفظ…",
+    "saved": "تم الحفظ!",
+    "language": "اللغة",
+    "language_system": "الإعداد الافتراضي للنظام"
+  },
+  "onboarding": {
+    "welcome_title": "مرحبًا بك في Autonomi",
+    "welcome_lede": "أنت على وشك أن تكون جاهزًا لتصفح المحتوى من شبكة Autonomi. خطوة إعداد سريعة واحدة وستدخل.",
+    "status_checking": "جارٍ التحقق من خدمة الشبكة…",
+    "step1_title": "تنزيل خدمة الشبكة",
+    "step1_body": "يوجد محتوى Autonomi على شبكة لامركزية. يعمل برنامج محلي صغير يُسمى antd على جهاز الكمبيوتر لديك ويجلب ذلك المحتوى للإضافة — لا يمكن لمتصفحك الوصول إلى الشبكة بمفرده. يعمل بهدوء في الخلفية ويستمع فقط على جهازك أنت.",
+    "download_for": "تنزيل لـ {platform}",
+    "your_platform": "نظامك",
+    "all_downloads": "جميع التنزيلات على GitHub",
+    "step2_title": "تشغيل المُثبّت",
+    "step2_body": "افتح الملف الذي نزّلته للتو واتبع التعليمات. يُثبّت antd ويشغّله ويضبطه للتشغيل تلقائيًا في كل مرة تسجّل فيها الدخول — لذا تقوم بذلك مرة واحدة فقط.",
+    "step3_title": "تحقق من اتصال الإضافة",
+    "step3_body": "تكتشف هذه الصفحة الخدمة تلقائيًا. بمجرد تشغيلها، يتحول الشريط أعلاه إلى اللون الأخضر وتصبح متصلاً بالشبكة. يمكنك أيضًا النقر على أيقونة Autonomi في شريط أدوات متصفحك في أي وقت لرؤية حالتك.",
+    "done_title": "🎉 أنت متصل الآن!",
+    "done_body": "يمكن للإضافة الآن تحميل محتوى Autonomi. قم بزيارة صفحة تحتوي على مراجع autonomi://، أو افتح نافذة شريط الأدوات المنبثقة لرؤية ما تم اكتشافه.",
+    "os_undetected": "تعذّر علينا اكتشاف نظام التشغيل لديك — اختر النسخة المناسبة على GitHub.",
+    "downloading_asset": "جارٍ تنزيل {asset}…",
+    "download_failed_fallback": "فشل التنزيل — يتم فتح صفحة إصدارات GitHub بدلاً من ذلك.",
+    "banner_connected": "متصل بشبكة Autonomi",
+    "banner_idle": "لم يتم اكتشاف خدمة الشبكة — اتبع الخطوات أدناه. تتصل هذه الصفحة تلقائيًا بمجرد تشغيلها.",
+    "banner_preview": "وضع المعاينة — ثبّت الإضافة لاكتشاف الخدمة."
+  },
+  "content": {
+    "download": "تنزيل",
+    "open": "فتح",
+    "fetching": "جارٍ الجلب…",
+    "downloading_pct": "جارٍ التنزيل… {pct}%",
+    "download_failed": "فشل التنزيل",
+    "title_download": "التنزيل من شبكة Autonomi",
+    "title_open": "فتح الملف الذي تم تنزيله",
+    "failed_to_load": "فشل التحميل من Autonomi"
+  }
+}

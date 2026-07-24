@@ -1,0 +1,116 @@
+{
+  "_translator_notes": "Machine-translated baseline. Native-speaker polish via PR welcome.",
+  "common": {
+    "download": "Downloaden",
+    "save": "Opslaan",
+    "connected": "Verbonden",
+    "checking": "Controleren…",
+    "downloading": "Downloaden…",
+    "settings": "Instellingen",
+    "downloads": "Downloads",
+    "unknown": "onbekend"
+  },
+  "status": {
+    "not_detected": "Daemon niet gedetecteerd",
+    "not_running": "Daemon draait niet"
+  },
+  "popup": {
+    "version_too_old": "Deze antd-versie is te oud. De extensie heeft {min} of nieuwer nodig.",
+    "update_antd": "antd bijwerken",
+    "prerelease_warning": "Dit is een pre-release build van antd ({version}). De extensie ondersteunt alleen stabiele releases.",
+    "install_stable": "De stabiele release installeren",
+    "update_available": "Update beschikbaar: {version}",
+    "get_latest": "De nieuwste versie ophalen",
+    "resources_heading": "Bronnen op deze pagina",
+    "no_resources": "Geen autonomi://-verwijzingen gedetecteerd.",
+    "clear_finished": "Voltooide wissen",
+    "no_downloads": "Nog geen downloads.",
+    "disconnected_help": "De extensie heeft de Autonomi-daemon (antd) nodig om inhoud van het netwerk op te halen.",
+    "detect_daemon": "Daemon detecteren",
+    "detecting": "Detecteren…",
+    "download_daemon": "Daemon downloaden",
+    "then_detect_prefix": "Klik daarna hierboven op Daemon detecteren, of",
+    "open_setup_guide": "open de volledige installatiehandleiding",
+    "setup_guide": "Installatiehandleiding"
+  },
+  "guide": {
+    "summary": "antd al geïnstalleerd? Zoek en start het",
+    "reach_antd": "Als u antd eerder hebt ingesteld, is het mogelijk gewoon gestopt – of draait het zonder de optie die de extensie nodig heeft. De extensie bereikt antd op {url} en heeft het nodig gestart met de optie --cors.",
+    "step1_terminal": "1 · Een terminal openen",
+    "step2_start": "2 · De daemon starten",
+    "terminal_on": "Op {os}: {instr}.",
+    "terminal_generic": "Open uw terminal-app.",
+    "terminal": {
+      "windows": "druk op Win, typ “PowerShell” en druk op Enter",
+      "macos": "druk op Cmd+Space, typ “Terminal” en druk op Enter",
+      "linux": "druk op Ctrl+Alt+T (of open uw terminal-app)"
+    },
+    "cmd_not_found": "Houd dat venster open terwijl u surft. Als u “command not found” ziet, staat antd niet in uw PATH – voer het uit met het volledige pad dat hieronder wordt getoond (voeg nog steeds --cors toe).",
+    "where_to_find": "Waar u het kunt vinden",
+    "label_program": "Programma",
+    "label_running_check": "Statuscontrole",
+    "path_varies": "verschilt per platform – zie de installatiehandleiding",
+    "path_varies_short": "verschilt per platform",
+    "portfile_hint": "– dit bestand verschijnt zodra antd is gestart.",
+    "connects_automatically": "Zodra het draait, maakt deze pagina automatisch verbinding – of klik op Daemon detecteren in de werkbalk-pop-up."
+  },
+  "install": {
+    "title_install": "antd installeren",
+    "title_update": "antd bijwerken",
+    "step_run": "Voer het installatieprogramma uit dat zojuist is gedownload ({file}).",
+    "step2_install": "Het start antd en stelt het in om bij het aanmelden te starten.",
+    "step2_update": "Het vervangt uw huidige antd en start het opnieuw.",
+    "step_detected": "Dit paneel wordt automatisch bijgewerkt zodra antd is gedetecteerd.",
+    "waiting": "Wachten op antd…",
+    "other_platforms": "Andere platforms of handmatige installatie:",
+    "releases_link": "antd-releases",
+    "see_releases": "(zie de releases-pagina)"
+  },
+  "downloads": {
+    "progress_pct": "Downloaden… {pct}% ({received} / {total})",
+    "progress_indeterminate": "Downloaden… {received}",
+    "open_folder": "Map openen",
+    "failed": "Mislukt"
+  },
+  "settings": {
+    "daemon_url": "Daemon-URL",
+    "auto_fetch": "Inline-bronnen automatisch ophalen",
+    "check_updates": "Controleren op antd-updates",
+    "saving": "Opslaan…",
+    "saved": "Opgeslagen!",
+    "language": "Taal",
+    "language_system": "Systeemstandaard"
+  },
+  "onboarding": {
+    "welcome_title": "Welkom bij Autonomi",
+    "welcome_lede": "U bent bijna klaar om inhoud van het Autonomi-netwerk te bekijken. Nog één snelle installatiestap en u kunt aan de slag.",
+    "status_checking": "Zoeken naar de netwerk-daemon…",
+    "step1_title": "De netwerk-daemon downloaden",
+    "step1_body": "Autonomi-inhoud bevindt zich op een gedecentraliseerd netwerk. Een klein lokaal programma genaamd antd draait op uw computer en haalt die inhoud op voor de extensie – uw browser kan het netwerk niet zelf bereiken. Het draait rustig op de achtergrond en luistert alleen op uw eigen machine.",
+    "download_for": "Downloaden voor {platform}",
+    "your_platform": "uw platform",
+    "all_downloads": "Alle downloads op GitHub",
+    "step2_title": "Het installatieprogramma uitvoeren",
+    "step2_body": "Open het bestand dat u zojuist hebt gedownload en volg de aanwijzingen. Het installeert antd, start het en stelt het in om automatisch te starten telkens wanneer u zich aanmeldt – zodat u dit maar één keer hoeft te doen.",
+    "step3_title": "Controleer de extensie op een verbinding",
+    "step3_body": "Deze pagina detecteert de daemon automatisch. Zodra deze draait, wordt de banner hierboven groen en bent u verbonden met het netwerk. U kunt ook op elk moment op het Autonomi-pictogram in uw browserwerkbalk klikken om uw status te bekijken.",
+    "done_title": "🎉 U bent verbonden!",
+    "done_body": "De extensie kan nu Autonomi-inhoud laden. Bezoek een pagina met autonomi://-verwijzingen of open de werkbalk-pop-up om te zien wat er is gedetecteerd.",
+    "os_undetected": "We konden uw besturingssysteem niet detecteren – kies de juiste build op GitHub.",
+    "downloading_asset": "{asset} downloaden…",
+    "download_failed_fallback": "Downloaden mislukt – in plaats daarvan wordt de GitHub-releases-pagina geopend.",
+    "banner_connected": "Verbonden met het Autonomi-netwerk",
+    "banner_idle": "Netwerk-daemon niet gedetecteerd – volg de onderstaande stappen. Deze pagina maakt automatisch verbinding zodra deze draait.",
+    "banner_preview": "Voorbeeldmodus – installeer de extensie om de daemon te detecteren."
+  },
+  "content": {
+    "download": "Downloaden",
+    "open": "Openen",
+    "fetching": "Ophalen…",
+    "downloading_pct": "Downloaden… {pct}%",
+    "download_failed": "Downloaden mislukt",
+    "title_download": "Downloaden van het Autonomi-netwerk",
+    "title_open": "Het gedownloade bestand openen",
+    "failed_to_load": "Laden van Autonomi mislukt"
+  }
+}
