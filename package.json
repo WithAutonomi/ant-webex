@@ -1,6 +1,6 @@
 {
   "name": "ant-webex",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": true,
   "description": "Browser extension for downloading content from the Autonomi decentralized network",
   "license": "MIT OR Apache-2.0",

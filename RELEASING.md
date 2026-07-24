@@ -26,6 +26,26 @@ You can also run it without tagging: **Actions → Release artifacts → Run
 workflow** (`workflow_dispatch`). Manual runs upload the artifacts to the run but
 don't create a GitHub Release.
 
+## Release candidates
+
+RCs follow the org convention: branch `rc-<version>`, tag `v<version>-rc.N`,
+marked pre-release on GitHub. Chrome forbids prerelease suffixes in
+`manifest.json` (1–4 dot-separated integers only), so the rc number is encoded
+in the manifest's 4th component and CI verifies the mapping:
+
+| where                        | value         |
+| ---------------------------- | ------------- |
+| branch                       | `rc-0.2.0`    |
+| git tag / GitHub pre-release | `v0.2.0-rc.1` |
+| `package.json`               | `0.2.0-rc.1`  |
+| `src/manifest.json`          | `0.2.0.1`     |
+
+Each iteration bumps the rc number (`rc.2` ↔ manifest `0.2.0.2`) — AMO signs a
+given version string only once, so never re-tag without bumping. The final
+release drops the suffix everywhere (tag `v0.2.0`, manifest `0.2.0`); if AMO
+refuses the final version because an earlier signing attempt already registered
+it, bump the patch version instead.
+
 ## One-time setup: AMO signing (for the Firefox `.xpi`)
 
 The signed Firefox build uses `web-ext sign` against the AMO API. Until these are

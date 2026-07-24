@@ -42,25 +42,29 @@ jobs:
         run: npm ci
 
       # Single source of truth for the version + a guard against drift: the tag
-      # (when tag-triggered) must equal manifest.json, which must equal package.json.
+      # (when tag-triggered) must equal package.json, which must map to manifest.json.
+      # Chrome forbids prerelease suffixes in manifest versions (1-4 dot-separated
+      # integers only), so a release candidate encodes its number in the 4th
+      # component: package/tag `X.Y.Z-rc.N` ↔ manifest `X.Y.Z.N`. See RELEASING.md.
       - name: Resolve and verify version
         id: ver
         run: |
           MANIFEST="$(node -p "require('./src/manifest.json').version")"
           PKG="$(node -p "require('./package.json').version")"
-          if [ "$MANIFEST" != "$PKG" ]; then
-            echo "::error::Version mismatch — src/manifest.json ($MANIFEST) != package.json ($PKG)"
+          EXPECT_MANIFEST="$(printf '%s' "$PKG" | sed -E 's/-rc\.([0-9]+)$/.\1/')"
+          if [ "$MANIFEST" != "$EXPECT_MANIFEST" ]; then
+            echo "::error::Version mismatch — src/manifest.json ($MANIFEST) != $EXPECT_MANIFEST expected from package.json ($PKG)"
             exit 1
           fi
           if [ "${{ github.event_name }}" = "push" ]; then
             TAG="${GITHUB_REF_NAME#v}"
-            if [ "$TAG" != "$MANIFEST" ]; then
-              echo "::error::Tag v$TAG does not match the manifest/package version $MANIFEST — bump the version before tagging."
+            if [ "$TAG" != "$PKG" ]; then
+              echo "::error::Tag v$TAG does not match the package.json version $PKG — bump the version before tagging."
               exit 1
             fi
           fi
-          echo "version=$MANIFEST" >> "$GITHUB_OUTPUT"
-          echo "Releasing v$MANIFEST"
+          echo "version=$PKG" >> "$GITHUB_OUTPUT"
+          echo "Releasing v$PKG (manifest $MANIFEST)"
 
       - name: Build (Chrome + Firefox)
         run: npm run build:all
@@ -126,9 +130,11 @@ jobs:
           if-no-files-found: error
 
       # Only cut a GitHub Release on a real tag (not on manual/dispatch runs).
+      # -rc.N tags are marked pre-release, matching the org convention.
       - name: Attach to GitHub Release
         if: github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
           files: artifacts/*
           fail_on_unmatched_files: true
+          prerelease: ${{ contains(github.ref_name, '-rc.') }}
